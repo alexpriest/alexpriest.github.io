@@ -1,1 +1,29 @@
-<html><body><h1>prjcts</h1></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Projects</title>
+  <style>
+    body { font-family: system-ui; max-width: 600px; margin: 4rem auto; padding: 1rem; }
+    a { display: block; margin: 1rem 0; }
+  </style>
+</head>
+<body>
+  <h1>Projects</h1>
+  <div id="projects"></div>
+  <script>
+    fetch('https://api.github.com/users/alexpriest/repos?type=public')
+      .then(r => r.json())
+      .then(repos => {
+        const container = document.getElementById('projects');
+        repos
+          .filter(r => r.has_pages && r.name !== 'alexpriest.github.io')
+          .forEach(r => {
+            const a = document.createElement('a');
+            a.href = `/${r.name}`;
+            a.textContent = r.name.replace(/-/g, ' ');
+            container.appendChild(a);
+          });
+      });
+  </script>
+</body>
+</html>
