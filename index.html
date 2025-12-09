@@ -18,6 +18,8 @@
             a.href = `/${r.name}`;
             a.textContent = r.name.replace(/-/g, ' ');
             container.appendChild(a);
+            const date = new Date(r.pushed_at).toISOString().split('T')[0];
+            container.appendChild(document.createTextNode(` (last updated: ${date})`));
             container.appendChild(document.createElement('br'));
           });
       });
