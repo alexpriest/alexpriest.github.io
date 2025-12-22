@@ -13,6 +13,7 @@
         const container = document.getElementById('projects');
         repos
           .filter(r => r.has_pages && r.name !== 'alexpriest.github.io')
+          .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))
           .forEach(r => {
             const a = document.createElement('a');
             a.href = `/${r.name}`;
