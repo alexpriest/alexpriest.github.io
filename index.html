@@ -16,7 +16,8 @@
           .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))
           .forEach(r => {
             const a = document.createElement('a');
-            a.href = r.has_pages ? `/${r.name}` : r.html_url;
+            const hasWorkingPages = r.has_pages && r.name !== 'alexpriest-raycast-extensions';
+            a.href = hasWorkingPages ? `/${r.name}` : r.html_url;
             a.textContent = r.name.replace(/-/g, ' ');
             container.appendChild(a);
             const date = new Date(r.pushed_at).toISOString().split('T')[0];
