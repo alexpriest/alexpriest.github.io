@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>iPod</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% 40%, #2a2a30 0%, #131316 70%);
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+/* ─── iPod Device Shell ─── */
+.ipod {
+  position: relative;
+  width: 372px;
+  height: 604px;
+  background: linear-gradient(180deg, #F4F2EE 0%, #ECEAE6 100%);
+  border-radius: 30px;
+  box-shadow:
+    0 0 0 1.5px #A8A8A8,
+    0 0 0 3px #C8C8C8,
+    0 4px 0 0 #B8B6B2,
+    0 6px 0 0 #A8A6A2,
+    0 24px 60px rgba(0,0,0,0.5),
+    0 8px 24px rgba(0,0,0,0.3),
+    inset 0 1px 1px rgba(255,255,255,0.7);
+  overflow: hidden;
+  animation: ipodIn 0.6s ease;
+}
+@keyframes ipodIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Light reflection hotspot */
+.ipod::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -20%;
+  width: 140%;
+  height: 80%;
+  background: radial-gradient(ellipse at 50% 80%, rgba(255,255,255,0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 25;
+}
+
+/* ─── Noise Texture ─── */
+.ipod-noise {
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 22;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+}
+.ipod-noise svg { width: 100%; height: 100%; }
+
+/* ─── Screen Bezel ─── */
+.bezel {
+  position: absolute;
+  top: 28px;
+  left: 32px;
+  right: 32px;
+  height: 226px;
+  background: #111;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    0 1px 4px rgba(0,0,0,0.4);
+  z-index: 2;
+}
+
+/* ─── LCD Screen ─── */
+.screen {
+  position: absolute;
+  inset: 3px;
+  background: linear-gradient(180deg, #F8F6F0 0%, #F0EDE6 100%);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.screen-glass {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    150deg,
+    rgba(255,255,255,0.14) 0%,
+    rgba(255,255,255,0.04) 30%,
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ─── Header Bar ─── */
+.hdr {
+  height: 26px;
+  background: linear-gradient(180deg, #D6D6D6 0%, #BCBCBC 100%);
+  border-bottom: 1px solid #A0A0A0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #222;
+  flex-shrink: 0;
+  padding: 0 6px;
+  letter-spacing: -0.2px;
+}
+.hdr-l { position: absolute; left: 6px; font-size: 9px; color: #555; }
+.hdr-r { position: absolute; right: 6px; display: flex; align-items: center; }
+.batt {
+  width: 18px; height: 9px;
+  border: 1.5px solid #555;
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1px;
+}
+.batt::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 50%; transform: translateY(-50%);
+  width: 2px; height: 4px;
+  background: #555;
+  border-radius: 0 1px 1px 0;
+}
+.batt-fill {
+  width: 75%; height: 100%;
+  background: #4CD964;
+  border-radius: 0.5px;
+}
+
+/* ─── Screen Content ─── */
+.scr-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── Menu View ─── */
+.mv {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  overflow: hidden;
+}
+.ms {
+  will-change: transform;
+  transition: transform 0.08s ease-out;
+}
+.mi {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 14px;
+  color: #000;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  cursor: default;
+  font-weight: 500;
+}
+.mi.sel {
+  background: linear-gradient(180deg, #4A7DD7 0%, #2B5797 100%);
+  color: #FFF;
+  border-bottom-color: transparent;
+}
+.mi-l {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mi-v {
+  font-size: 12px;
+  opacity: 0.5;
+  margin-right: 4px;
+  font-weight: 400;
+}
+.mi-c {
+  font-size: 14px;
+  opacity: 0.35;
+  font-weight: 300;
+  margin-left: 2px;
+}
+.mi.sel .mi-c, .mi.sel .mi-v { opacity: 0.7; }
+
+/* ─── Now Playing ─── */
+.np {
+  position: absolute;
+  inset: 0;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+.np-main {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+  align-items: flex-start;
+  padding-top: 2px;
+}
+.np-art {
+  width: 84px; height: 84px;
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #ccc, #999);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.np-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.np-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  gap: 2px;
+  padding-top: 4px;
+}
+.np-t {
+  font-size: 13px; font-weight: 700; color: #000;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.np-a {
+  font-size: 11px; color: #444;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.np-al {
+  font-size: 10px; color: #777;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.np-num {
+  font-size: 9px; color: #999; margin-top: 3px;
+}
+.np-prog { padding-top: 6px; }
+.np-bar {
+  width: 100%; height: 5px;
+  background: #C8C8C8;
+  border-radius: 2.5px;
+  overflow: hidden;
+}
+.np-fill {
+  height: 100%;
+  background: linear-gradient(180deg, #5B9BD5, #3A7BC8);
+  border-radius: 2.5px;
+  width: 0%;
+  transition: width 0.25s linear;
+}
+.np-times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px; color: #888;
+  margin-top: 2px;
+}
+
+/* ─── About Screen ─── */
+.about-screen {
+  position: absolute;
+  inset: 0;
+  padding: 10px 12px;
+  font-size: 11px;
+  color: #333;
+  line-height: 1.5;
+  will-change: transform;
+}
+.about-screen h3 {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #000;
+}
+
+/* ─── Click Wheel ─── */
+.wheel {
+  position: absolute;
+  width: 198px;
+  height: 198px;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(
+      circle at center,
+      transparent 0px, transparent 2.5px,
+      rgba(0,0,0,0.01) 2.5px, rgba(0,0,0,0.01) 3.5px
+    ),
+    linear-gradient(180deg, #E8E6E2 0%, #DAD8D4 100%);
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.45),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  cursor: pointer;
+  touch-action: none;
+  z-index: 2;
+}
+.wl {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 600;
+  color: #9A9A9A;
+  pointer-events: none;
+  letter-spacing: 0.3px;
+}
+.wl-t { top: 14px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: 0.8px; }
+.wl-b { bottom: 14px; left: 50%; transform: translateX(-50%); font-size: 8px; letter-spacing: 1px; }
+.wl-l { left: 16px; top: 50%; transform: translateY(-50%); font-size: 8px; }
+.wl-r { right: 16px; top: 50%; transform: translateY(-50%); font-size: 8px; }
+
+/* Center Button */
+.wb {
+  position: absolute;
+  width: 82px; height: 82px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 42% 36%, rgba(255,255,255,0.3) 0%, transparent 50%),
+    linear-gradient(180deg, #EEECE8 0%, #DFDDD9 100%);
+  box-shadow:
+    0 1px 2px rgba(0,0,0,0.07),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.1s;
+}
+.wb:active, .wb.pressed {
+  background:
+    radial-gradient(circle at 42% 36%, rgba(255,255,255,0.15) 0%, transparent 50%),
+    linear-gradient(180deg, #E4E2DE 0%, #D5D3CF 100%);
+}
+
+/* ─── Responsive ─── */
+@media (max-height: 680px) {
+  .ipod { transform: scale(0.82); }
+}
+@media (max-height: 560px) {
+  .ipod { transform: scale(0.68); }
+}
+</style>
+</head>
+<body>
+
+<div class="ipod">
+  <!-- Noise texture -->
+  <div class="ipod-noise">
+    <svg><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+  </div>
+
+  <!-- Screen -->
+  <div class="bezel">
+    <div class="screen">
+      <div class="hdr">
+        <span class="hdr-l" id="hdrL"></span>
+        <span id="hdrT">iPod</span>
+        <div class="hdr-r"><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="scr-content" id="scrC"></div>
+      <div class="screen-glass"></div>
+    </div>
+  </div>
+
+  <!-- Click Wheel -->
+  <div class="wheel" id="whl">
+    <span class="wl wl-t">MENU</span>
+    <span class="wl wl-l">◀◀</span>
+    <span class="wl wl-r">▶▶</span>
+    <span class="wl wl-b">▶ ❙❙</span>
+    <div class="wb" id="wb"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// SONG DATA (placeholders — swap with Miranda's favorites)
+// ═══════════════════════════════════════════
+const songs = [
+  { title: 'Blinding Lights', artist: 'The Weeknd', album: 'After Hours' },
+  { title: 'Bohemian Rhapsody', artist: 'Queen', album: 'A Night at the Opera' },
+  { title: 'Do I Wanna Know?', artist: 'Arctic Monkeys', album: 'AM' },
+  { title: 'Dreams', artist: 'Fleetwood Mac', album: 'Rumours' },
+  { title: 'Midnight City', artist: 'M83', album: "Hurry Up, We're Dreaming" },
+  { title: 'Redbone', artist: 'Childish Gambino', album: 'Awaken, My Love!' },
+  { title: 'Skinny Love', artist: 'Bon Iver', album: 'For Emma, Forever Ago' },
+  { title: 'Somebody That I Used To Know', artist: 'Gotye', album: 'Making Mirrors' },
+  { title: 'Young Folks', artist: 'Peter Bjorn and John', album: "Writer's Block" },
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+const state = {
+  navStack: [{ menuId: 'main', sel: 0, scroll: 0 }],
+  view: 'menu',         // 'menu' | 'nowPlaying'
+  songIdx: -1,
+  playing: false,
+  shuffle: 'off',       // 'off' | 'songs'
+  repeat: 'off',        // 'off' | 'one' | 'all'
+  clicker: true,
+  aboutTitle: '',
+};
+const audio = new Audio();
+
+// ═══════════════════════════════════════════
+// AUDIO CONTEXT & CLICK SOUND
+// ═══════════════════════════════════════════
+let actx = null;
+function playClick() {
+  if (!state.clicker) return;
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    const len = Math.floor(actx.sampleRate * 0.006);
+    const buf = actx.createBuffer(1, len, actx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.12));
+    const src = actx.createBufferSource();
+    src.buffer = buf;
+    const flt = actx.createBiquadFilter();
+    flt.type = 'highpass';
+    flt.frequency.value = 3500;
+    const gn = actx.createGain();
+    gn.gain.value = 0.07;
+    src.connect(flt);
+    flt.connect(gn);
+    gn.connect(actx.destination);
+    src.start();
+  } catch (e) {}
+}
+
+// ═══════════════════════════════════════════
+// MENU DATA
+// ═══════════════════════════════════════════
+function getMenu(id) {
+  switch (id) {
+    case 'main': return {
+      title: 'iPod',
+      items: [
+        { label: 'Music', sub: 'music', chev: true },
+        { label: 'Extras', sub: 'extras', chev: true },
+        { label: 'Settings', sub: 'settings', chev: true },
+        { label: 'Shuffle Songs', act: 'shuffleAll' },
+      ]
+    };
+    case 'music': return {
+      title: 'Music',
+      items: [
+        { label: 'Artists', sub: 'artists', chev: true },
+        { label: 'Albums', sub: 'albums', chev: true },
+        { label: 'Songs', sub: 'songs', chev: true },
+        { label: 'Shuffle Songs', act: 'shuffleAll' },
+      ]
+    };
+    case 'songs': return {
+      title: 'Songs',
+      items: songs.map((s, i) => ({ label: s.title, act: 'play', idx: i }))
+    };
+    case 'artists': {
+      const a = [...new Set(songs.map(s => s.artist))].sort();
+      return { title: 'Artists', items: a.map(x => ({ label: x, sub: 'artist:' + x, chev: true })) };
+    }
+    case 'albums': {
+      const a = [...new Set(songs.map(s => s.album))].sort();
+      return { title: 'Albums', items: a.map(x => ({ label: x, sub: 'album:' + x, chev: true })) };
+    }
+    case 'settings': return {
+      title: 'Settings',
+      items: [
+        { label: 'About', act: 'about' },
+        { label: 'Shuffle', act: 'togShuffle', val: () => state.shuffle === 'off' ? 'Off' : 'Songs' },
+        { label: 'Repeat', act: 'togRepeat', val: () => ({ off: 'Off', one: 'One', all: 'All' })[state.repeat] },
+        { label: 'Clicker', act: 'togClicker', val: () => state.clicker ? 'On' : 'Off' },
+      ]
+    };
+    case 'extras': return {
+      title: 'Extras',
+      items: [
+        { label: 'About Miranda', act: 'aboutMiranda' },
+      ]
+    };
+    default:
+      if (id.startsWith('artist:')) {
+        const name = id.slice(7);
+        const ss = songs.filter(s => s.artist === name);
+        return { title: name, items: ss.map(s => ({ label: s.title, act: 'play', idx: songs.indexOf(s) })) };
+      }
+      if (id.startsWith('album:')) {
+        const name = id.slice(6);
+        const ss = songs.filter(s => s.album === name);
+        return { title: name, items: ss.map(s => ({ label: s.title, act: 'play', idx: songs.indexOf(s) })) };
+      }
+      return { title: '', items: [] };
+  }
+}
+
+// ═══════════════════════════════════════════
+// RENDERING
+// ═══════════════════════════════════════════
+const ITEM_H = 32;
+const MAX_VIS = 6;
+
+function mkMenuView(menuData, sel, scrollOff) {
+  const v = document.createElement('div');
+  v.className = 'mv';
+  const s = document.createElement('div');
+  s.className = 'ms';
+  menuData.items.forEach((item, i) => {
+    const r = document.createElement('div');
+    r.className = 'mi' + (i === sel ? ' sel' : '');
+    const l = document.createElement('span');
+    l.className = 'mi-l';
+    l.textContent = item.label;
+    r.appendChild(l);
+    if (item.val) {
+      const vv = document.createElement('span');
+      vv.className = 'mi-v';
+      vv.textContent = item.val();
+      r.appendChild(vv);
+    }
+    if (item.chev) {
+      const c = document.createElement('span');
+      c.className = 'mi-c';
+      c.textContent = '›';
+      r.appendChild(c);
+    }
+    s.appendChild(r);
+  });
+  s.style.transform = 'translateY(-' + (scrollOff * ITEM_H) + 'px)';
+  v.appendChild(s);
+  return v;
+}
+
+function mkNowPlaying() {
+  const song = songs[state.songIdx];
+  const v = document.createElement('div');
+  v.className = 'np';
+
+  const main = document.createElement('div');
+  main.className = 'np-main';
+
+  const art = document.createElement('div');
+  art.className = 'np-art';
+  art.id = 'npArt';
+  if (song.artworkUrl) {
+    const img = document.createElement('img');
+    img.src = song.artworkUrl;
+    img.alt = song.album;
+    art.appendChild(img);
+  } else if (song.gradient) {
+    art.style.background = song.gradient;
+  }
+  main.appendChild(art);
+
+  const info = document.createElement('div');
+  info.className = 'np-info';
+  const t = document.createElement('div'); t.className = 'np-t'; t.textContent = song.title; info.appendChild(t);
+  const a = document.createElement('div'); a.className = 'np-a'; a.textContent = song.artist; info.appendChild(a);
+  const al = document.createElement('div'); al.className = 'np-al'; al.textContent = song.album; info.appendChild(al);
+  const num = document.createElement('div'); num.className = 'np-num';
+  num.textContent = (state.songIdx + 1) + ' of ' + songs.length;
+  info.appendChild(num);
+  main.appendChild(info);
+  v.appendChild(main);
+
+  const prog = document.createElement('div');
+  prog.className = 'np-prog';
+  const bar = document.createElement('div');
+  bar.className = 'np-bar';
+  const fill = document.createElement('div');
+  fill.className = 'np-fill';
+  fill.id = 'npFill';
+  bar.appendChild(fill);
+  prog.appendChild(bar);
+  const times = document.createElement('div');
+  times.className = 'np-times';
+  const el = document.createElement('span'); el.id = 'npE'; el.textContent = '0:00'; times.appendChild(el);
+  const rm = document.createElement('span'); rm.id = 'npR'; rm.textContent = '-0:30'; times.appendChild(rm);
+  prog.appendChild(times);
+  v.appendChild(prog);
+  return v;
+}
+
+function mkAboutScreen(content) {
+  const v = document.createElement('div');
+  v.className = 'about-screen';
+  v.innerHTML = content;
+  return v;
+}
+
+function transitionTo(newEl, dir) {
+  const c = document.getElementById('scrC');
+  const oldEl = c.firstElementChild;
+  const enterFrom = dir === 'forward' ? '100%' : '-100%';
+  const exitTo = dir === 'forward' ? '-100%' : '100%';
+  newEl.style.transform = 'translateX(' + enterFrom + ')';
+  newEl.style.transition = 'none';
+  c.appendChild(newEl);
+  newEl.offsetHeight; // force reflow
+  requestAnimationFrame(() => {
+    const tr = 'transform 0.28s cubic-bezier(0.4, 0, 0.2, 1)';
+    if (oldEl) { oldEl.style.transition = tr; oldEl.style.transform = 'translateX(' + exitTo + ')'; }
+    newEl.style.transition = tr;
+    newEl.style.transform = 'translateX(0)';
+  });
+  setTimeout(() => { if (oldEl && oldEl.parentNode) oldEl.remove(); }, 300);
+}
+
+function replaceContent(newEl) {
+  const c = document.getElementById('scrC');
+  c.innerHTML = '';
+  newEl.style.transform = 'translateX(0)';
+  c.appendChild(newEl);
+}
+
+function updateHeader() {
+  const t = document.getElementById('hdrT');
+  const l = document.getElementById('hdrL');
+  if (state.view === 'nowPlaying') {
+    t.textContent = 'Now Playing';
+  } else if (state.view === 'about') {
+    t.textContent = state.aboutTitle || 'About';
+  } else {
+    const cur = state.navStack[state.navStack.length - 1];
+    t.textContent = getMenu(cur.menuId).title;
+  }
+  l.textContent = state.playing ? '▶' : '';
+}
+
+function updateMenuDisplay() {
+  const c = document.getElementById('scrC');
+  const mv = c.querySelector('.mv');
+  if (!mv) return;
+  const ms = mv.querySelector('.ms');
+  if (!ms) return;
+  const cur = state.navStack[state.navStack.length - 1];
+  const menuData = getMenu(cur.menuId);
+
+  if (cur.sel < cur.scroll) cur.scroll = cur.sel;
+  if (cur.sel >= cur.scroll + MAX_VIS) cur.scroll = cur.sel - MAX_VIS + 1;
+
+  const items = ms.querySelectorAll('.mi');
+  items.forEach((el, i) => {
+    el.classList.toggle('sel', i === cur.sel);
+    // Update dynamic values
+    const item = menuData.items[i];
+    if (item && item.val) {
+      let valEl = el.querySelector('.mi-v');
+      if (valEl) valEl.textContent = item.val();
+    }
+  });
+  ms.style.transform = 'translateY(-' + (cur.scroll * ITEM_H) + 'px)';
+}
+
+function fmtTime(s) {
+  if (isNaN(s) || s < 0) return '0:00';
+  const m = Math.floor(s / 60);
+  const ss = Math.floor(s % 60);
+  return m + ':' + String(ss).padStart(2, '0');
+}
+
+function updateProgress() {
+  if (state.view !== 'nowPlaying') return;
+  const fill = document.getElementById('npFill');
+  const eEl = document.getElementById('npE');
+  const rEl = document.getElementById('npR');
+  if (!fill) return;
+  const cur = audio.currentTime;
+  const dur = audio.duration || 0;
+  if (dur > 0) {
+    fill.style.width = (cur / dur * 100) + '%';
+    if (eEl) eEl.textContent = fmtTime(cur);
+    if (rEl) rEl.textContent = '-' + fmtTime(dur - cur);
+  }
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION & ACTIONS
+// ═══════════════════════════════════════════
+function scrollMenu(dir) {
+  if (state.view !== 'menu') return;
+  const cur = state.navStack[state.navStack.length - 1];
+  const menuData = getMenu(cur.menuId);
+  if (!menuData.items.length) return;
+  const next = cur.sel + dir;
+  if (next < 0 || next >= menuData.items.length) return;
+  cur.sel = next;
+  playClick();
+  updateMenuDisplay();
+}
+
+function selectItem() {
+  if (state.view !== 'menu') return;
+  const cur = state.navStack[state.navStack.length - 1];
+  const menuData = getMenu(cur.menuId);
+  const item = menuData.items[cur.sel];
+  if (!item) return;
+  playClick();
+
+  if (item.sub) {
+    state.navStack.push({ menuId: item.sub, sel: 0, scroll: 0 });
+    const sub = getMenu(item.sub);
+    transitionTo(mkMenuView(sub, 0, 0), 'forward');
+    updateHeader();
+  } else if (item.act) {
+    handleAction(item);
+  }
+}
+
+function goBack() {
+  if (state.view === 'nowPlaying' || state.view === 'about') {
+    state.view = 'menu';
+    const cur = state.navStack[state.navStack.length - 1];
+    const menuData = getMenu(cur.menuId);
+    transitionTo(mkMenuView(menuData, cur.sel, cur.scroll), 'back');
+    updateHeader();
+    return;
+  }
+  if (state.navStack.length <= 1) return;
+  playClick();
+  state.navStack.pop();
+  const cur = state.navStack[state.navStack.length - 1];
+  const menuData = getMenu(cur.menuId);
+  transitionTo(mkMenuView(menuData, cur.sel, cur.scroll), 'back');
+  updateHeader();
+}
+
+function handleAction(item) {
+  switch (item.act) {
+    case 'play':
+      playSong(item.idx);
+      break;
+    case 'shuffleAll': {
+      state.shuffle = 'songs';
+      playSong(Math.floor(Math.random() * songs.length));
+      break;
+    }
+    case 'togShuffle':
+      state.shuffle = state.shuffle === 'off' ? 'songs' : 'off';
+      updateMenuDisplay();
+      break;
+    case 'togRepeat': {
+      const modes = ['off', 'one', 'all'];
+      state.repeat = modes[(modes.indexOf(state.repeat) + 1) % 3];
+      updateMenuDisplay();
+      break;
+    }
+    case 'togClicker':
+      state.clicker = !state.clicker;
+      updateMenuDisplay();
+      break;
+    case 'about':
+      showAbout();
+      break;
+    case 'aboutMiranda':
+      showAboutMiranda();
+      break;
+  }
+}
+
+function showAbout() {
+  state.view = 'about';
+  state.aboutTitle = 'About';
+  const el = mkAboutScreen(
+    '<h3>iPod</h3>' +
+    '<p>' + songs.length + ' Songs</p>' +
+    '<p style="margin-top:8px;font-size:10px;color:#999;">Built with love by Alex</p>'
+  );
+  transitionTo(el, 'forward');
+  updateHeader();
+}
+
+function showAboutMiranda() {
+  state.view = 'about';
+  state.aboutTitle = 'Extras';
+  const el = mkAboutScreen(
+    '<h3>Miranda Gale</h3>' +
+    '<p>Artist & Creative</p>' +
+    '<p>Austin, TX</p>' +
+    '<p style="margin-top:8px;font-size:10px;color:#999;">mirandagale.com</p>'
+  );
+  transitionTo(el, 'forward');
+  updateHeader();
+}
+
+// ═══════════════════════════════════════════
+// AUDIO PLAYBACK
+// ═══════════════════════════════════════════
+function playSong(idx) {
+  state.songIdx = idx;
+  const song = songs[idx];
+  if (song.previewUrl) {
+    audio.src = song.previewUrl;
+    audio.play().catch(() => {});
+    state.playing = true;
+  } else {
+    state.playing = false;
+  }
+  state.view = 'nowPlaying';
+  transitionTo(mkNowPlaying(), 'forward');
+  updateHeader();
+}
+
+function togglePlay() {
+  if (state.songIdx < 0) return;
+  if (state.playing) {
+    audio.pause();
+    state.playing = false;
+  } else {
+    audio.play().catch(() => {});
+    state.playing = true;
+  }
+  updateHeader();
+}
+
+function playNext() {
+  if (state.songIdx < 0) return;
+  let next;
+  if (state.shuffle === 'songs') {
+    next = Math.floor(Math.random() * songs.length);
+  } else {
+    next = state.songIdx + 1;
+    if (next >= songs.length) {
+      if (state.repeat === 'all') next = 0;
+      else { state.playing = false; updateHeader(); return; }
+    }
+  }
+  state.songIdx = next;
+  const song = songs[next];
+  if (song.previewUrl) {
+    audio.src = song.previewUrl;
+    audio.play().catch(() => {});
+    state.playing = true;
+  }
+  if (state.view === 'nowPlaying') replaceContent(mkNowPlaying());
+  updateHeader();
+}
+
+function playPrev() {
+  if (state.songIdx < 0) return;
+  if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+  let prev = state.songIdx - 1;
+  if (prev < 0) prev = songs.length - 1;
+  state.songIdx = prev;
+  const song = songs[prev];
+  if (song.previewUrl) {
+    audio.src = song.previewUrl;
+    audio.play().catch(() => {});
+    state.playing = true;
+  }
+  if (state.view === 'nowPlaying') replaceContent(mkNowPlaying());
+  updateHeader();
+}
+
+audio.addEventListener('timeupdate', updateProgress);
+audio.addEventListener('ended', () => {
+  if (state.repeat === 'one') {
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  } else {
+    playNext();
+  }
+});
+
+// ═══════════════════════════════════════════
+// ITUNES SEARCH API
+// ═══════════════════════════════════════════
+async function loadSongData() {
+  const gradients = [
+    'linear-gradient(135deg, #ef4444, #f97316)',
+    'linear-gradient(135deg, #8B5CF6, #D946EF)',
+    'linear-gradient(135deg, #1e293b, #475569)',
+    'linear-gradient(135deg, #f5af19, #f12711)',
+    'linear-gradient(135deg, #1e3a5f, #7c3aed)',
+    'linear-gradient(135deg, #dc2626, #f59e0b)',
+    'linear-gradient(135deg, #94a3b8, #e2e8f0)',
+    'linear-gradient(135deg, #78716c, #a8a29e)',
+    'linear-gradient(135deg, #3b82f6, #10b981)',
+  ];
+  songs.forEach((s, i) => { s.gradient = gradients[i % gradients.length]; });
+
+  await Promise.all(songs.map(async (song) => {
+    try {
+      const term = encodeURIComponent(song.artist + ' ' + song.title);
+      const res = await fetch('https://itunes.apple.com/search?term=' + term + '&media=music&entity=song&limit=1');
+      const data = await res.json();
+      if (data.results && data.results.length > 0) {
+        const r = data.results[0];
+        song.previewUrl = r.previewUrl;
+        if (r.artworkUrl100) song.artworkUrl = r.artworkUrl100.replace('100x100', '600x600');
+        song.duration = r.trackTimeMillis;
+      }
+    } catch (e) {}
+  }));
+
+  // Refresh now playing artwork if visible
+  if (state.view === 'nowPlaying' && state.songIdx >= 0) {
+    const art = document.getElementById('npArt');
+    const song = songs[state.songIdx];
+    if (art && song.artworkUrl && !art.querySelector('img')) {
+      art.style.background = 'none';
+      const img = document.createElement('img');
+      img.src = song.artworkUrl;
+      img.alt = song.album;
+      art.appendChild(img);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════
+// CLICK WHEEL INPUT
+// ═══════════════════════════════════════════
+let wTrack = false, wLastAng = 0, wAcc = 0, wVel = 0, wLastT = 0;
+let wMoved = false, wSX = 0, wSY = 0, wIsTouch = false, wAccelTmr = null;
+const DEG_TICK = 15;
+
+function wCenter() {
+  const r = document.getElementById('whl').getBoundingClientRect();
+  return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+}
+function wRadii() {
+  return {
+    outer: document.getElementById('whl').offsetWidth / 2,
+    inner: document.getElementById('wb').offsetWidth / 2,
+  };
+}
+function dist(x1, y1, x2, y2) { return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2); }
+function ang(cx, cy) { const c = wCenter(); return Math.atan2(cy - c.y, cx - c.x) * 180 / Math.PI; }
+function onWheel(cx, cy) { const c = wCenter(); const r = wRadii(); const d = dist(cx, cy, c.x, c.y); return d <= r.outer && d > r.inner; }
+
+function wStart(e) {
+  const c = wCenter();
+  const r = wRadii();
+  const d = dist(e.clientX, e.clientY, c.x, c.y);
+  if (d <= r.inner || d > r.outer) return;
+  wTrack = true;
+  wLastAng = ang(e.clientX, e.clientY);
+  wAcc = 0; wVel = 0;
+  wLastT = Date.now();
+  wSX = e.clientX; wSY = e.clientY;
+  wMoved = false;
+}
+
+function wMove(e) {
+  if (!wTrack) return;
+  const a = ang(e.clientX, e.clientY);
+  let delta = a - wLastAng;
+  if (delta > 180) delta -= 360;
+  if (delta < -180) delta += 360;
+  if (Math.abs(delta) > DEG_TICK * 3) { wLastAng = a; return; }
+  if (dist(e.clientX, e.clientY, wSX, wSY) > 5) wMoved = true;
+  wAcc += delta;
+  wLastAng = a;
+
+  const now = Date.now();
+  const dt = now - wLastT;
+  if (dt > 0) wVel = wVel * 0.9375 + (Math.abs(delta) / dt) * 0.0625;
+  wLastT = now;
+
+  clearTimeout(wAccelTmr);
+  wAccelTmr = setTimeout(() => { wVel = 0; }, 250);
+
+  if (Math.abs(wAcc) >= DEG_TICK) {
+    const dir = wAcc > 0 ? 1 : -1;
+    const steps = Math.floor(Math.abs(wAcc) / DEG_TICK);
+    let mult = 1;
+    if (wVel > 0.5) mult = 2;
+    if (wVel > 1.0) mult = 4;
+    for (let i = 0; i < steps * mult; i++) {
+      if (state.view === 'menu') scrollMenu(dir);
+    }
+    wAcc = wAcc % DEG_TICK;
+  }
+}
+
+function wEnd() {
+  if (!wTrack) return;
+  const wasTap = !wMoved;
+  wTrack = false;
+  wVel = 0;
+  clearTimeout(wAccelTmr);
+  if (wIsTouch && wasTap) handleTap(ang(wSX, wSY));
+}
+
+function handleTap(angle) {
+  playClick();
+  if (angle >= -135 && angle < -45) goBack();                  // MENU (top)
+  else if (angle >= -45 && angle < 45) playNext();             // >>| (right)
+  else if (angle >= 45 && angle < 135) togglePlay();           // ▶❙❙ (bottom)
+  else playPrev();                                              // ◀◀ (left)
+}
+
+function setupWheel() {
+  const whl = document.getElementById('whl');
+  const wb = document.getElementById('wb');
+
+  // Center button
+  wb.addEventListener('mousedown', e => { e.stopPropagation(); wb.classList.add('pressed'); });
+  wb.addEventListener('mouseup', () => wb.classList.remove('pressed'));
+  wb.addEventListener('mouseleave', () => wb.classList.remove('pressed'));
+  wb.addEventListener('click', e => { e.stopPropagation(); playClick(); selectItem(); });
+  wb.addEventListener('touchstart', e => { e.stopPropagation(); e.preventDefault(); wb.classList.add('pressed'); }, { passive: false });
+  wb.addEventListener('touchend', e => { e.stopPropagation(); wb.classList.remove('pressed'); playClick(); selectItem(); });
+
+  // Wheel drag
+  whl.addEventListener('mousedown', e => { wIsTouch = false; wStart(e); });
+  whl.addEventListener('touchstart', e => { wIsTouch = true; e.preventDefault(); wStart(e.touches[0]); }, { passive: false });
+  document.addEventListener('mousemove', e => wMove(e));
+  document.addEventListener('touchmove', e => { if (wTrack) { e.preventDefault(); wMove(e.touches[0]); } }, { passive: false });
+  document.addEventListener('mouseup', wEnd);
+  document.addEventListener('touchend', wEnd);
+
+  // Mouse click on wheel regions (non-drag)
+  whl.addEventListener('click', e => {
+    if (wIsTouch || wMoved) return;
+    if (!onWheel(e.clientX, e.clientY)) return;
+    handleTap(ang(e.clientX, e.clientY));
+  });
+
+  // Scroll wheel support
+  whl.addEventListener('wheel', e => {
+    e.preventDefault();
+    if (state.view === 'menu') scrollMenu(e.deltaY > 0 ? 1 : -1);
+  }, { passive: false });
+}
+
+// ═══════════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════════
+function setupKeys() {
+  document.addEventListener('keydown', e => {
+    switch (e.key) {
+      case 'ArrowUp': e.preventDefault(); scrollMenu(-1); break;
+      case 'ArrowDown': e.preventDefault(); scrollMenu(1); break;
+      case 'Enter': e.preventDefault(); playClick(); selectItem(); break;
+      case 'Escape': case 'Backspace': e.preventDefault(); goBack(); break;
+      case ' ': e.preventDefault(); togglePlay(); break;
+      case 'ArrowLeft': e.preventDefault(); playPrev(); break;
+      case 'ArrowRight': e.preventDefault(); playNext(); break;
+    }
+  });
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+function init() {
+  const menuData = getMenu('main');
+  const mv = mkMenuView(menuData, 0, 0);
+  mv.style.transform = 'translateX(0)';
+  document.getElementById('scrC').appendChild(mv);
+  updateHeader();
+  setupWheel();
+  setupKeys();
+  loadSongData();
+}
+init();
+</script>
+</body>
+</html>
