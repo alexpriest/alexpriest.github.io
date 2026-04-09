@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Office Built-Ins</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #111214;
+    color: #d4d4d4;
+    min-height: 100vh;
+  }
+
+  .app {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 32px 40px 48px;
+  }
+
+  /* Header */
+  .hdr {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid #252525;
+    padding-bottom: 20px;
+  }
+  .hdr h1 {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.4px;
+    color: #e8e8e8;
+  }
+  .hdr .dim {
+    font-size: 13px;
+    color: #5a5a5a;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  /* Controls */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .mode-switch {
+    display: flex;
+    background: #1a1a1c;
+    border-radius: 8px;
+    padding: 3px;
+    border: 1px solid #2a2a2c;
+  }
+  .mode-btn {
+    padding: 7px 22px;
+    border: none;
+    background: transparent;
+    color: #777;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 0.2px;
+  }
+  .mode-btn:hover { color: #bbb; }
+  .mode-btn.active {
+    background: #c5a55a;
+    color: #111;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(197,165,90,0.3);
+  }
+
+  .opts {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s;
+  }
+  .opt:hover { color: #999; }
+  .opt input {
+    accent-color: #c5a55a;
+    width: 13px;
+    height: 13px;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 16px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.3px;
+  }
+  .swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* Canvas */
+  .canvas-wrap {
+    position: relative;
+    margin-bottom: 24px;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+    background: #1a1c1e;
+  }
+
+  /* Callouts */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  .card {
+    background: #161618;
+    border: 1px solid #222224;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .card h3 {
+    font-size: 11px;
+    font-weight: 600;
+    color: #c5a55a;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 5px;
+  }
+  .card p {
+    font-size: 12.5px;
+    color: #6a6a6a;
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  /* Brief */
+  .brief {
+    margin-top: 48px;
+    border-top: 1px solid #252525;
+    padding-top: 36px;
+  }
+  .brief h2 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #e8e8e8;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .brief-intro {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+  .brief-section {
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #1e1e20;
+  }
+  .brief-section:last-child { border-bottom: none; }
+  .brief-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c5a55a;
+    margin-bottom: 10px;
+  }
+  .brief-section h4 {
+    font-size: 13px;
+    font-weight: 500;
+    color: #bbb;
+    margin: 16px 0 6px;
+  }
+  .brief-section p {
+    font-size: 13.5px;
+    color: #888;
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  .brief-section ul, .brief-section ol {
+    margin: 8px 0 12px 20px;
+    font-size: 13.5px;
+    color: #888;
+    line-height: 1.65;
+  }
+  .brief-section li { margin-bottom: 4px; }
+  .brief-section strong { color: #bbb; font-weight: 500; }
+  .brief-section em { color: #666; }
+  .brief-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 12.5px;
+  }
+  .brief-section th {
+    text-align: left;
+    padding: 8px 12px;
+    background: #1a1a1c;
+    color: #aaa;
+    font-weight: 500;
+    border: 1px solid #2a2a2c;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .brief-section td {
+    padding: 7px 12px;
+    border: 1px solid #222224;
+    color: #777;
+  }
+  .question {
+    background: #1a1a1c;
+    border-left: 3px solid #c5a55a;
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+  }
+  .questions ol {
+    counter-reset: q;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+  .questions li {
+    counter-increment: q;
+    padding: 10px 14px;
+    background: #1a1a1c;
+    border: 1px solid #2a2a2c;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .questions li::before {
+    content: counter(q) ".";
+    color: #c5a55a;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="hdr">
+    <h1>Office Built-Ins + Murphy Bed</h1>
+    <span class="dim">6 Columns &mdash; 22" &middot; 22" &middot; 40" &middot; 40" &mdash; Flush, Adjustable, Brass on Sliding Only</span>
+  </div>
+
+  <div class="toolbar">
+    <div class="mode-switch">
+      <button class="mode-btn active" id="btn-office" onclick="setMode('office')">Office</button>
+      <button class="mode-btn" id="btn-guest" onclick="setMode('guest')">Guest</button>
+    </div>
+    <div class="opts">
+      <label class="opt"><input type="checkbox" id="opt-rails" checked onchange="draw()"> Brass rails</label>
+      <label class="opt"><input type="checkbox" id="opt-wb" checked onchange="draw()"> Whiteboard</label>
+      <label class="opt"><input type="checkbox" id="opt-led" checked onchange="draw()"> LEDs</label>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="swatch" style="background:#474D4A"></div> Studio Green frame</div>
+    <div class="legend-item"><div class="swatch" style="background:#7a5535"></div> Walnut</div>
+    <div class="legend-item"><div class="swatch" style="background:#352820"></div> Back panel</div>
+    <div class="legend-item"><div class="swatch" style="background:#c8a85c"></div> Brass</div>
+  </div>
+
+  <div class="canvas-wrap">
+    <canvas id="c" width="2400" height="1300"></canvas>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="brief">
+    <h2>Design Feedback &amp; Direction</h2>
+    <p class="brief-intro">Thanks for the initial SketchUp designs — the overall structure and sliding mechanism approach is solid. I want to keep the two-panel sliding mechanism but push the design in a more refined direction. Here's my thinking, organized by topic.</p>
+
+    <div class="brief-section">
+      <h3>1. Layout: Asymmetric, 4 Columns</h3>
+      <p>My office isn't symmetrical — windows on the left, desk offset to the right — so I'd like the built-ins to reflect that. The room breaks into two zones:</p>
+      <ul>
+        <li><strong>Lounge zone (left, ~44"):</strong> Eames chair, side table, near windows</li>
+        <li><strong>Desk zone (right, ~80"):</strong> Desk (55" wide), desk chair</li>
+      </ul>
+      <p>The built-in wall matches these zones. Each zone gets a <strong>matched pair</strong>: one fixed deep section + one sliding panel of similar width. The panel split aligns with the zone boundary.</p>
+      <table>
+        <thead><tr><th>Section</th><th>Width</th><th>Depth</th><th>Type</th><th>Zone</th></tr></thead>
+        <tbody>
+          <tr><td>Lounge bookcase</td><td>~22"</td><td>14" (deep, fixed)</td><td>Fixed</td><td>Lounge</td></tr>
+          <tr><td>Panel A</td><td>~22"</td><td>8" (shallow, sliding)</td><td>Slides over lounge bookcase</td><td>Lounge</td></tr>
+          <tr><td>Panel B</td><td>~40"</td><td>8" (shallow, sliding)</td><td>Slides over desk bookcase</td><td>Desk</td></tr>
+          <tr><td>Desk bookcase</td><td>~40"</td><td>14" (deep, fixed)</td><td>Fixed</td><td>Desk</td></tr>
+        </tbody>
+      </table>
+      <p><em>(The wall is 124" total, so these widths fit exactly. The two panels need to total the bed cabinet width (~64") — confirm exact mechanism width and adjust panel widths accordingly. The fixed sections absorb any difference.)</em></p>
+      <p><strong>Why 4 columns, not 6:</strong> Earlier versions split the 40" sections into two ~20" columns each. But 20" vs. 22" column widths looked like a measuring error. With 4 columns, the width difference (40" vs. 22") is dramatic and intentional — wide columns for display, narrow columns for books.</p>
+      <p><strong>How it works:</strong></p>
+      <ul>
+        <li>Panel A (22") slides over the lounge bookcase (22") — perfect fit</li>
+        <li>Panel B (40") slides over the desk bookcase (40") — perfect fit</li>
+        <li>Full bed opening clear (~64") — bed folds down</li>
+      </ul>
+      <p><strong>Bed clearance when open:</strong></p>
+      <ul>
+        <li>Lounge side (left): ~22" — enough to get in/out</li>
+        <li>Desk side (right): ~40" — plenty of room, luggage goes here</li>
+      </ul>
+    </div>
+
+    <div class="brief-section">
+      <h3>2. Flush Design</h3>
+      <p>I want the wall to read as <strong>one flat plane</strong> when closed — no depth steps between the sliding panels and the fixed sections.</p>
+      <p><strong>Why flush matters:</strong> With proud panels, each zone would have one section at 14" depth and one at 22" depth. The depth step cross-cuts both zones, visually connecting them instead of differentiating them. Flush preserves zone integrity — each zone reads as one unbroken rectangle.</p>
+      <p><strong>How it works:</strong> The fixed sections normally sit at the same 22" depth as the panels. Full 14" deep shelves (front of shelves at 22" from wall). When opening the bed, push the fixed sections back ~8" on a concealed mechanism, creating clearance for the panels to slide laterally across the front.</p>
+      <p><strong>Mechanism:</strong> I'd like to explore a <strong>low-profile linear bearing on a concealed rail</strong> mounted slightly above floor level on the cabinet base. 8" of travel with end stops. Sealed from debris (not an open floor channel). This keeps the action smooth and the hardware hidden.</p>
+      <p class="question"><strong>Question:</strong> Is this feasible? What kind of linear bearing/rail system would support the weight of a loaded bookcase section? What's the cost/complexity premium vs. standard proud panels?</p>
+    </div>
+
+    <div class="brief-section">
+      <h3>3. Material Palette</h3>
+      <p>Three-material approach:</p>
+      <ul>
+        <li><strong>Frame / structure:</strong> Farrow &amp; Ball Studio Green (#474D4A), painted to match room walls</li>
+        <li><strong>Shelves:</strong> Natural walnut — warm contrast against the green</li>
+        <li><strong>Back panels:</strong> Darker stained wood or painted dark — creates depth behind objects</li>
+        <li><strong>Hardware:</strong> Brass — exposed track, shelf rails on sliding panels, cabinet knobs, shelf pins</li>
+      </ul>
+    </div>
+
+    <div class="brief-section">
+      <h3>4. Adjustable Shelving</h3>
+      <p>Instead of fixed shelf positions, I'd like <strong>brass shelf pins in finely machined holes</strong> across every column. 32mm European spacing for the pin holes.</p>
+      <p><strong>Why:</strong> This means every column has identical construction. The different shelf rhythms between the two zones (denser books in the lounge zone, taller display openings in the desk zone) become <strong>styling choices, not structural commitments</strong>. I can reconfigure anytime.</p>
+      <p><strong>Key concern for 40" wide shelves:</strong> These spans need serious material — 3/4" hardwood or reinforced plywood with a walnut front edge strip to prevent sag. Please confirm the right material and thickness for a 40" unsupported span.</p>
+    </div>
+
+    <div class="brief-section">
+      <h3>5. Brass Details</h3>
+      <p>Brass serves a specific role: <strong>it marks the parts that move.</strong></p>
+      <ul>
+        <li><strong>Exposed brass track</strong> across the top of the unit — visible rail with rolling carriers. This is the hero detail of the whole piece. I want something that feels bespoke — machined brass, substantial rollers, library-quality.</li>
+        <li><strong>Brass shelf rails</strong> on <strong>all columns</strong> — thin brass rods with end posts running horizontally across each shelf opening.</li>
+        <li><strong>Non-slip shelf liner</strong> on all shelves — museum-grade, invisible against the walnut.</li>
+        <li><strong>Brass shelf pins</strong> — tying into the material story</li>
+        <li><strong>Brass knobs</strong> on all lower cabinets</li>
+      </ul>
+    </div>
+
+    <div class="brief-section">
+      <h3>6. Top Cap</h3>
+      <p>No crown molding (there's none in the house). Instead:</p>
+      <ul>
+        <li><strong>Thick flat cap</strong> (1.5–2" solid piece) across the entire width</li>
+        <li><strong>Recessed puck lights</strong> mounted in the underside of the cap, washing downward to illuminate the shelves.</li>
+      </ul>
+    </div>
+
+    <div class="brief-section">
+      <h3>7. Bottom Closed Storage</h3>
+      <p>Closed storage across the bottom of all four sections. Key constraint: <strong>no outward-swinging doors</strong> — my desk is directly in front of this wall.</p>
+      <ul>
+        <li><strong>Sliding cabinet doors</strong> on all four sections — small panels that slide horizontally within the base cabinet, with routed finger pulls (no protruding hardware).</li>
+        <li>The lounge-side cabinet (22") will store spirit bottles and glassware inside.</li>
+      </ul>
+    </div>
+
+    <div class="brief-section">
+      <h3>8. Astragal</h3>
+      <p>Where the two sliding panels meet: an <strong>astragal</strong> (vertical molding strip on the leading edge of one panel that slightly overlaps the other) to hide the gap. This seam aligns with the zone boundary between lounge and desk areas.</p>
+    </div>
+
+    <div class="brief-section">
+      <h3>9. Hidden Features (Guest Mode)</h3>
+      <h4>Glass whiteboard on the bed panel face</h4>
+      <p>The inside face of the murphy bed door — mount a <strong>glass whiteboard</strong> here. When I slide the panels open without lowering the bed, I get a full-width writing surface. When closed, completely hidden. <strong>This is the feature I'm most excited about — the dual-reveal (whiteboard for work, bed for guests) is the concept.</strong></p>
+      <h4>Bedding storage</h4>
+      <p>Pillows, sheets, and duvet stored in the lower cabinets when bed is folded up.</p>
+      <h4>Pull-out nightstand trays</h4>
+      <p><strong>Slide-out walnut trays at mattress height</strong> on both sides of the bed opening. Phone, water, glasses. Tuck completely flush when not in use.</p>
+      <h4>Built-in charging</h4>
+      <p><strong>Recessed USB-C outlets</strong> on both sides of the bed cavity at mattress height, near the nightstand trays.</p>
+      <h4>Lighting</h4>
+      <ul>
+        <li><strong>Puck lights in the cap</strong> provide ambient shelf lighting day-to-day and reading light when bed is open</li>
+        <li><strong>Warm LED strip along the top of the bed cavity</strong> — eliminates the "head in a cave" feeling</li>
+      </ul>
+    </div>
+
+    <div class="brief-section">
+      <h3>10. Electrical</h3>
+      <p>Plan for outlets/wiring:</p>
+      <ul>
+        <li>Inside the bed cavity (LED strip + guest USB-C charging, both sides)</li>
+        <li>Inside the lower cabinets (for charging stored devices)</li>
+        <li>In the cap (for the recessed puck lights)</li>
+        <li>Behind the lounge bookcase (for future accent lighting)</li>
+      </ul>
+    </div>
+
+    <div class="brief-section questions">
+      <h3>Questions for Contractor</h3>
+      <ol>
+        <li><strong>Bed mechanism width:</strong> What's the exact cabinet width for the queen mechanism you're specifying?</li>
+        <li><strong>Flush mechanism:</strong> Is a linear bearing rail system feasible for pushing the fixed sections back 8"?</li>
+        <li><strong>Brass track:</strong> What's the best heavy-duty track system that can be finished or clad in brass?</li>
+        <li><strong>40" shelf spans:</strong> What material and thickness for a 40" unsupported walnut shelf that won't sag?</li>
+        <li><strong>Weight capacity:</strong> What's the max load on Panel B (40" wide) with walnut shelves + brass rails + books/objects?</li>
+        <li><strong>Glass whiteboard:</strong> Can we mount a glass whiteboard on the murphy bed panel face? Weight/thickness concerns?</li>
+        <li><strong>Electrical:</strong> Can we run electrical into the bed cavity, lower cabinets, and cap during the build?</li>
+        <li><strong>Puck lights in cap:</strong> What's the right fixture and spacing for recessed puck lights in a 1.5–2" thick cap piece?</li>
+        <li><strong>Shelf pins:</strong> Any concerns with 32mm European spacing brass pins at these shelf depths?</li>
+        <li><strong>Linear bearing for push-back:</strong> What product/system would you recommend for the fixed section push-back mechanism?</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+const dpr = 2;
+const canvas = document.getElementById('c');
+const W = 1200, H = 650;
+canvas.width = W * dpr;
+canvas.height = H * dpr;
+canvas.style.maxWidth = W + 'px';
+const ctx = canvas.getContext('2d');
+ctx.scale(dpr, dpr);
+
+// ── State ──
+let slide = 0, target = 0, mode = 'office', raf = null;
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-office').classList.toggle('active', m === 'office');
+  document.getElementById('btn-guest').classList.toggle('active', m === 'guest');
+  target = m === 'guest' ? 1 : 0;
+  tick();
+  updateCards();
+}
+
+function tick() {
+  const d = target - slide;
+  if (Math.abs(d) < 0.003) { slide = target; draw(); return; }
+  slide += d * 0.065;
+  draw();
+  raf = requestAnimationFrame(tick);
+}
+
+function opt(id) { return document.getElementById(id).checked; }
+
+// ── Deterministic random ──
+function rng(s) {
+  s = Math.sin(s * 9301 + 49297) * 233280;
+  return s - Math.floor(s);
+}
+
+// ── Colors ──
+const P = {
+  frame:    '#474D4A',
+  frameDk:  '#3b403d',
+  frameLt:  '#545a56',
+  walnut:   '#7a5535',
+  walnutLt: '#906840',
+  walnutDk: '#5e3f25',
+  back:     '#2e2118',
+  backLt:   '#3a2d22',
+  brass:    '#c8a85c',
+  brassLt:  '#dabe78',
+  brassDk:  '#9e8444',
+  bg:       '#1a1c1e',
+  cavity:   '#1e1e20',
+  cavityLt: '#262628',
+  wb:       '#e4e4e0',
+  wbLine:   '#d0d0cc',
+};
+
+// ── Layout ──
+const MARGIN_L = 80, MARGIN_R = 80, MARGIN_T = 52, MARGIN_B = 60;
+const UNIT_W = W - MARGIN_L - MARGIN_R;  // total unit width
+const UNIT_H = H - MARGIN_T - MARGIN_B - 40; // leave room for labels
+const UX = MARGIN_L, UY = MARGIN_T;
+
+// Proportions: bookcase(40) | panelB(40) | panelA(22) | bar(22) = 124 units
+const TOTAL = 124;
+const sec = {
+  book:   (40 / TOTAL) * UNIT_W,
+  panelB: (40 / TOTAL) * UNIT_W,
+  panelA: (22 / TOTAL) * UNIT_W,
+  bar:    (22 / TOTAL) * UNIT_W,
+};
+
+const CAP_H = 16;
+const TRACK_H = 14;
+const CAB_H = 105;
+const FRM = 6;  // frame thickness on each side of a column
+const SHELF_ZONE = UNIT_H - CAP_H - TRACK_H - CAB_H;
+const DIV_W = FRM; // divider between columns in 40" sections
+
+// Section home X positions
+const X = {
+  book:   UX,
+  panelB: UX + sec.book,
+  panelA: UX + sec.book + sec.panelB,
+  bar:    UX + sec.book + sec.panelB + sec.panelA,
+};
+
+// ── Shelf configurations ──
+// DESK ZONE (4 columns, ~20" each): fewer shelves, taller openings, display/decor — what you look at all day
+// 3 shelves = 4 openings
+const DESK_SHELVES = [0.0, 0.22, 0.50, 0.76];
+// LOUNGE ZONE (2 columns, ~22" each): more shelves, book-heavy, denser — the reading library
+// 5 shelves = 6 openings
+const LOUNGE_SHELVES = [0.0, 0.14, 0.30, 0.48, 0.66, 0.82];
+// PANEL A: same shelf lines as lounge but bottom shelf removed — taller bottom opening for bar area
+const PANEL_A_SHELVES = [0.0, 0.14, 0.30, 0.48, 0.66];
+const SHELVES = {
+  'book-L':   DESK_SHELVES,
+  'book-R':   DESK_SHELVES,
+  'panelB-L': DESK_SHELVES,
+  'panelB-R': DESK_SHELVES,
+  'panelA':   PANEL_A_SHELVES,
+  'bar':      LOUNGE_SHELVES,
+};
+
+// ── Drawing helpers ──
+
+function drawBarShelfItems(x, y, w, h) {
+  ctx.save();
+  ctx.globalAlpha = 0.45;
+  const colors = ['#8a6818', '#604020', '#705030'];
+  for (let i = 0; i < 2; i++) {
+    const bw = 8, bh = h * 0.6 + i * 4;
+    const bx = x + 6 + i * 20;
+    ctx.fillStyle = colors[i];
+    ctx.beginPath();
+    ctx.roundRect(bx, y + h - bh, bw, bh, [1, 1, 0, 0]);
+    ctx.fill();
+    ctx.fillRect(bx + 2.5, y + h - bh - 5, 3, 7);
+  }
+  for (let i = 0; i < 3; i++) {
+    const gx = x + w * 0.48 + i * 13;
+    const gw = 7, gh = h * 0.28;
+    ctx.fillStyle = 'rgba(180,170,150,0.5)';
+    ctx.beginPath();
+    ctx.roundRect(gx, y + h - gh, gw, gh, [1, 1, 0, 0]);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawShelfItems(seed, x, y, w, h, isLounge) {
+  ctx.save();
+  ctx.globalAlpha = 0.4;
+  if (isLounge) {
+    // Lounge zone: display-oriented — objects, art, a few styled books
+    const type = Math.floor(rng(seed * 17) * 4);
+    if (type === 0) {
+      // A vase or sculptural object
+      const vw = w * 0.2, vh = h * 0.55;
+      ctx.fillStyle = '#6a5a4a';
+      ctx.beginPath();
+      ctx.roundRect(x + w * 0.35, y + h - vh, vw, vh, [4, 4, 1, 1]);
+      ctx.fill();
+    } else if (type === 1) {
+      // Framed photo + small object
+      const fw = w * 0.25, fh = h * 0.5;
+      ctx.fillStyle = '#5a4a3a';
+      ctx.fillRect(x + w * 0.15, y + h - fh, fw, fh);
+      ctx.fillStyle = '#4a3a2a';
+      ctx.fillRect(x + w * 0.15 + 2, y + h - fh + 2, fw - 4, fh - 4);
+      ctx.fillStyle = '#8a7a60';
+      ctx.beginPath();
+      ctx.arc(x + w * 0.65, y + h - h * 0.15, h * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (type === 2) {
+      // A few books stacked horizontally + object on top
+      const sw = w * 0.4, sh = h * 0.12;
+      for (let i = 0; i < 3; i++) {
+        ctx.fillStyle = ['#7a5a20', '#4a3020', '#3a5545'][i];
+        ctx.fillRect(x + w * 0.1, y + h - (i + 1) * (sh + 1), sw, sh);
+      }
+      ctx.fillStyle = '#8a7a60';
+      ctx.beginPath();
+      ctx.arc(x + w * 0.3, y + h - 3 * (sh + 1) - h * 0.08, h * 0.06, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Small plant or candle
+      ctx.fillStyle = '#5a6a5a';
+      ctx.beginPath();
+      ctx.arc(x + w * 0.5, y + h - h * 0.25, h * 0.12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#6a5a4a';
+      ctx.fillRect(x + w * 0.42, y + h - h * 0.12, w * 0.16, h * 0.12);
+    }
+  } else {
+    // Desk zone: book-heavy, denser
+    const type = Math.floor(rng(seed * 13) * 5);
+    if (type < 4) {
+      // Books (80% chance) — fill the shelf
+      const count = Math.floor(w / 11);
+      let cx = x + 3;
+      for (let i = 0; i < count * 0.7; i++) {
+        const bw = 4 + rng(seed + i) * 4;
+        const bh = h * (0.5 + rng(seed + i * 2) * 0.4);
+        const colors = ['#7a5a20', '#4a3020', '#3a5545', '#5a4050', '#44446a', '#6a5540'];
+        ctx.fillStyle = colors[Math.floor(rng(seed + i * 5) * colors.length)];
+        ctx.fillRect(cx, y + h - bh, bw, bh);
+        cx += bw + 1;
+        if (cx > x + w - 6) break;
+      }
+    } else {
+      // Occasional object break
+      const vw = w * 0.18, vh = h * 0.45;
+      ctx.fillStyle = '#6a5a4a';
+      ctx.beginPath();
+      ctx.roundRect(x + w * 0.3, y + h - vh, vw, vh, [3, 3, 1, 1]);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
+function drawArchedColumn(x, y, w, h, shelfPositions, seed, isLounge, barOpeningIdx) {
+  const st = 5; // shelf thickness
+  const archPad = FRM;
+  const innerW = w - archPad * 2;
+  const archR = innerW / 2;
+  const archCenterX = x + w / 2;
+  const archTopY = y + archR + archPad;
+
+  // Clip to arch shape
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(x + archPad, y + h);
+  ctx.lineTo(x + archPad, archTopY);
+  ctx.arc(archCenterX, archTopY, archR, Math.PI, 0, false);
+  ctx.lineTo(x + w - archPad, y + h);
+  ctx.closePath();
+  ctx.clip();
+
+  // Back panel
+  ctx.fillStyle = P.back;
+  ctx.fillRect(x, y, w, h);
+  // Subtle gradient on back
+  const bg = ctx.createLinearGradient(x, y, x, y + h);
+  bg.addColorStop(0, 'rgba(0,0,0,0.15)');
+  bg.addColorStop(0.5, 'rgba(0,0,0,0)');
+  bg.addColorStop(1, 'rgba(0,0,0,0.1)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(x, y, w, h);
+
+  // Shelves and items
+  const sx = x + archPad + 2;
+  const sw = innerW - 4;
+
+  for (let i = 0; i < shelfPositions.length; i++) {
+    const sy = y + shelfPositions[i] * h;
+
+    // Shelf
+    ctx.fillStyle = P.walnut;
+    ctx.fillRect(sx - 2, sy, sw + 4, st);
+    // Top edge highlight
+    ctx.fillStyle = P.walnutLt;
+    ctx.fillRect(sx - 2, sy, sw + 4, 1);
+    // Bottom shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(sx - 2, sy + st, sw + 4, 2);
+
+    // LED glow
+    if (opt('opt-led') && i > 0) {
+      ctx.fillStyle = 'rgba(255,215,150,0.12)';
+      ctx.fillRect(sx, sy + st, sw, 14);
+      ctx.fillStyle = 'rgba(255,200,120,0.5)';
+      ctx.fillRect(sx, sy + st, sw, 1.5);
+    }
+
+    // Items on shelf
+    if (i < shelfPositions.length - 1) {
+      const nextY = y + shelfPositions[i + 1] * h;
+      const openH = nextY - sy - st;
+      if (i === barOpeningIdx) drawBarShelfItems(sx + 2, sy + st + 2, sw - 4, openH - 4);
+      else drawShelfItems(seed + i * 100, sx + 2, sy + st + 2, sw - 4, openH - 4, isLounge);
+    }
+  }
+  // Bottom shelf
+  ctx.fillStyle = P.walnut;
+  ctx.fillRect(sx - 2, y + h - st, sw + 4, st);
+  ctx.fillStyle = P.walnutLt;
+  ctx.fillRect(sx - 2, y + h - st, sw + 4, 1);
+
+  // Last opening items
+  if (shelfPositions.length > 0) {
+    const lastIdx = shelfPositions.length;
+    const lastSy = y + shelfPositions[shelfPositions.length - 1] * h + st;
+    const lastH = (y + h - st) - lastSy;
+    if (lastH > 10) {
+      if (lastIdx === barOpeningIdx) drawBarShelfItems(sx + 2, lastSy + 2, sw - 4, lastH - 4);
+      else drawShelfItems(seed + 99, sx + 2, lastSy + 2, sw - 4, lastH - 4, isLounge);
+    }
+  }
+
+  ctx.restore();
+
+  // Arch frame (painted frame color, drawn as thick stroke)
+  ctx.save();
+  ctx.strokeStyle = P.frame;
+  ctx.lineWidth = archPad;
+  ctx.beginPath();
+  ctx.moveTo(x + archPad / 2, y + h);
+  ctx.lineTo(x + archPad / 2, archTopY);
+  ctx.arc(archCenterX, archTopY, archR + archPad / 2, Math.PI, 0, false);
+  ctx.lineTo(x + w - archPad / 2, y + h);
+  ctx.stroke();
+  // Inner shadow line
+  ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x + archPad, y + h);
+  ctx.lineTo(x + archPad, archTopY);
+  ctx.arc(archCenterX, archTopY, archR, Math.PI, 0, false);
+  ctx.lineTo(x + w - archPad, y + h);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawSquareColumn(x, y, w, h, shelfPositions, seed, isLounge, barOpeningIdx) {
+  const st = 5;
+  const pad = FRM;
+  const sx = x + pad, sw = w - pad * 2;
+
+  ctx.fillStyle = P.back;
+  ctx.fillRect(sx, y + pad, sw, h - pad);
+  const bg = ctx.createLinearGradient(x, y, x, y + h);
+  bg.addColorStop(0, 'rgba(0,0,0,0.12)');
+  bg.addColorStop(1, 'rgba(0,0,0,0.06)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(sx, y + pad, sw, h - pad);
+
+  for (let i = 0; i < shelfPositions.length; i++) {
+    const sy = y + shelfPositions[i] * h;
+    ctx.fillStyle = P.walnut;
+    ctx.fillRect(sx, sy, sw, st);
+    ctx.fillStyle = P.walnutLt;
+    ctx.fillRect(sx, sy, sw, 1);
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.fillRect(sx, sy + st, sw, 2);
+
+    if (opt('opt-led') && i > 0) {
+      ctx.fillStyle = 'rgba(255,215,150,0.12)';
+      ctx.fillRect(sx + 1, sy + st, sw - 2, 14);
+      ctx.fillStyle = 'rgba(255,200,120,0.5)';
+      ctx.fillRect(sx + 1, sy + st, sw - 2, 1.5);
+    }
+
+    if (i < shelfPositions.length - 1) {
+      const nextY = y + shelfPositions[i + 1] * h;
+      if (i === barOpeningIdx) drawBarShelfItems(sx + 2, sy + st + 2, sw - 4, nextY - sy - st - 4);
+      else drawShelfItems(seed + i * 100, sx + 2, sy + st + 2, sw - 4, nextY - sy - st - 4, isLounge);
+    }
+  }
+  ctx.fillStyle = P.walnut;
+  ctx.fillRect(sx, y + h - st, sw, st);
+  ctx.fillStyle = P.walnutLt;
+  ctx.fillRect(sx, y + h - st, sw, 1);
+
+  if (shelfPositions.length > 0) {
+    const lastIdx = shelfPositions.length;
+    const lastSy = y + shelfPositions[shelfPositions.length - 1] * h + st;
+    const lastH = (y + h - st) - lastSy;
+    if (lastH > 10) {
+      if (lastIdx === barOpeningIdx) drawBarShelfItems(sx + 2, lastSy + 2, sw - 4, lastH - 4);
+      else drawShelfItems(seed + 99, sx + 2, lastSy + 2, sw - 4, lastH - 4, isLounge);
+    }
+  }
+
+  // Frame border
+  ctx.strokeStyle = P.frameDk;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(sx + 0.5, y + pad + 0.5, sw - 1, h - pad - 1);
+}
+
+function drawRoundedColumn(x, y, w, h, shelfPositions, seed, isLounge, barOpeningIdx) {
+  const st = 5;
+  const pad = FRM;
+  const sx = x + pad, sw = w - pad * 2;
+  const radius = 12; // subtle rounded corners on top
+
+  // Clipped rounded rectangle for the opening
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(sx, y + pad, sw, h - pad, [radius, radius, 0, 0]);
+  ctx.clip();
+
+  ctx.fillStyle = P.back;
+  ctx.fillRect(sx, y + pad, sw, h - pad);
+  const bg = ctx.createLinearGradient(x, y, x, y + h);
+  bg.addColorStop(0, 'rgba(0,0,0,0.12)');
+  bg.addColorStop(1, 'rgba(0,0,0,0.06)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(sx, y + pad, sw, h - pad);
+
+  for (let i = 0; i < shelfPositions.length; i++) {
+    const sy = y + shelfPositions[i] * h;
+    ctx.fillStyle = P.walnut;
+    ctx.fillRect(sx, sy, sw, st);
+    ctx.fillStyle = P.walnutLt;
+    ctx.fillRect(sx, sy, sw, 1);
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.fillRect(sx, sy + st, sw, 2);
+
+    if (opt('opt-led') && i > 0) {
+      ctx.fillStyle = 'rgba(255,215,150,0.12)';
+      ctx.fillRect(sx + 1, sy + st, sw - 2, 14);
+      ctx.fillStyle = 'rgba(255,200,120,0.5)';
+      ctx.fillRect(sx + 1, sy + st, sw - 2, 1.5);
+    }
+
+    if (i < shelfPositions.length - 1) {
+      const nextY = y + shelfPositions[i + 1] * h;
+      if (i === barOpeningIdx) drawBarShelfItems(sx + 2, sy + st + 2, sw - 4, nextY - sy - st - 4);
+      else drawShelfItems(seed + i * 100, sx + 2, sy + st + 2, sw - 4, nextY - sy - st - 4, isLounge);
+    }
+  }
+  ctx.fillStyle = P.walnut;
+  ctx.fillRect(sx, y + h - st, sw, st);
+  ctx.fillStyle = P.walnutLt;
+  ctx.fillRect(sx, y + h - st, sw, 1);
+
+  if (shelfPositions.length > 0) {
+    const lastIdx = shelfPositions.length;
+    const lastSy = y + shelfPositions[shelfPositions.length - 1] * h + st;
+    const lastH = (y + h - st) - lastSy;
+    if (lastH > 10) {
+      if (lastIdx === barOpeningIdx) drawBarShelfItems(sx + 2, lastSy + 2, sw - 4, lastH - 4);
+      else drawShelfItems(seed + 99, sx + 2, lastSy + 2, sw - 4, lastH - 4, isLounge);
+    }
+  }
+
+  ctx.restore();
+
+  // Rounded frame border
+  ctx.strokeStyle = P.frameDk;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect(sx + 0.5, y + pad + 0.5, sw - 1, h - pad - 1, [radius, radius, 0, 0]);
+  ctx.stroke();
+}
+
+function drawRevealColumn(x, y, w, h, shelfPositions, seed, isLounge, barOpeningIdx) {
+  // Square opening with a thin reveal/shadow line inset from the frame
+  const st = 5;
+  const pad = FRM;
+  const sx = x + pad, sw = w - pad * 2;
+  const revealInset = 3;
+
+  ctx.fillStyle = P.back;
+  ctx.fillRect(sx, y + pad, sw, h - pad);
+  const bg = ctx.createLinearGradient(x, y, x, y + h);
+  bg.addColorStop(0, 'rgba(0,0,0,0.12)');
+  bg.addColorStop(1, 'rgba(0,0,0,0.06)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(sx, y + pad, sw, h - pad);
+
+  // Reveal line — thin dark inset border
+  ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(sx + revealInset + 0.5, y + pad + revealInset + 0.5, sw - revealInset * 2 - 1, h - pad - revealInset - 1);
+
+  for (let i = 0; i < shelfPositions.length; i++) {
+    const sy = y + shelfPositions[i] * h;
+    ctx.fillStyle = P.walnut;
+    ctx.fillRect(sx, sy, sw, st);
+    ctx.fillStyle = P.walnutLt;
+    ctx.fillRect(sx, sy, sw, 1);
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.fillRect(sx, sy + st, sw, 2);
+
+    if (opt('opt-led') && i > 0) {
+      ctx.fillStyle = 'rgba(255,215,150,0.12)';
+      ctx.fillRect(sx + 1, sy + st, sw - 2, 14);
+      ctx.fillStyle = 'rgba(255,200,120,0.5)';
+      ctx.fillRect(sx + 1, sy + st, sw - 2, 1.5);
+    }
+
+    if (i < shelfPositions.length - 1) {
+      const nextY = y + shelfPositions[i + 1] * h;
+      if (i === barOpeningIdx) drawBarShelfItems(sx + 2, sy + st + 2, sw - 4, nextY - sy - st - 4);
+      else drawShelfItems(seed + i * 100, sx + 2, sy + st + 2, sw - 4, nextY - sy - st - 4, isLounge);
+    }
+  }
+  ctx.fillStyle = P.walnut;
+  ctx.fillRect(sx, y + h - st, sw, st);
+  ctx.fillStyle = P.walnutLt;
+  ctx.fillRect(sx, y + h - st, sw, 1);
+
+  if (shelfPositions.length > 0) {
+    const lastIdx = shelfPositions.length;
+    const lastSy = y + shelfPositions[shelfPositions.length - 1] * h + st;
+    const lastH = (y + h - st) - lastSy;
+    if (lastH > 10) {
+      if (lastIdx === barOpeningIdx) drawBarShelfItems(sx + 2, lastSy + 2, sw - 4, lastH - 4);
+      else drawShelfItems(seed + 99, sx + 2, lastSy + 2, sw - 4, lastH - 4, isLounge);
+    }
+  }
+
+  // Outer frame border
+  ctx.strokeStyle = P.frameDk;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(sx + 0.5, y + pad + 0.5, sw - 1, h - pad - 1);
+}
+
+function drawBrassRails(x, y, w, h, shelfPositions) {
+  const pad = FRM + 2;
+  const sx = x + pad, sw = w - pad * 2;
+  const st = 5; // shelf thickness
+
+  // A brass rail sits just above each shelf — at about 40% of the opening height
+  // measured up from the shelf below. This is where a guard rail would naturally go
+  // to keep books/objects from falling.
+
+  // Build list of all shelf Y positions including bottom shelf
+  const allY = shelfPositions.map(p => y + p * h);
+  allY.push(y + h - st); // bottom shelf
+
+  // Arch geometry (needed to clip rail width in arch mode)
+  const archPad = FRM;
+  const innerW = w - archPad * 2;
+  const archR = innerW / 2;
+  const archCenterX = x + w / 2;
+  const archCenterY = y + archR + archPad;
+
+  // Draw a rail in each opening (between consecutive shelves)
+  for (let i = 0; i < allY.length - 1; i++) {
+    const shelfTop = allY[i] + st;
+    const shelfBottom = allY[i + 1];
+    const openingH = shelfBottom - shelfTop;
+    if (openingH < 20) continue;
+
+    // Rail sits 6px above the shelf
+    const ry = shelfBottom - 6;
+
+    // Calculate rail width — in arch mode, clip to the arch circle at this Y
+    let railLeft = sx + 2;
+    let railRight = sx + sw - 2;
+
+    if (false && ry < archCenterY) { // arches removed
+      // ry is within the arch curve — calculate horizontal chord width
+      const dy = archCenterY - ry;
+      if (dy >= archR) continue; // above the arch entirely
+      const dx = Math.sqrt(archR * archR - dy * dy);
+      railLeft = Math.max(railLeft, archCenterX - dx + 4);
+      railRight = Math.min(railRight, archCenterX + dx - 4);
+      if (railRight - railLeft < 20) continue; // too narrow
+    }
+
+    // Rod
+    ctx.strokeStyle = P.brass;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(railLeft, ry);
+    ctx.lineTo(railRight, ry);
+    ctx.stroke();
+    // Highlight
+    ctx.strokeStyle = P.brassLt;
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(railLeft, ry - 0.5);
+    ctx.lineTo(railRight, ry - 0.5);
+    ctx.stroke();
+    // End posts
+    for (const px of [railLeft, railRight]) {
+      ctx.fillStyle = P.brass;
+      ctx.beginPath();
+      ctx.arc(px, ry, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = P.brassLt;
+      ctx.beginPath();
+      ctx.arc(px - 0.5, ry - 0.5, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+function drawCabinet(x, y, w, h) {
+  // All cabinets: sliding doors
+  ctx.fillStyle = P.frame;
+  ctx.fillRect(x, y, w, h);
+  const p = FRM;
+
+  // Recessed background behind doors
+  ctx.fillStyle = P.frameDk;
+  ctx.fillRect(x + p, y + 4, w - p * 2, h - 8);
+
+  // Two sliding doors — slightly lighter than frame to read as distinct panels
+  const gap = 4;
+  const dw = (w - p * 2 - gap) / 2;
+  for (let i = 0; i < 2; i++) {
+    const dx = x + p + i * (dw + gap);
+    const dy = y + 6;
+    const dh = h - 12;
+
+    // Door face — lighter than the recessed area so it reads as a raised panel
+    ctx.fillStyle = P.frameLt;
+    ctx.fillRect(dx, dy, dw, dh);
+
+    // Recessed panel inset
+    ctx.fillStyle = P.frame;
+    ctx.fillRect(dx + 5, dy + 5, dw - 10, dh - 10);
+
+    // Finger pull (routed groove) — on the meeting edge of each door
+    const pullX = i === 0 ? dx + dw - 8 : dx + 5;
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.beginPath();
+    ctx.roundRect(pullX, dy + dh / 2 - 10, 2.5, 20, 1);
+    ctx.fill();
+  }
+
+  // Brass knobs centered on each door
+  for (let i = 0; i < 2; i++) {
+    const kx = x + p + i * (dw + gap) + dw / 2;
+    ctx.fillStyle = P.brass;
+    ctx.beginPath();
+    ctx.arc(kx, y + h / 2, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = P.brassLt;
+    ctx.beginPath();
+    ctx.arc(kx - 0.5, y + h / 2 - 0.5, 1, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// Fold-down spirits front — drawn over the lowest shelf opening on bar column
+function drawBarSpiritsOverlay(x, y, w, h, shelfPositions) {
+  const st = 5;
+  // The lowest shelf opening: between last shelf position and the bottom
+  const lastShelfY = y + shelfPositions[shelfPositions.length - 1] * h + st;
+  const bottomShelfY = y + h - st;
+  const openingH = bottomShelfY - lastShelfY;
+  const pad = FRM;
+  const fx = x + pad + 2, fy = lastShelfY + 2;
+  const fw = w - pad * 2 - 4, fh = openingH - 4;
+
+  // Reeded fold-down panel over the opening
+  ctx.fillStyle = P.frame;
+  ctx.fillRect(fx, fy, fw, fh);
+  for (let i = 0; i < fw; i += 4) {
+    ctx.fillStyle = i % 8 < 4 ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.04)';
+    ctx.fillRect(fx + i, fy, 2, fh);
+  }
+  // Brass knob
+  ctx.fillStyle = P.brass;
+  ctx.beginPath();
+  ctx.arc(fx + fw / 2, fy + fh * 0.35, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = P.brassLt;
+  ctx.beginPath();
+  ctx.arc(fx + fw / 2 - 1, fy + fh * 0.35 - 1, 1.3, 0, Math.PI * 2);
+  ctx.fill();
+  // Hinge line at bottom
+  ctx.fillStyle = P.brassDk;
+  ctx.fillRect(fx + 6, fy + fh - 2, fw - 12, 1);
+}
+
+// ── Draw a single column (arch or square + cabinet) ──
+function drawColumn(x, y, totalW, shelfKey, seed, isLounge, isSliding, barOpeningIdx) {
+  const topY = y + CAP_H + TRACK_H;
+  const shelfH = SHELF_ZONE;
+  const cabY = topY + shelfH;
+  const positions = SHELVES[shelfKey];
+
+  // Column outer frame background
+  ctx.fillStyle = P.frame;
+  ctx.fillRect(x, topY, totalW, shelfH + CAB_H);
+
+  // Shelf zone
+  drawSquareColumn(x, topY, totalW, shelfH, positions, seed, isLounge, barOpeningIdx);
+
+  // Brass rails on all columns
+  if (opt('opt-rails')) {
+    drawBrassRails(x, topY, totalW, shelfH, positions);
+  }
+
+  // Cabinet (all get sliding doors)
+  drawCabinet(x, cabY, totalW, CAB_H);
+
+  // All sections uniform — no special bar overlay
+}
+
+// ── Draw a 40" section (two columns with divider) ──
+function drawWideSection(x, y, totalW, prefix, seedBase, isSliding) {
+  const colW = (totalW - DIV_W) / 2;
+  drawColumn(x, y, colW, prefix + '-L', seedBase, false, isSliding);
+  ctx.fillStyle = P.frame;
+  ctx.fillRect(x + colW, y + CAP_H + TRACK_H, DIV_W, SHELF_ZONE + CAB_H);
+  drawColumn(x + colW + DIV_W, y, colW, prefix + '-R', seedBase + 50, false, isSliding);
+}
+
+// ── Draw bed cavity ──
+function drawBedCavity(x, y, w, h) {
+  if (slide <= 0) return;
+  ctx.save();
+  ctx.globalAlpha = Math.min(slide * 3, 1);
+
+  // Cavity background
+  ctx.fillStyle = P.cavity;
+  ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = P.cavityLt;
+  ctx.fillRect(x + 4, y + 4, w - 8, h - 8);
+
+  // Subtle depth shading at top
+  const dg = ctx.createLinearGradient(x, y, x, y + 30);
+  dg.addColorStop(0, 'rgba(0,0,0,0.3)');
+  dg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = dg;
+  ctx.fillRect(x + 4, y + 4, w - 8, 30);
+
+  // Cavity LED at top
+  if (opt('opt-led')) {
+    ctx.fillStyle = 'rgba(255,215,150,0.08)';
+    ctx.fillRect(x + 6, y + 6, w - 12, 18);
+    ctx.fillStyle = 'rgba(255,200,120,0.45)';
+    ctx.fillRect(x + 8, y + 6, w - 16, 1.5);
+  }
+
+  const pad = 40;
+
+  if (mode === 'bed') {
+    // ── BED DOWN VIEW ──
+    // The bed panel has folded down — cavity is open, mattress visible
+    // Back wall of cavity
+    ctx.fillStyle = '#252525';
+    ctx.fillRect(x + 6, y + 6, w - 12, h - 12);
+
+    // Mattress (queen, centered in the cavity)
+    const mattPad = 20;
+    const mattX = x + mattPad;
+    const mattW = w - mattPad * 2;
+    const mattH = h - 30;
+    const mattY = y + 20;
+
+    // Mattress body
+    ctx.fillStyle = '#d8d0c4';
+    ctx.beginPath();
+    ctx.roundRect(mattX, mattY, mattW, mattH, 4);
+    ctx.fill();
+
+    // Mattress quilting lines
+    ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+    ctx.lineWidth = 1;
+    for (let ly = 30; ly < mattH - 10; ly += 20) {
+      ctx.beginPath();
+      ctx.moveTo(mattX + 8, mattY + ly);
+      ctx.lineTo(mattX + mattW - 8, mattY + ly);
+      ctx.stroke();
+    }
+
+    // Pillow area (top ~20%)
+    const pillowH = mattH * 0.18;
+    ctx.fillStyle = '#e4ddd2';
+    ctx.beginPath();
+    ctx.roundRect(mattX + 10, mattY + 6, mattW * 0.42, pillowH, 6);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.roundRect(mattX + mattW * 0.5 + 4, mattY + 6, mattW * 0.42, pillowH, 6);
+    ctx.fill();
+
+    // Subtle mattress edge shadow
+    ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(mattX + 0.5, mattY + 0.5, mattW - 1, mattH - 1, 4);
+    ctx.stroke();
+
+    // Pull-out nightstand trays (extended, with items on them)
+    const trayW = 30, trayH = 5;
+    const trayY = mattY + pillowH + 10;
+    for (const side of ['left', 'right']) {
+      const tx = side === 'left' ? x + 4 : x + w - 4 - trayW;
+      // Tray shelf
+      ctx.fillStyle = P.walnut;
+      ctx.beginPath();
+      ctx.roundRect(tx, trayY, trayW, trayH, 1);
+      ctx.fill();
+      ctx.fillStyle = P.walnutLt;
+      ctx.fillRect(tx, trayY, trayW, 1);
+      // Phone on tray
+      ctx.fillStyle = '#333';
+      ctx.beginPath();
+      ctx.roundRect(tx + 8, trayY - 10, 14, 8, 2);
+      ctx.fill();
+      // Water glass
+      ctx.fillStyle = 'rgba(150,170,180,0.4)';
+      ctx.fillRect(tx + trayW - 10, trayY - 12, 6, 12);
+    }
+
+    // Label
+    ctx.fillStyle = '#777';
+    ctx.font = '500 11px "DM Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('QUEEN BED (folded down)', x + w / 2, mattY + mattH + 14);
+
+  } else {
+    // ── WHITEBOARD VIEW ── (panels open, bed still folded up)
+    if (opt('opt-wb')) {
+      ctx.fillStyle = P.wb;
+      ctx.beginPath();
+      ctx.roundRect(x + pad, y + 14, w - pad * 2, h - 28, 3);
+      ctx.fill();
+      // Grid lines
+      ctx.strokeStyle = P.wbLine;
+      ctx.lineWidth = 0.4;
+      for (let gy = 28; gy < h - 30; gy += 22) {
+        ctx.beginPath();
+        ctx.moveTo(x + pad + 10, y + gy);
+        ctx.lineTo(x + w - pad - 10, y + gy);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#aaa';
+      ctx.font = '500 12px "DM Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('GLASS WHITEBOARD', x + w / 2, y + h / 2 - 4);
+      ctx.fillStyle = '#888';
+      ctx.font = '400 10px "DM Sans", sans-serif';
+      ctx.fillText('on murphy bed panel face', x + w / 2, y + h / 2 + 12);
+    } else {
+      ctx.fillStyle = '#444';
+      ctx.font = '500 12px "DM Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('MURPHY BED CAVITY', x + w / 2, y + h / 2 - 4);
+      ctx.fillStyle = '#333';
+      ctx.font = '400 10px "DM Sans", sans-serif';
+      ctx.fillText('bed folds down from here', x + w / 2, y + h / 2 + 12);
+    }
+  }
+
+  ctx.restore();
+}
+
+// ── Main render ──
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = P.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Wall background behind unit
+  ctx.fillStyle = '#363b38';
+  ctx.beginPath();
+  ctx.roundRect(UX - 10, UY - 10, UNIT_W + 20, UNIT_H + 20, 4);
+  ctx.fill();
+  ctx.fillStyle = P.frame;
+  ctx.fillRect(UX - 6, UY - 6, UNIT_W + 12, UNIT_H + 12);
+
+  // Panel positions
+  const pbX = X.panelB - slide * sec.book;
+  const paX = X.panelA + slide * sec.bar;
+
+  // 1. Bed cavity (behind everything)
+  const bedX = X.panelB;
+  const bedW = sec.panelB + sec.panelA;
+  const bedY = UY + CAP_H + TRACK_H;
+  drawBedCavity(bedX, bedY, bedW, SHELF_ZONE + CAB_H);
+
+  // 2. Fixed sections (behind panels)
+  drawWideSection(X.book, UY, sec.book, 'book', 200, false);
+  drawColumn(X.bar, UY, sec.bar, 'bar', 100, true, false); // isLounge=true
+
+  // 3. Sliding panels (on top)
+  drawWideSection(pbX, UY, sec.panelB, 'panelB', 400, true);
+  drawColumn(paX, UY, sec.panelA, 'panelA', 300, true, true, 5); // isLounge=true, bar at last opening (idx = length of shelf positions)
+
+  // 4. Brass track (continuous, on top)
+  const ty = UY + CAP_H;
+  // Track background
+  ctx.fillStyle = P.brassDk;
+  ctx.fillRect(UX, ty, UNIT_W, TRACK_H);
+  // Top rail
+  ctx.fillStyle = P.brass;
+  ctx.fillRect(UX, ty + 3, UNIT_W, 2.5);
+  ctx.fillStyle = P.brassLt;
+  ctx.fillRect(UX, ty + 3, UNIT_W, 0.8);
+  // Bottom rail
+  ctx.fillStyle = P.brass;
+  ctx.fillRect(UX, ty + TRACK_H - 5, UNIT_W, 2.5);
+  ctx.fillStyle = P.brassLt;
+  ctx.fillRect(UX, ty + TRACK_H - 5, UNIT_W, 0.8);
+
+  // Rollers on Panel B
+  for (const rx of [pbX + 25, pbX + sec.panelB / 2, pbX + sec.panelB - 25]) {
+    ctx.fillStyle = P.brassLt;
+    ctx.beginPath(); ctx.arc(rx, ty + TRACK_H / 2, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = P.brass;
+    ctx.beginPath(); ctx.arc(rx, ty + TRACK_H / 2, 2.5, 0, Math.PI * 2); ctx.fill();
+  }
+  // Rollers on Panel A
+  for (const rx of [paX + 18, paX + sec.panelA - 18]) {
+    ctx.fillStyle = P.brassLt;
+    ctx.beginPath(); ctx.arc(rx, ty + TRACK_H / 2, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = P.brass;
+    ctx.beginPath(); ctx.arc(rx, ty + TRACK_H / 2, 2.5, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // 5. Top cap
+  ctx.fillStyle = P.frameDk;
+  ctx.fillRect(UX, UY, UNIT_W, CAP_H);
+  // Bottom shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.25)';
+  ctx.fillRect(UX, UY + CAP_H - 2, UNIT_W, 2);
+  // Top highlight
+  ctx.fillStyle = P.frameLt;
+  ctx.fillRect(UX, UY, UNIT_W, 1);
+
+  // 6. Astragal (where panels meet) — subtle, just the frame seam
+
+  // ── Labels ──
+  ctx.textAlign = 'center';
+
+  // Zone labels (top)
+  const zoneY = UY - 22;
+  ctx.font = '500 10px "DM Sans", sans-serif';
+  ctx.fillStyle = '#505050';
+  ctx.fillText('DESK ZONE  (~80")', UX + (sec.book + sec.panelB) / 2, zoneY);
+  ctx.fillText('LOUNGE ZONE  (~44")', UX + sec.book + sec.panelB + (sec.panelA + sec.bar) / 2, zoneY);
+  // Zone divider dot
+  ctx.fillStyle = '#3a3a3a';
+  ctx.beginPath();
+  ctx.arc(UX + sec.book + sec.panelB, zoneY - 3, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Section labels (bottom)
+  // When closed (slide=0), panels sit on top of fixed sections, so only show panel labels.
+  // As panels slide away, fade in the fixed section labels underneath.
+  const lblY = UY + UNIT_H + 20;
+  const fixedAlpha = Math.min(slide * 3, 1); // 0 when closed, 1 when open
+
+  // Bookcase label (only visible when Panel B has moved away)
+  if (fixedAlpha > 0) {
+    ctx.save();
+    ctx.globalAlpha = fixedAlpha;
+    ctx.font = '600 11px "DM Sans", sans-serif';
+    ctx.fillStyle = P.brass;
+    ctx.fillText('BOOKCASE', X.book + sec.book / 2, lblY);
+    ctx.font = '400 9px "DM Sans", sans-serif';
+    ctx.fillStyle = '#555';
+    ctx.fillText('Fixed  /  40"  /  14" deep', X.book + sec.book / 2, lblY + 14);
+    ctx.restore();
+  }
+
+  // Bar label (only visible when Panel A has moved away)
+  if (fixedAlpha > 0) {
+    ctx.save();
+    ctx.globalAlpha = fixedAlpha;
+    ctx.font = '600 11px "DM Sans", sans-serif';
+    ctx.fillStyle = P.brass;
+    ctx.fillText('LOUNGE', X.bar + sec.bar / 2, lblY);
+    ctx.font = '400 9px "DM Sans", sans-serif';
+    ctx.fillStyle = '#555';
+    ctx.fillText('Fixed  /  22"  /  14" deep', X.bar + sec.bar / 2, lblY + 14);
+    ctx.restore();
+  }
+
+  // Panel labels — fade out as they park over the fixed sections
+  const panelAlpha = Math.max(0, 1 - slide * 2.5); // fades to 0 by slide ~0.4
+  if (panelAlpha > 0) {
+    ctx.save();
+    ctx.globalAlpha = panelAlpha;
+
+    // Panel B
+    ctx.font = '600 11px "DM Sans", sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('PANEL B', pbX + sec.panelB / 2, lblY);
+    ctx.font = '400 9px "DM Sans", sans-serif';
+    ctx.fillStyle = '#555';
+    ctx.fillText('40"  /  8" deep  /  slides \u2190', pbX + sec.panelB / 2, lblY + 14);
+
+    // Panel A
+    ctx.font = '600 11px "DM Sans", sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('PANEL A', paX + sec.panelA / 2, lblY);
+    ctx.font = '400 9px "DM Sans", sans-serif';
+    ctx.fillStyle = '#555';
+    ctx.fillText('22"  /  8" deep  /  slides \u2192', paX + sec.panelA / 2, lblY + 14);
+
+    ctx.restore();
+  }
+
+  // Bed cavity label
+  if (slide > 0.3) {
+    ctx.globalAlpha = Math.min((slide - 0.3) * 3, 1);
+    ctx.font = '400 9px "DM Sans", sans-serif';
+    ctx.fillStyle = '#444';
+    ctx.fillText('BED CAVITY  (64")', X.panelB + (sec.panelB + sec.panelA) / 2, lblY + 30);
+    ctx.globalAlpha = 1;
+  }
+
+  // Side labels
+  ctx.save();
+  ctx.font = '400 9px "DM Sans", sans-serif';
+  ctx.fillStyle = '#3a3a3a';
+  ctx.translate(UX - 30, UY + UNIT_H / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('WALL  /  DESK SIDE', 0, 0);
+  ctx.restore();
+
+  ctx.save();
+  ctx.font = '400 9px "DM Sans", sans-serif';
+  ctx.fillStyle = '#3a3a3a';
+  ctx.translate(UX + UNIT_W + 30, UY + UNIT_H / 2);
+  ctx.rotate(Math.PI / 2);
+  ctx.fillText('WINDOW  /  LOUNGE SIDE', 0, 0);
+  ctx.restore();
+
+  // Annotations (right side)
+  if (slide < 0.2) {
+    const annAlpha = 1 - slide / 0.2;
+    ctx.save();
+    ctx.globalAlpha = annAlpha;
+    ctx.textAlign = 'left';
+    ctx.font = '500 8px "DM Sans", sans-serif';
+
+    // Brass track annotation
+    ctx.fillStyle = P.brassDk;
+    const annX = UX + UNIT_W + 12;
+    ctx.fillText('BRASS TRACK', annX, ty + TRACK_H / 2 + 3);
+    ctx.strokeStyle = P.brassDk;
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(annX - 4, ty + TRACK_H / 2);
+    ctx.lineTo(UX + UNIT_W + 2, ty + TRACK_H / 2);
+    ctx.stroke();
+
+    // Cap annotation
+    ctx.fillStyle = '#555';
+    ctx.fillText('FLAT CAP', annX, UY + CAP_H / 2 + 3);
+    ctx.strokeStyle = '#444';
+    ctx.beginPath();
+    ctx.moveTo(annX - 4, UY + CAP_H / 2);
+    ctx.lineTo(UX + UNIT_W + 2, UY + CAP_H / 2);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  // Slide arrows
+  if (slide > 0.03 && slide < 0.97) {
+    ctx.fillStyle = P.brass;
+    ctx.font = '600 18px "DM Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.globalAlpha = 0.7;
+    ctx.fillText('\u2190', pbX + sec.panelB / 2, UY + CAP_H + TRACK_H + 20);
+    ctx.fillText('\u2192', paX + sec.panelA / 2, UY + CAP_H + TRACK_H + 20);
+    ctx.globalAlpha = 1;
+  }
+}
+
+// ── Callout cards ──
+function updateCards() {
+  const el = document.getElementById('cards');
+  const office = [
+    ['Asymmetric Layout', 'Each zone gets a matched pair: fixed deep section + sliding shallow panel. Panel split aligns with the zone boundary.'],
+    ['Exposed Brass Track', 'Visible brass rail with rolling carriers across the full width. Library ladder aesthetic matched by shelf rails and cabinet hardware.'],
+    ['Walnut + Painted Frame', 'Warm walnut shelves and dark back panels inside a painted frame. Three-material palette creates richness and depth.'],
+    ['Adjustable Shelving', 'Brass pins in 32mm holes. Every column is identical construction. Zone character comes from styling, not structure. Reconfigure anytime.'],
+    ['Flush When Closed', 'Fixed sections push back on linear bearings to let panels slide. When closed, the whole wall is one unbroken plane. Each zone reads as a clean rectangle.'],
+    ['6-Column Rhythm', '40" sections split into two ~20" columns. Clean square openings, no arches. Zone differentiation comes from shelf styling, not structure.'],
+  ];
+  const whiteboard = [
+    ['Glass Whiteboard', 'Full-width glass whiteboard on the murphy bed panel face. Slide panels apart for a writing surface without lowering the bed.'],
+    ['Cavity LED Strip', 'Warm LED along the top of the bed cavity. Eliminates the "head in a cave" feeling and provides ambient reading light.'],
+    ['Matched-Pair Parking', 'Panel A (22") parks over lounge bookcase (22"). Panel B (40") parks over desk bookcase (40"). Each panel fits perfectly.'],
+    ['Quick Access', 'Slide both panels apart to use the whiteboard. Slide them back when done. No bed interaction needed.'],
+    ['Double Duty', 'The whiteboard is on the bed panel face \u2014 hidden when closed, available when panels are open, and out of the way when the bed is down.'],
+    ['Bed Clearance', '22" clearance on the lounge side, 40" on the desk side. Luggage goes on the wider desk side.'],
+  ];
+  const bed = [
+    ['Queen Murphy Bed', 'Folds down from the cavity with the whiteboard panel rotating out of the way. Pillows and linens stored inside.'],
+    ['Pull-Out Nightstand Trays', 'Walnut trays slide out from both sides of the cavity at mattress height. Phone, water, glasses. Tuck flush when not in use.'],
+    ['Cavity LED Strip', 'Warm overhead LED eliminates the "sleeping in a cave" feeling and provides ambient reading light for guests.'],
+    ['Matched-Pair Parking', 'Panel A parks over lounge bookcase. Panel B parks over desk bookcase. Both fixed sections hidden but accessible if needed.'],
+    ['Guest Access', '40" clearance on the desk side for getting in/out + luggage. 22" on the lounge side.'],
+    ['Spirits Accessible', 'Bar area is on Panel A (now parked). Bottles stored in lounge cabinet below \u2014 always accessible for a nightcap.'],
+  ];
+  const items = mode === 'office' ? office : whiteboard;
+  el.innerHTML = items.map(([t, d]) => `<div class="card"><h3>${t}</h3><p>${d}</p></div>`).join('');
+}
+
+// Init
+updateCards();
+draw();
+</script>
+</body>
+</html>
