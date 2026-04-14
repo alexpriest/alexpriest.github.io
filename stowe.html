@@ -65,6 +65,15 @@
   .verdict h2 { margin: 0 0 0.75rem; }
   .verdict p { font-size: 0.95rem; line-height: 1.6; color: #555; }
 
+  /* Mini tables inside tabs */
+  .mini-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.5rem 0; }
+  @media (max-width: 700px) { .mini-tables { grid-template-columns: 1fr; } }
+  .mini-table { background: #f5f3ef; border-radius: 8px; padding: 1rem 1.25rem; }
+  .mini-table h3 { font-size: 0.95rem; color: #2d4a3e; margin-bottom: 0.6rem; }
+  .mini-table ol { list-style: none; padding: 0; counter-reset: item; }
+  .mini-table li { padding: 0.3rem 0; padding-left: 1.5rem; position: relative; font-size: 0.88rem; line-height: 1.45; }
+  .mini-table li::before { counter-increment: item; content: counter(item); position: absolute; left: 0; color: #2d4a3e; font-weight: 700; font-size: 0.8rem; }
+  .mini-table .note { font-size: 0.75rem; color: #999; font-style: italic; }
   .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #aaa; }
 </style>
 </head>
@@ -135,6 +144,52 @@
     <div class="excursion"><div><div class="name">Burlington waterfront</div><div class="desc">Lake Champlain, Church Street pedestrian mall, playgrounds, ice cream. Closest thing to a "city day."</div></div><div class="dist">45 min</div></div>
     <div class="excursion"><div><div class="name">Moss Glen Falls</div><div class="desc">Easy 0.5 mi walk to a beautiful waterfall. Swimming below if it's warm enough.</div></div><div class="dist">10 min</div></div>
     <div class="excursion"><div><div class="name">Montpelier</div><div class="desc">Smallest state capital in the US. Cute downtown, good food. Low-key half day.</div></div><div class="dist">35 min</div></div>
+
+    <h2>The details</h2>
+    <div class="mini-tables">
+      <div class="mini-table">
+        <h3>Top restaurants</h3>
+        <ol>
+          <li><strong>Hen of the Wood</strong> — Farm-to-table in a historic mill. The best meal in the area. Book ahead. <span class="note">(Waterbury, 15 min)</span></li>
+          <li><strong>Doc Ponds</strong> — Elevated pub food, great cocktails, lively vibe. Smoked carnitas, Vermont chicken.</li>
+          <li><strong>Plate</strong> — Small plates, natural wine, intimate. Good date-night-while-kids-sleep spot.</li>
+          <li><strong>Harrison's</strong> — American fare, wood beams, brick fireplace. Reliable and warm.</li>
+          <li><strong>The Bench</strong> — Wood-fired everything: pizza, scallops, mussels. Casual, kid-friendly.</li>
+        </ol>
+      </div>
+      <div class="mini-table">
+        <h3>Top bars &amp; cocktails</h3>
+        <ol>
+          <li><strong>Apres Cocktails &amp; Wine</strong> — Hidden inside a day spa. Craft cocktails, small and intimate.</li>
+          <li><strong>Doc Ponds bar</strong> — Cider Punch (rum, brandy, maple, cider). Best casual drink in town.</li>
+          <li><strong>Lower Bar</strong> — 25 taps, creative cocktails, downtown. Lively without being loud.</li>
+          <li><strong>Idletyme Brewing</strong> — Brewpub with solid food. Good for a low-key beer night.</li>
+          <li><strong>The Alchemist</strong> — Heady Topper on tap at the source. <span class="note">(Waterbury/Stowe, taproom)</span></li>
+        </ol>
+      </div>
+      <div class="mini-table">
+        <h3>Top outdoor / nature</h3>
+        <ol>
+          <li><strong>Stowe Rec Path</strong> — 5.3 mi paved, flat, along the river. Daily anchor. Stroller/bike/scooter.</li>
+          <li><strong>Moss Glen Falls</strong> — 10 min walk to a beautiful waterfall. Swimming below in warm weather.</li>
+          <li><strong>Bingham Falls</strong> — Quarter-mile hike to falls + swimming holes upstream. Easy with a carrier.</li>
+          <li><strong>Sterling Falls Gorge</strong> — Half-mile, easy terrain. Dramatic gorge.</li>
+          <li><strong>Sunset Rock</strong> — 1-mile hike from Main Street to overlook of village + Mt. Mansfield.</li>
+          <li><strong>Wiessner Woods</strong> — 3-mile loop, flat forested trails. Quiet and shaded.</li>
+        </ol>
+      </div>
+      <div class="mini-table">
+        <h3>Top kid activities</h3>
+        <ol>
+          <li><strong>Ben &amp; Jerry's Factory</strong> — 30-min tour + ice cream sample. The 4yo will talk about this for months. <span class="note">(Waterbury)</span></li>
+          <li><strong>Rec Path by bike/scooter</strong> — Flat, paved, riverside. Let the 4yo ride, stroller the 2yo.</li>
+          <li><strong>Swimming Hole</strong> — Indoor pool complex with waterslide + shallow wading pool with fountains.</li>
+          <li><strong>Stowe Golf Park</strong> — Mini golf with water hazards and sand traps. Ice cream on site.</li>
+          <li><strong>Cold Hollow Cider Mill</strong> — Free cider samples, cider donuts. Kids love the donut machine. <span class="note">(Waterbury)</span></li>
+          <li><strong>Smugglers' Notch boulders</strong> — Big rocks to climb and scramble. 4yo paradise (watch the 2yo).</li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   <!-- MAINE TAB -->
@@ -187,6 +242,52 @@
     <div class="excursion"><div><div class="name">Portland food day</div><div class="desc">Eventide, Duckfat, Holy Donut, waterfront. Plan a full day — it's worth the drive.</div></div><div class="dist">1.5 hrs</div></div>
     <div class="excursion"><div><div class="name">Penobscot Bay boat tour</div><div class="desc">Windjammer or lobster boat tour. Beautiful from the water. Check if the 2yo is old enough.</div></div><div class="dist">Rockland harbor</div></div>
     <div class="excursion"><div><div class="name">Owls Head Lighthouse</div><div class="desc">Short easy walk to a classic lighthouse on the rocks. Great for photos, manageable with kids.</div></div><div class="dist">15 min</div></div>
+
+    <h2>The details</h2>
+    <div class="mini-tables">
+      <div class="mini-table">
+        <h3>Top restaurants</h3>
+        <ol>
+          <li><strong>Natalie's</strong> — Fine dining overlooking Camden Harbor. Award-winning. Book well ahead. <span class="note">(Camden)</span></li>
+          <li><strong>Long Grain</strong> — Thai/Asian in an intimate 40-seat room. The surprise gem of midcoast. <span class="note">(Camden)</span></li>
+          <li><strong>Primo</strong> — James Beard-recognized. Farm-to-table Italian on a working farm. <span class="note">(Rockland)</span></li>
+          <li><strong>North Beacon Oyster</strong> — Curated oysters, local seafood, Maine beef. Modern. <span class="note">(Rockland)</span></li>
+          <li><strong>Pig + Poet</strong> — Raw bar, roast pork, creative lobster rolls at the Whitehall. <span class="note">(Camden)</span></li>
+        </ol>
+      </div>
+      <div class="mini-table">
+        <h3>Top bars &amp; cocktails</h3>
+        <ol>
+          <li><strong>Natalie's bar</strong> — World-class cocktails, 24-page wine list. The nicest drink in town. <span class="note">(Camden)</span></li>
+          <li><strong>40 Paper</strong> — Mules, espresso vodka, local gin. Small, lively. <span class="note">(Camden)</span></li>
+          <li><strong>Rock Harbor Pub &amp; Brewery</strong> — Housemade ales, comfort food. Relaxed. <span class="note">(Rockland)</span></li>
+          <li><strong>The Jack</strong> — Laid-back, fruity cocktails, cornhole, outdoor seating. <span class="note">(Camden)</span></li>
+          <li><strong>In Good Company</strong> — Wine bar with small plates. Grown-up vibe. <span class="note">(Rockland)</span></li>
+        </ol>
+      </div>
+      <div class="mini-table">
+        <h3>Top outdoor / nature</h3>
+        <ol>
+          <li><strong>Mt. Battie (Camden Hills SP)</strong> — Short hike or drive to summit. Jaw-dropping harbor views.</li>
+          <li><strong>Owls Head Lighthouse</strong> — Easy walk to a classic lighthouse on the rocks.</li>
+          <li><strong>Penobscot Bay by boat</strong> — Windjammer or lobster boat tour. Seals, islands, open water.</li>
+          <li><strong>Merryspring Nature Center</strong> — 66-acre preserve with easy trails and gardens. Free. <span class="note">(Camden)</span></li>
+          <li><strong>Beaucaire (Camden waterfall)</strong> — Small waterfall right in town. Quick, easy, kid-friendly.</li>
+          <li><strong>Rockport Harbor</strong> — Tiny, picturesque, less touristy than Camden. Good for a quiet walk.</li>
+        </ol>
+      </div>
+      <div class="mini-table">
+        <h3>Top kid activities</h3>
+        <ol>
+          <li><strong>Tide pool exploring</strong> — Rocky coast = endless tide pools. Starfish, crabs, sea urchins. 4yo heaven.</li>
+          <li><strong>Lobster boat tour</strong> — Watch traps get hauled. Touch a live lobster. Unforgettable for kids.</li>
+          <li><strong>Camden Harbor ice cream</strong> — Multiple shops within walking distance. Post-dinner ritual.</li>
+          <li><strong>Coastal Children's Museum</strong> — Small but sweet, hands-on exhibits. Good for rainy days. <span class="note">(Rockland)</span></li>
+          <li><strong>Project Puffin Visitor Center</strong> — Learn about puffin conservation. Free, interactive. <span class="note">(Rockland)</span></li>
+          <li><strong>Harbor seal watching</strong> — Common in Penobscot Bay. Boat tours or from shore at certain spots.</li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   <!-- ACADIA TAB -->
@@ -240,6 +341,53 @@
     <div class="excursion"><div><div class="name">Thunder Hole</div><div class="desc">Ocean waves crash into a narrow inlet with a booming sound. Best at half tide. 4yo will be hypnotized. Watch the 2yo near edges.</div></div><div class="dist">In park</div></div>
     <div class="excursion"><div><div class="name">Bar Island walk</div><div class="desc">At low tide, a gravel bar emerges connecting Bar Harbor to Bar Island. Walk across, explore, walk back before the tide returns. Thrilling for kids.</div></div><div class="dist">Bar Harbor</div></div>
     <div class="excursion"><div><div class="name">Whale watching from Bar Harbor</div><div class="desc">Several operators run trips. 2-3 hours. Check age minimums for the 2yo — some require 2+.</div></div><div class="dist">Bar Harbor pier</div></div>
+
+    <h2>The details</h2>
+    <div class="mini-tables">
+      <div class="mini-table">
+        <h3>Top restaurants</h3>
+        <ol>
+          <li><strong>Table Salt</strong> — Opened 2025, immediately the town's best. Fine dining, creative menu. Book ahead.</li>
+          <li><strong>Havana</strong> — Latin-inspired, great cocktails, warm atmosphere. The adults' favorite.</li>
+          <li><strong>Mache Bistro</strong> — French-American, seasonal menu, intimate. One of the few "destination" spots.</li>
+          <li><strong>Jordan Pond House</strong> — Popovers + tea on the lawn overlooking the pond. Iconic. <span class="note">(In park)</span></li>
+          <li><strong>Trenton Bridge Lobster Pound</strong> — No-frills lobster since the 1950s. The real thing. <span class="note">(Trenton, on the way in)</span></li>
+        </ol>
+      </div>
+      <div class="mini-table">
+        <h3>Top bars &amp; cocktails</h3>
+        <ol>
+          <li><strong>Project Social Kitchen &amp; Bar</strong> — Fresh-ingredient cocktails, dinner. Best cocktails in town.</li>
+          <li><strong>Leary's Landing Irish Pub</strong> — Named Maine's best small-town bar by Thrillist. Cozy, ales + whiskeys.</li>
+          <li><strong>Luce Spirits</strong> — Cocktail-forward, intimate setting. The grown-up option.</li>
+          <li><strong>Thirsty Whale Tavern</strong> — Classic pub, outdoor patio, Maine craft beers. Relaxed.</li>
+          <li><strong>Paddy's Irish Pub</strong> — Views of Frenchman Bay, blueberry mojitos. Touristy but fun.</li>
+        </ol>
+        <p class="note">Honest note: Bar Harbor's bar scene is pub-heavy, not cocktail-forward. Expect good beer, not craft mixology.</p>
+      </div>
+      <div class="mini-table">
+        <h3>Top outdoor / nature</h3>
+        <ol>
+          <li><strong>Carriage Roads</strong> — 45 mi of car-free crushed gravel. Jordan Pond + Eagle Lake loops are best for strollers.</li>
+          <li><strong>Ocean Path</strong> — 4-mi coastal trail from Sand Beach to Otter Point. Stunning, mostly flat.</li>
+          <li><strong>Jordan Pond Path</strong> — 3.3 mi loop around the pond. Flat, 59 ft elevation gain. Stroller-friendly.</li>
+          <li><strong>Cadillac Summit Loop</strong> — 0.3 mi at the top. Drive up, walk the loop, see forever.</li>
+          <li><strong>Bar Island Trail</strong> — Walk across a sandbar at low tide. Explore, walk back. Thrilling for kids.</li>
+          <li><strong>Jesup &amp; Hemlock Paths</strong> — Boardwalks through birch + hemlock forest. Easy, shaded, peaceful.</li>
+        </ol>
+      </div>
+      <div class="mini-table">
+        <h3>Top kid activities</h3>
+        <ol>
+          <li><strong>Tide pools at Thunder Hole / Otter Point</strong> — Starfish, crabs, sea urchins in every crevice. Bring a net.</li>
+          <li><strong>Bar Island sandbar walk</strong> — Appears at low tide, disappears after. The 4yo will think it's magic.</li>
+          <li><strong>Carriage road bike ride</strong> — Rent a bike trailer for the 2yo. Flat, car-free, bridges to cross.</li>
+          <li><strong>Whale watching</strong> — 2-3 hour boat trip. Minke and humpback whales. Check age mins for the 2yo.</li>
+          <li><strong>Sand Beach</strong> — Real sand! Kids can dig and play even if the water's too cold to swim.</li>
+          <li><strong>Popovers at Jordan Pond House</strong> — Warm popovers with butter on the lawn. Kids love them.</li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   <!-- MONTREAL TAB -->
@@ -293,6 +441,55 @@
     <div class="excursion"><div><div class="name">Mont-Royal</div><div class="desc">The mountain in the middle of the city. Easy walk or drive to the top. Panoramic views, tam-tam drum circle on Sundays, playgrounds.</div></div><div class="dist">Central</div></div>
     <div class="excursion"><div><div class="name">Lachine Canal bike ride</div><div class="desc">Flat paved path along the canal. Rent bikes (+ trailer for the 2yo). Ends at Atwater Market for lunch.</div></div><div class="dist">Southwest</div></div>
     <div class="excursion"><div><div class="name">Day trip to Ottawa (optional)</div><div class="desc">1.5 hrs east. Parliament Hill, Rideau Canal, Canadian Museum of History (great kids section). Only if you want a change of pace.</div></div><div class="dist">1.5 hrs</div></div>
+
+    <h2>The details</h2>
+    <div class="mini-tables">
+      <div class="mini-table">
+        <h3>Top restaurants</h3>
+        <ol>
+          <li><strong>Joe Beef</strong> — The most famous restaurant in Montreal. Rich, French-inspired, legendary. Book months ahead.</li>
+          <li><strong>Mon Lapin</strong> — French-Italian, natural wine, inventive. Same team as Joe Beef but more relaxed.</li>
+          <li><strong>Schwartz's Deli</strong> — Smoked meat sandwiches since 1928. The line is part of the experience. Cash only.</li>
+          <li><strong>Lawrence</strong> — Michelin Recommended, Mile End. Solo chef, seasonal Quebec ingredients. Unpretentious.</li>
+          <li><strong>Mastard</strong> — Seasonal, creative, locally sourced. Vegetables treated as seriously as meat.</li>
+        </ol>
+        <p class="note">This list barely scratches it. Montreal has more great restaurants per capita than almost anywhere in North America.</p>
+      </div>
+      <div class="mini-table">
+        <h3>Top bars &amp; cocktails</h3>
+        <ol>
+          <li><strong>Cloakroom</strong> — No-menu, 25 seats, Canada's #2 bar. Tell them what you like, they make it. Reservations.</li>
+          <li><strong>Atwater Cocktail Club</strong> — Hidden entrance, dramatic interior, world-class cocktails. Top 50 in North America.</li>
+          <li><strong>Le Mal Nécessaire</strong> — Tiki bar in Chinatown. Fun, strong drinks, shareable bowls. Lively.</li>
+          <li><strong>Big in Japan</strong> — Asian-inspired cocktails, speakeasy entrance. Cool without trying too hard.</li>
+          <li><strong>Bar Henrietta</strong> — Natural wine + wine cocktails. Warm, neighborhood vibe.</li>
+        </ol>
+        <p class="note">Montreal's cocktail scene is genuinely world-class. This is the only destination where "adults night out" is a reason to pick the trip.</p>
+      </div>
+      <div class="mini-table">
+        <h3>Top outdoor / nature</h3>
+        <ol>
+          <li><strong>Mont-Royal</strong> — The mountain in the city. Easy paths to Kondiaronk lookout. Panoramic views.</li>
+          <li><strong>Lachine Canal</strong> — Flat paved path, 14 km. Bike or walk. Ends at Atwater Market.</li>
+          <li><strong>Parc La Fontaine</strong> — Lake, playgrounds, paths, ducks. The best "hang in the park" day.</li>
+          <li><strong>Old Port waterfront</strong> — Walk along the St. Lawrence. Clock tower, beach (yes, urban beach).</li>
+          <li><strong>Botanical Garden</strong> — 75 hectares, themed gardens, butterflies. Easily a half day with kids.</li>
+          <li><strong>Parc Jean-Drapeau</strong> — Island park with beaches, pools, Biosphere museum. <span class="note">(Metro accessible)</span></li>
+        </ol>
+        <p class="note">It's a city — "nature" means parks and paths, not wilderness. Beautiful parks though.</p>
+      </div>
+      <div class="mini-table">
+        <h3>Top kid activities</h3>
+        <ol>
+          <li><strong>Biodome</strong> — Four ecosystems under one roof. Penguins, rainforest, lynx. Half-day minimum.</li>
+          <li><strong>Old Port splash pad + carousel</strong> — Free splash pad, classic carousel, harbor views. Easy toddler afternoon.</li>
+          <li><strong>Jean-Talon Market</strong> — Let the 4yo pick fruit. The 2yo eats cheese samples. Everyone's happy.</li>
+          <li><strong>Montreal Science Centre</strong> — Interactive exhibits, toddler-friendly areas. Good rainy day plan.</li>
+          <li><strong>Tam-tam drum circle</strong> — Sundays on Mont-Royal. Drums, dancing, picnics. Free, magical, kids love it.</li>
+          <li><strong>St-Viateur Bagels</strong> — Watch them come out of the wood-fired oven. Warm bagel bigger than the 2yo's head.</li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   </div><!-- close .container -->
