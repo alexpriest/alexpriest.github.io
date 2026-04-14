@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stowe + Montreal — June 11–19, 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f3ef; color: #2c2c2c; }
+  .hero { background: linear-gradient(135deg, #2d4a3e 0%, #1a3a5c 100%); color: #f5f3ef; padding: 3rem 2rem 2.5rem; text-align: center; }
+  .hero h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.02em; }
+  .hero .subtitle { font-size: 1.2rem; opacity: 0.9; margin-top: 0.4rem; }
+  .hero .details { font-size: 0.95rem; opacity: 0.65; margin-top: 0.5rem; }
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Map */
+  #map { height: 400px; border-radius: 12px; margin: 0 0 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+
+  /* Overview stats */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin: 0 0 2.5rem; }
+  .stat { background: #fff; border-radius: 10px; padding: 1rem; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .stat .num { font-size: 1.4rem; font-weight: 700; color: #2d4a3e; }
+  .stat .label { font-size: 0.8rem; color: #777; margin-top: 0.2rem; }
+
+  /* Section headers */
+  h2 { font-size: 1.5rem; color: #2d4a3e; margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e8e5e0; }
+  h2.no-border { border: none; padding: 0; }
+  h3 { font-size: 1.15rem; color: #2d4a3e; margin: 1.5rem 0 0.5rem; }
+
+  /* Day cards */
+  .day { background: #fff; border-radius: 12px; padding: 1.75rem; margin: 1rem 0; box-shadow: 0 1px 6px rgba(0,0,0,0.06); position: relative; }
+  .day.drive { border-left: 5px solid #c45c4a; }
+  .day.stowe { border-left: 5px solid #4a9e6e; }
+  .day.montreal { border-left: 5px solid #1a3a5c; }
+  .day.spa { border-left: 5px solid #9e6e4a; }
+  .day.fly { border-left: 5px solid #777; }
+  .day-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.75rem; }
+  .day-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.6rem; border-radius: 4px; color: #fff; }
+  .day.drive .day-label { background: #c45c4a; }
+  .day.stowe .day-label { background: #4a9e6e; }
+  .day.montreal .day-label { background: #1a3a5c; }
+  .day.spa .day-label { background: #9e6e4a; }
+  .day.fly .day-label { background: #777; }
+  .day-date { font-size: 0.85rem; color: #999; }
+  .day h3 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+  .day p { font-size: 0.92rem; line-height: 1.6; color: #555; margin: 0.3rem 0; }
+  .day ul { list-style: none; padding: 0; margin: 0.5rem 0; }
+  .day li { font-size: 0.9rem; line-height: 1.55; padding: 0.2rem 0 0.2rem 1.2rem; position: relative; color: #555; }
+  .day li::before { content: "·"; position: absolute; left: 0; font-weight: 700; color: #2d4a3e; font-size: 1.2rem; }
+  .day .meal-tip { background: #faf9f7; border-radius: 6px; padding: 0.6rem 0.8rem; margin-top: 0.75rem; font-size: 0.85rem; color: #777; }
+  .day .meal-tip strong { color: #555; }
+
+  /* Accommodation cards */
+  .accom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+  @media (max-width: 650px) { .accom-grid { grid-template-columns: 1fr; } }
+  .accom { background: #fff; border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .accom h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+  .accom .where { font-size: 0.85rem; color: #4a9e6e; font-weight: 600; margin-bottom: 0.4rem; }
+  .accom.mtl .where { color: #1a3a5c; }
+  .accom p { font-size: 0.88rem; line-height: 1.5; color: #555; margin: 0.2rem 0; }
+  .accom ul { list-style: none; padding: 0; margin: 0.4rem 0; }
+  .accom li { font-size: 0.85rem; padding: 0.15rem 0 0.15rem 1rem; position: relative; color: #555; }
+  .accom li::before { content: "—"; position: absolute; left: 0; color: #aaa; font-size: 0.8rem; }
+  .accom .search-link { display: inline-block; margin-top: 0.5rem; font-size: 0.85rem; color: #2d4a3e; font-weight: 600; text-decoration: none; border-bottom: 1px solid #2d4a3e; }
+
+  /* Spa section */
+  .spa-card { background: #fff; border-radius: 12px; padding: 1.75rem; margin: 1rem 0; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border-top: 4px solid #9e6e4a; }
+  .spa-card h3 { color: #9e6e4a; margin: 0 0 0.3rem; font-size: 1.1rem; }
+  .spa-card .tagline { font-size: 0.9rem; color: #999; font-style: italic; margin-bottom: 0.6rem; }
+  .spa-card p { font-size: 0.92rem; line-height: 1.6; color: #555; margin: 0.3rem 0; }
+
+  /* Packing / logistics */
+  .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+  @media (max-width: 600px) { .checklist { grid-template-columns: 1fr; } }
+  .check-group { background: #fff; border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .check-group h3 { font-size: 0.95rem; margin: 0 0 0.5rem; color: #2d4a3e; }
+  .check-group ul { list-style: none; padding: 0; }
+  .check-group li { font-size: 0.88rem; padding: 0.2rem 0 0.2rem 1.5rem; position: relative; }
+  .check-group li::before { content: "☐"; position: absolute; left: 0; }
+
+  .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #aaa; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Stowe + Montreal</h1>
+  <div class="subtitle">Mountains, then city. Nature, then food.</div>
+  <div class="details">June 11–19, 2026 — 7 people, 5 adults + 2 kids (2yo &amp; 4yo)</div>
+</div>
+
+<div class="container">
+
+  <div id="map"></div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">9 days</div><div class="label">June 11–19</div></div>
+    <div class="stat"><div class="num">4.5 + 2.5 hrs</div><div class="label">two drives</div></div>
+    <div class="stat"><div class="num">2 stays</div><div class="label">house + apartment</div></div>
+    <div class="stat"><div class="num">YUL</div><div class="label">fly home June 19</div></div>
+    <div class="stat"><div class="num">🇺🇸→🇨🇦</div><div class="label">passports required</div></div>
+  </div>
+
+  <!-- ==================== ACCOMMODATIONS ==================== -->
+  <h2>Where to stay</h2>
+
+  <div class="accom-grid">
+    <div class="accom">
+      <div class="where">Stowe, VT — 4 nights (June 11–15)</div>
+      <h3>Big house with a yard</h3>
+      <p>Look for a 4+ bedroom house in or near Stowe Village. Being walkable to restaurants is the key — Mountain Road or Village area, not up at the resort.</p>
+      <ul>
+        <li>4+ bedrooms, 2+ baths, sleeps 7+</li>
+        <li>Yard for kids to run around</li>
+        <li>Within walking distance of village restaurants</li>
+        <li>Firepit or porch for evening hangs</li>
+        <li>Off-season ski houses = great deals in June</li>
+        <li>Budget: ~$250–400/night for a big house</li>
+      </ul>
+      <a class="search-link" href="https://www.vrbo.com/search?destination=Stowe%2C+VT&startDate=2026-06-11&endDate=2026-06-15&adults=5&children=2" target="_blank">Search VRBO →</a>
+      <a class="search-link" href="https://www.airbnb.com/s/Stowe--VT/homes?checkin=2026-06-11&checkout=2026-06-15&adults=5&children=2&min_bedrooms=3" target="_blank" style="margin-left: 1rem;">Search Airbnb →</a>
+    </div>
+    <div class="accom mtl">
+      <div class="where">Montreal — 4 nights (June 15–19)</div>
+      <h3>Large apartment in the Plateau</h3>
+      <p>The Plateau-Mont-Royal or Mile End neighborhoods are ideal — walkable to everything, restaurants on every block, parks nearby. Avoid downtown hotels.</p>
+      <ul>
+        <li>3-4 bedrooms, sleeps 7+</li>
+        <li>Plateau, Mile End, or Outremont neighborhoods</li>
+        <li>Near a park (Parc La Fontaine, Parc Jeanne-Mance)</li>
+        <li>Look for outdoor space — balcony, terrace, small yard</li>
+        <li>Near a metro stop for rainy days</li>
+        <li>Budget: ~$300–500/night (CAD favorable)</li>
+      </ul>
+      <a class="search-link" href="https://www.vrbo.com/search?destination=Le+Plateau-Mont-Royal%2C+Montreal&startDate=2026-06-15&endDate=2026-06-19&adults=5&children=2" target="_blank">Search VRBO →</a>
+      <a class="search-link" href="https://www.airbnb.com/s/Le-Plateau-Mont-Royal--Montreal/homes?checkin=2026-06-15&checkout=2026-06-19&adults=5&children=2&min_bedrooms=3" target="_blank" style="margin-left: 1rem;">Search Airbnb →</a>
+    </div>
+  </div>
+
+  <!-- ==================== DAY BY DAY ==================== -->
+  <h2>Day by day</h2>
+
+  <!-- Day 1 -->
+  <div class="day drive">
+    <div class="day-header">
+      <span class="day-label">Travel day</span>
+      <span class="day-date">Wednesday, June 11</span>
+    </div>
+    <h3>White Plains → Stowe (4.5 hrs)</h3>
+    <p>Leave by 8-9am to arrive before the afternoon nap meltdown. The drive is mostly I-87 north through the Hudson Valley, then cuts east into Vermont on Route 89.</p>
+    <ul>
+      <li><strong>Stop 1: Saratoga Springs, NY (~2 hrs in)</strong> — Stretch legs at Congress Park, grab lunch at Hattie's (Southern comfort food, kid-friendly) or Uncommon Grounds coffee</li>
+      <li><strong>Stop 2: Waterbury, VT (~4 hrs in, 15 min from Stowe)</strong> — Cold Hollow Cider Mill for cider donuts. Or save Ben &amp; Jerry's for another day.</li>
+      <li>Arrive Stowe ~1-2pm. Unpack, explore the village, early dinner.</li>
+    </ul>
+    <div class="meal-tip"><strong>First dinner:</strong> The Bench (wood-fired pizza, relaxed, kid-friendly) or Doc Ponds (pub food, great cocktails) — both walkable, no reservation needed</div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day stowe">
+    <div class="day-header">
+      <span class="day-label">Stowe</span>
+      <span class="day-date">Thursday, June 12</span>
+    </div>
+    <h3>Settle in — Rec Path + village day</h3>
+    <p>No agenda. Let the kids set the pace. This is your decompression day.</p>
+    <ul>
+      <li><strong>Morning:</strong> Stowe Recreation Path — grab coffee, put the 2yo in the stroller, let the 4yo scooter. 5.3 miles paved along the West Branch river. Go as far as you want and turn back.</li>
+      <li><strong>Afternoon:</strong> Explore the village. Stowe Golf Park (mini golf) or just wander. Find the covered bridge on the Rec Path.</li>
+      <li><strong>If it's warm:</strong> Wade in the river at one of the Rec Path access points. The water is cold but the kids won't care.</li>
+    </ul>
+    <div class="meal-tip"><strong>Dinner:</strong> Harrison's — American fare, wood beams, cozy. Walk there and back. Book a table.</div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="day stowe">
+    <div class="day-header">
+      <span class="day-label">Stowe</span>
+      <span class="day-date">Friday, June 13</span>
+    </div>
+    <h3>Waterfall + swimming holes</h3>
+    <ul>
+      <li><strong>Morning:</strong> Moss Glen Falls (10 min drive) — easy 10-minute walk to a beautiful waterfall. The 4yo can hike it, carry the 2yo. Swimming below the falls if it's warm enough.</li>
+      <li><strong>Midday:</strong> Bingham Falls (near Smugglers' Notch) — quarter-mile hike to falls + swimming holes upstream. More adventurous. Optional.</li>
+      <li><strong>Afternoon:</strong> Ben &amp; Jerry's factory (15 min in Waterbury). 30-minute tour, ice cream at the end. Hit Cold Hollow Cider Mill next door for donuts if you didn't on Day 1.</li>
+    </ul>
+    <div class="meal-tip"><strong>Dinner:</strong> Hen of the Wood (Waterbury, 15 min) — the best meal of the Stowe leg. Farm-to-table, changes daily. <strong>Book ahead.</strong> Consider getting a sitter and making this an adults-only dinner.</div>
+  </div>
+
+  <!-- Day 4 -->
+  <div class="day stowe">
+    <div class="day-header">
+      <span class="day-label">Stowe</span>
+      <span class="day-date">Saturday, June 14</span>
+    </div>
+    <h3>Lake Elmore beach day + Smugglers' Notch</h3>
+    <ul>
+      <li><strong>Morning:</strong> Drive to Smugglers' Notch (20 min) — dramatic narrow pass through the mountains. Stop to scramble on the giant boulders. The 4yo will be in heaven. Keep the 2yo close.</li>
+      <li><strong>Afternoon:</strong> Lake Elmore State Park (25 min from Stowe) — sandy beach, roped swimming area, lifeguards. Pack a cooler and towels. This is the "beach day" of the trip — calm lake water, warm-ish by mid-June, perfect for toddlers.</li>
+      <li><strong>Evening:</strong> Back to Stowe. Last firepit night. Rec Path sunset walk.</li>
+    </ul>
+    <div class="meal-tip"><strong>Dinner:</strong> Plate (small plates, natural wine, intimate) or Doc Ponds if you want something casual. Adults: end the night at Apres Cocktails &amp; Wine — hidden inside a day spa, craft cocktails.</div>
+  </div>
+
+  <!-- Day 5 -->
+  <div class="day drive">
+    <div class="day-header">
+      <span class="day-label">Travel day</span>
+      <span class="day-date">Sunday, June 15</span>
+    </div>
+    <h3>Stowe → Montreal (2.5 hrs)</h3>
+    <p>Easy drive north. No rush — check out by 11, arrive Montreal by 2pm.</p>
+    <ul>
+      <li><strong>Route:</strong> North on Route 100 to I-89, then I-89 to the border at Highgate Springs / Saint-Armand. Quick border crossing on a Sunday (usually 15-20 min).</li>
+      <li><strong>Optional stop: Burlington (45 min from Stowe)</strong> — Church Street pedestrian mall, Lake Champlain waterfront. Worth 60-90 min if the kids need to burn energy before the border.</li>
+      <li><strong>Border tip:</strong> Have all 7 passports handy (including kids). Declare any food you're bringing. They'll ask where you're staying and how long.</li>
+      <li><strong>Arrive Montreal ~2-3pm.</strong> Settle into the apartment. Walk the neighborhood.</li>
+    </ul>
+    <div class="meal-tip"><strong>First Montreal meal:</strong> Walk to St-Viateur Bagels (Mile End) — watch them come out of the wood-fired oven. Grab a dozen. Then wander to Parc La Fontaine or Parc Jeanne-Mance and let the kids run.</div>
+  </div>
+
+  <!-- Day 6 -->
+  <div class="day montreal">
+    <div class="day-header">
+      <span class="day-label">Montreal</span>
+      <span class="day-date">Monday, June 16</span>
+    </div>
+    <h3>Old Montreal + Old Port</h3>
+    <ul>
+      <li><strong>Morning:</strong> Walk the cobblestones of Old Montreal. Notre-Dame Basilica (stunning interior, the 4yo will be awed by the blue light). Place d'Armes square.</li>
+      <li><strong>Midday:</strong> Old Port waterfront — splash pad (free!), carousel, harborside walk. The 2yo will be happy here for hours.</li>
+      <li><strong>Afternoon:</strong> Clock Tower Beach area or boat tour of the harbor.</li>
+    </ul>
+    <div class="meal-tip"><strong>Lunch:</strong> Olive et Gourmando (Old Montreal, legendary sandwiches). <strong>Dinner:</strong> Schwartz's Deli — smoked meat sandwiches since 1928. Cash only, line out the door, worth it. Kids love it (it's basically a diner).</div>
+  </div>
+
+  <!-- Day 7 — Spa day -->
+  <div class="day spa">
+    <div class="day-header">
+      <span class="day-label">Spa day</span>
+      <span class="day-date">Tuesday, June 17</span>
+    </div>
+    <h3>Biodome + Bota Bota spa</h3>
+    <p>Split the group. This is the day the adults get their payoff.</p>
+    <ul>
+      <li><strong>Morning (everyone):</strong> Biodome — four ecosystems under one roof. Penguins, rainforest, lynx, fish. Half-day minimum. The 4yo will be obsessed. The 2yo will love the penguins.</li>
+      <li><strong>Afternoon (adults rotate):</strong> 2-3 adults take the kids to Parc Maisonneuve (right next to Biodome, big open green space, playground). The other 2-3 adults go to the spa.</li>
+    </ul>
+    <div class="meal-tip"><strong>Dinner:</strong> Mon Lapin (Little Italy, French-Italian, natural wine) — book ahead. Or Joe Beef if you can get a table (book months ahead, try calling day-of for cancellations).</div>
+  </div>
+
+  <!-- Day 8 -->
+  <div class="day montreal">
+    <div class="day-header">
+      <span class="day-label">Montreal</span>
+      <span class="day-date">Wednesday, June 18</span>
+    </div>
+    <h3>Market + mountain + last night out</h3>
+    <ul>
+      <li><strong>Morning:</strong> Jean-Talon Market — the best outdoor market in North America. Cheese, pastries, fruit, flowers, prepared food. Let the 4yo pick lunch. The 2yo eats samples.</li>
+      <li><strong>Afternoon:</strong> Mont-Royal — easy walk or drive to Kondiaronk lookout for panoramic city views. Playground at Parc Jeanne-Mance on the way down. Beaver Lake if kids have energy.</li>
+      <li><strong>Evening:</strong> This is the big night. Adults rotate out for the best meal of the trip.</li>
+    </ul>
+    <div class="meal-tip"><strong>Dinner:</strong> Lawrence (Mile End, Michelin Recommended, seasonal) or Mastard (creative, vegetable-forward). <strong>After dinner:</strong> Cloakroom (no-menu, 25 seats, tell them what you like, they make it) or Atwater Cocktail Club (hidden entrance, world-class).</div>
+  </div>
+
+  <!-- Day 9 -->
+  <div class="day fly">
+    <div class="day-header">
+      <span class="day-label">Fly home</span>
+      <span class="day-date">Thursday, June 19</span>
+    </div>
+    <h3>Montreal → Home (YUL)</h3>
+    <ul>
+      <li>Sleep in. Slow morning. Pack up.</li>
+      <li><strong>Last stop:</strong> Fairmount Bagels (the other legendary bagel shop, 2 min from St-Viateur) — grab a bag for the plane.</li>
+      <li><strong>YUL airport is 20 min from the Plateau.</strong> Major international hub, direct flights to most US cities.</li>
+      <li>Drop the rental car at the airport. Done.</li>
+    </ul>
+  </div>
+
+  <!-- ==================== SPA ==================== -->
+  <h2>The spa</h2>
+
+  <div class="spa-card">
+    <h3>Bota Bota, spa-sur-l'eau</h3>
+    <div class="tagline">A floating Nordic spa on a restored 1950s ferry in the Old Port of Montreal</div>
+    <p>Five decks of saunas, steam rooms, outdoor hot tubs, cold plunges, and relaxation areas — all on a boat on the St. Lawrence River with views of Old Montreal. The water circuit alternates hot → cold → rest, repeat. Deeply relaxing. Phones are banned (except Thursdays).</p>
+    <p style="margin-top: 0.5rem;"><strong>Facilities:</strong> 4 saunas with river views, eucalyptus steam bath, outdoor whirlpool baths, cold plunge pools, restaurant on board, garden terrace</p>
+    <p style="margin-top: 0.5rem;"><strong>When:</strong> Tuesday June 17 afternoon — while half the group has the kids at the park after the Biodome. Book 2-3 hours.</p>
+    <p style="margin-top: 0.5rem;"><strong>Cost:</strong> ~$70-90 CAD per person for the water circuit. Massages additional.</p>
+    <p style="margin-top: 0.5rem;"><strong>Location:</strong> Old Port, right on the waterfront. 15 min from the Plateau by metro or taxi.</p>
+    <p style="margin-top: 0.5rem;"><strong>Book ahead:</strong> <a href="https://botabota.ca/en/" target="_blank" style="color: #9e6e4a; font-weight: 600;">botabota.ca</a></p>
+  </div>
+
+  <div class="spa-card" style="border-top-color: #2d4a3e;">
+    <h3>Alternatives</h3>
+    <div class="tagline">If Bota Bota is booked or you want more options</div>
+    <p><strong>Scandinave Spa Old Montreal</strong> — Indoor Nordic spa in a historic stone building. Same hot/cold/rest cycle. Enforced silence. More intimate than Bota Bota. ~$80 CAD. <a href="https://www.scandinave.com/vieux-montreal" target="_blank" style="color: #2d4a3e;">scandinave.com</a></p>
+    <p style="margin-top: 0.5rem;"><strong>Strom Spa Nordique (Nuns' Island)</strong> — Outdoor Nordic spa on an island in the St. Lawrence. 20 min from downtown. Infinity pools, saunas, river views. The most dramatic setting. <a href="https://www.stromspa.com" target="_blank" style="color: #2d4a3e;">stromspa.com</a></p>
+    <p style="margin-top: 0.5rem;"><strong>Spa at Topnotch (Stowe)</strong> — If you'd rather spa during the Stowe leg. 25,000 sq ft, award-winning. More of a resort spa vibe than Nordic. Good for a rainy day in Vermont. <a href="https://www.topnotchresort.com/spa" target="_blank" style="color: #2d4a3e;">topnotchresort.com</a></p>
+  </div>
+
+  <!-- ==================== ROAD STOPS ==================== -->
+  <h2>Nice stops along the way</h2>
+
+  <h3>Leg 1: White Plains → Stowe</h3>
+  <div class="day" style="border-left: 3px solid #ddd; margin: 0.5rem 0;">
+    <ul>
+      <li><strong>Saratoga Springs, NY (2 hrs)</strong> — Good midpoint. Congress Park for the kids, Hattie's for fried chicken, or just a coffee stop at Uncommon Grounds.</li>
+      <li><strong>Manchester, VT (3.5 hrs via Route 7)</strong> — If you take the scenic route. Cute town, outlet shopping, Hildene (Lincoln family estate).</li>
+      <li><strong>Waterbury, VT (4 hrs)</strong> — 15 min from Stowe. Ben &amp; Jerry's, Cold Hollow Cider Mill, Cabot Cheese. You'll come back here during the trip, so you can skip on arrival day.</li>
+    </ul>
+  </div>
+
+  <h3>Leg 2: Stowe → Montreal</h3>
+  <div class="day" style="border-left: 3px solid #ddd; margin: 0.5rem 0;">
+    <ul>
+      <li><strong>Burlington, VT (45 min from Stowe)</strong> — Church Street pedestrian mall, Lake Champlain waterfront, Hen of the Wood's second location. Worth a stop if you have time.</li>
+      <li><strong>Shelburne, VT (1 hr from Stowe)</strong> — Shelburne Farms (working farm, walking trails, lake views) and Shelburne Museum (art + Americana, outdoor campus).</li>
+      <li><strong>Border crossing at Highgate Springs / Saint-Armand</strong> — Usually the quickest crossing on this route. Avoid Champlain/Lacolle on weekends.</li>
+    </ul>
+  </div>
+
+  <!-- ==================== LOGISTICS ==================== -->
+  <h2>Logistics</h2>
+
+  <div class="checklist">
+    <div class="check-group">
+      <h3>Before you go</h3>
+      <ul>
+        <li>Valid passports for all 7 (including both kids — check expiry dates now)</li>
+        <li>Book Stowe house (VRBO/Airbnb — June 11-15)</li>
+        <li>Book Montreal apartment (Airbnb — June 15-19)</li>
+        <li>Book Hen of the Wood dinner (Waterbury — June 13)</li>
+        <li>Book Bota Bota spa (June 17 afternoon)</li>
+        <li>Book Montreal dinner (Joe Beef / Mon Lapin / Lawrence — June 17 or 18)</li>
+        <li>Rent car large enough for 7 + luggage (minivan or large SUV)</li>
+        <li>Book flights home from YUL (June 19)</li>
+        <li>Car seats: 2 (bring your own or rent with car)</li>
+      </ul>
+    </div>
+    <div class="check-group">
+      <h3>Packing notes</h3>
+      <ul>
+        <li>Layers — Stowe mornings are 55°F, afternoons 70°F+</li>
+        <li>Swimsuits + towels for swimming holes and Lake Elmore</li>
+        <li>Water shoes for rocky river bottoms</li>
+        <li>Rain jackets (Vermont weather is unpredictable)</li>
+        <li>Stroller for the 2yo (Rec Path is paved)</li>
+        <li>Scooter or balance bike for the 4yo (Rec Path)</li>
+        <li>Baby carrier/hiking backpack for waterfall hikes</li>
+        <li>Sunscreen + bug spray (early June = blackfly season in VT)</li>
+        <li>CAD cash not strictly needed — tap-to-pay works everywhere in Montreal</li>
+      </ul>
+    </div>
+    <div class="check-group">
+      <h3>Budget rough estimates</h3>
+      <ul>
+        <li>Stowe house (4 nights): $1,000–1,600</li>
+        <li>Montreal apartment (4 nights): $1,200–2,000 CAD</li>
+        <li>Rental car (9 days): $500–800</li>
+        <li>Gas: ~$120 total</li>
+        <li>Bota Bota spa (2-3 people): $200-270 CAD</li>
+        <li>Groceries: ~$300-400 for the week</li>
+        <li>Dining out: $150-250/day for the group</li>
+        <li>Activities: Most are free or cheap (parks, paths, falls)</li>
+      </ul>
+    </div>
+    <div class="check-group">
+      <h3>Good to know</h3>
+      <ul>
+        <li>Montreal is French-first. Menus, signs, greetings in French. Everyone speaks English but open with "bonjour."</li>
+        <li>Tipping in Quebec is same as US — 15-20%</li>
+        <li>Quebec uses CAD (~0.73 USD) — your dollar goes further</li>
+        <li>Blackfly season in Vermont peaks late May / early June. Bring DEET. They're annoying near water.</li>
+        <li>Lake Elmore has lifeguards but verify they're staffing by June 14</li>
+        <li>Stowe Rec Path is open year-round but mud can be an issue in early June after rain</li>
+        <li>Montreal Airbnb regulations exist — book licensed properties</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">Stowe + Montreal — June 11–19, 2026</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map = L.map('map').setView([43.5, -73.2], 6);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OSM &copy; CARTO', maxZoom: 19
+}).addTo(map);
+
+// Main route
+const leg1 = [[41.034,-73.763],[41.3,-73.6],[42.0,-73.3],[42.7,-73.1],[43.08,-73.78],[43.3,-72.9],[44.0,-72.8],[44.338,-72.756],[44.465,-72.687]];
+const leg2 = [[44.465,-72.687],[44.476,-73.212],[44.8,-72.8],[45.0,-73.1],[45.3,-73.3],[45.501,-73.567]];
+const toAirport = [[45.501,-73.567],[45.457,-73.749]];
+
+L.polyline(leg1, { color: '#4a9e6e', weight: 3.5, opacity: 0.7 }).addTo(map);
+L.polyline(leg2, { color: '#1a3a5c', weight: 3.5, opacity: 0.7 }).addTo(map);
+L.polyline(toAirport, { color: '#777', weight: 2, opacity: 0.5, dashArray: '6,6' }).addTo(map);
+
+// Markers
+const spots = [
+  { coords: [41.034, -73.763], label: "White Plains, NY — Start", icon: "🚗", size: 1.6 },
+  { coords: [44.465, -72.687], label: "Stowe, VT — June 11-15", icon: "🏔️", size: 1.6 },
+  { coords: [45.501, -73.567], label: "Montreal — June 15-19", icon: "🇨🇦", size: 1.6 },
+  { coords: [45.457, -73.749], label: "Fly home (YUL)", icon: "✈️", size: 1.4 },
+];
+
+spots.forEach(s => {
+  const icon = L.divIcon({
+    html: `<div style="font-size:${s.size}rem;text-align:center">${s.icon}</div>`,
+    iconSize: [30, 30], iconAnchor: [15, 15], className: ''
+  });
+  L.marker(s.coords, { icon }).addTo(map).bindPopup(`<strong>${s.label}</strong>`);
+});
+
+// Stops along the way
+const stops = [
+  [43.08, -73.78, "Saratoga Springs — lunch stop"],
+  [44.338, -72.756, "Waterbury — Ben & Jerry's, cider donuts"],
+  [44.558, -72.793, "Smugglers' Notch"],
+  [44.490, -72.680, "Moss Glen Falls"],
+  [44.72, -72.51, "Lake Elmore"],
+  [44.476, -73.212, "Burlington — optional stop"],
+  [45.56, -73.60, "Jean-Talon Market"],
+  [45.504, -73.556, "Old Montreal / Bota Bota"],
+  [45.56, -73.55, "Biodome"],
+  [45.51, -73.59, "Mont-Royal"],
+];
+
+stops.forEach(([lat, lng, name]) => {
+  L.circleMarker([lat, lng], {
+    radius: 5, fillColor: '#4a9e6e', color: '#fff', weight: 1.5, fillOpacity: 0.8
+  }).addTo(map).bindPopup(name);
+});
+</script>
+
+</body>
+</html>
