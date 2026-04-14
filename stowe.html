@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stowe, VT — June Trip</title>
+<title>Stowe vs. Maine — June Trip</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,162 +11,270 @@
   .hero { background: #2d4a3e; color: #f5f3ef; padding: 3rem 2rem 2rem; text-align: center; }
   .hero h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.02em; }
   .hero p { margin-top: 0.5rem; font-size: 1.1rem; opacity: 0.8; }
-  .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem; }
-  #map { height: 420px; border-radius: 12px; margin: 2rem 0; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 2rem 0; }
-  .stat { background: #fff; border-radius: 10px; padding: 1.2rem; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-  .stat .num { font-size: 1.6rem; font-weight: 700; color: #2d4a3e; }
-  .stat .label { font-size: 0.85rem; color: #777; margin-top: 0.25rem; }
-  h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: #2d4a3e; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1rem 0; }
+  .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 0; margin: 2rem 0 0; }
+  .tab { flex: 1; padding: 1rem; text-align: center; font-weight: 600; font-size: 1.05rem; cursor: pointer; border-radius: 10px 10px 0 0; background: #e8e5e0; color: #777; transition: all 0.2s; }
+  .tab.active { background: #fff; color: #2d4a3e; box-shadow: 0 -2px 8px rgba(0,0,0,0.06); }
+  .tab-content { display: none; background: #fff; border-radius: 0 0 12px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 2rem; }
+  .tab-content.active { display: block; }
+
+  /* Map */
+  .map-container { height: 400px; border-radius: 10px; margin-bottom: 1.5rem; overflow: hidden; }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+  .stat { background: #f5f3ef; border-radius: 8px; padding: 1rem; text-align: center; }
+  .stat .num { font-size: 1.4rem; font-weight: 700; color: #2d4a3e; }
+  .stat .label { font-size: 0.8rem; color: #777; margin-top: 0.2rem; }
+
+  /* Pros/Cons */
+  h2 { font-size: 1.3rem; margin: 2rem 0 0.75rem; color: #2d4a3e; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 0.75rem 0; }
   @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-  .card { background: #fff; border-radius: 10px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-  .card.pros { border-top: 4px solid #4a9e6e; }
-  .card.cons { border-top: 4px solid #c45c4a; }
-  .card h3 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+  .card { background: #f5f3ef; border-radius: 8px; padding: 1.25rem; }
+  .card.pros { border-left: 4px solid #4a9e6e; }
+  .card.cons { border-left: 4px solid #c45c4a; }
+  .card h3 { font-size: 1rem; margin-bottom: 0.6rem; }
   .card ul { list-style: none; padding: 0; }
-  .card li { padding: 0.4rem 0; padding-left: 1.4rem; position: relative; font-size: 0.95rem; line-height: 1.5; }
+  .card li { padding: 0.35rem 0; padding-left: 1.3rem; position: relative; font-size: 0.9rem; line-height: 1.5; }
   .card.pros li::before { content: "+"; position: absolute; left: 0; color: #4a9e6e; font-weight: 700; }
   .card.cons li::before { content: "—"; position: absolute; left: 0; color: #c45c4a; font-weight: 700; }
-  .excursions { margin: 2rem 0; }
-  .excursion { background: #fff; border-radius: 10px; padding: 1.2rem 1.5rem; margin: 0.75rem 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; }
-  .excursion .name { font-weight: 600; }
-  .excursion .meta { font-size: 0.85rem; color: #777; }
+
+  /* Excursions */
+  .excursion { background: #f5f3ef; border-radius: 8px; padding: 1rem 1.25rem; margin: 0.5rem 0; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .excursion .name { font-weight: 600; font-size: 0.95rem; }
+  .excursion .desc { font-size: 0.82rem; color: #777; margin-top: 0.15rem; }
+  .excursion .dist { font-size: 0.82rem; color: #999; white-space: nowrap; }
+
+  /* Comparison */
+  .compare-section { margin: 3rem 0 1rem; }
+  .compare-section h2 { text-align: center; margin-bottom: 1.5rem; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  th, td { padding: 0.85rem 1rem; text-align: left; font-size: 0.9rem; }
+  th { background: #2d4a3e; color: #f5f3ef; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  tr:nth-child(even) { background: #faf9f7; }
+  td:first-child { font-weight: 600; color: #555; width: 28%; }
+  .winner { background: #e8f5ed !important; }
+
+  /* Verdict */
+  .verdict { background: #fff; border-radius: 12px; padding: 2rem; margin: 2.5rem 0; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border-left: 5px solid #2d4a3e; }
+  .verdict h2 { margin: 0 0 0.75rem; }
+  .verdict p { font-size: 0.95rem; line-height: 1.6; color: #555; }
+
   .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #aaa; }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <h1>Stowe, Vermont</h1>
-  <p>Early June 2026 — 7 people, 5 adults + 2 kids (2yo &amp; 4yo)</p>
+  <h1>Stowe vs. Midcoast Maine</h1>
+  <p>Early June 2026 — 7 people, 5 adults + 2 kids (2yo &amp; 4yo) — one week from White Plains</p>
 </div>
 
 <div class="container">
 
-  <div id="map"></div>
-
-  <div class="stats">
-    <div class="stat"><div class="num">4.5 hrs</div><div class="label">Drive from White Plains</div></div>
-    <div class="stat"><div class="num">BTV</div><div class="label">Fly home from Burlington</div></div>
-    <div class="stat"><div class="num">65–75°F</div><div class="label">Early June highs</div></div>
-    <div class="stat"><div class="num">~15 hrs</div><div class="label">Daylight per day</div></div>
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('stowe')">Stowe, VT</div>
+    <div class="tab" onclick="showTab('maine')">Midcoast Maine</div>
   </div>
 
-  <h2>The honest case</h2>
-  <div class="grid">
-    <div class="card pros">
-      <h3>Why it works</h3>
-      <ul>
-        <li>Stowe Rec Path is a daily anchor — 5.3 mi paved, flat, along the river. Stroller + scooter friendly. You'll use it every day.</li>
-        <li>Swimming holes are legit by early June — Moss Glen Falls, Sterling Falls Gorge, ranch camp spots along the river</li>
-        <li>Restaurant scene punches way above its weight — Hen of the Wood, Doc Ponds, Plate, Idletyme, Harrison's</li>
-        <li>Big ski houses sit empty in June = great deals on spacious rentals with yards</li>
-        <li>Ben &amp; Jerry's factory (15 min) — the 4yo will remember this forever</li>
-        <li>Pre-tourist-season: locals are around, crowds aren't, everything's open but not slammed</li>
-        <li>Genuinely beautiful. Green mountains, wildflowers, covered bridges. It photographs well and feels good.</li>
-        <li>Adults can rotate brewery/dinner runs while kids sleep — town is compact</li>
-      </ul>
+  <!-- STOWE TAB -->
+  <div class="tab-content active" id="stowe">
+    <div class="map-container" id="map-stowe"></div>
+    <div class="stats">
+      <div class="stat"><div class="num">4.5 hrs</div><div class="label">from White Plains</div></div>
+      <div class="stat"><div class="num">BTV</div><div class="label">fly home from Burlington</div></div>
+      <div class="stat"><div class="num">65–75°F</div><div class="label">early June highs</div></div>
+      <div class="stat"><div class="num">~15 hrs</div><div class="label">daylight / day</div></div>
+      <div class="stat"><div class="num">45 min</div><div class="label">to airport</div></div>
     </div>
-    <div class="card cons">
-      <h3>The honest downsides</h3>
-      <ul>
-        <li>No lake or ocean. River swimming and pools only. If your crew wants beach days, this isn't it.</li>
-        <li>4.5 hour drive with a 2yo is real. Plan for stops. It's not terrible but it's not nothing.</li>
-        <li>It's a small town. By day 5–6, you'll have eaten at most of the restaurants. Not a huge variety of "new" things to discover.</li>
-        <li>Nightlife is essentially zero. After kids' bedtime it's porch/firepit/board games. (Maybe that's fine.)</li>
-        <li>Early June water is still cold. Swimmable but bracing — not "float lazily" temperature.</li>
-        <li>Rain days with toddlers in a mountain town = limited indoor options beyond the house</li>
-        <li>Burlington (airport) is 45 min away — not a quick Uber-to-terminal situation</li>
-        <li>Cell service can be spotty depending on where the rental is</li>
-      </ul>
+
+    <h2>The honest case</h2>
+    <div class="grid">
+      <div class="card pros">
+        <h3>Why it works</h3>
+        <ul>
+          <li>Stowe Rec Path is a daily anchor — 5.3 mi paved, flat, along the river. Stroller + scooter friendly.</li>
+          <li>Swimming holes by early June — Moss Glen Falls, Sterling Falls Gorge, ranch camp spots</li>
+          <li>Restaurant scene punches above its weight — Hen of the Wood, Doc Ponds, Plate, Harrison's</li>
+          <li>Big ski houses sit empty in June = great deals on spacious rentals with yards</li>
+          <li>Ben &amp; Jerry's factory 15 min away — the 4yo will remember this forever</li>
+          <li>Pre-tourist-season: locals are around, crowds aren't, everything's open but not slammed</li>
+          <li>Genuinely beautiful. Green mountains, wildflowers, covered bridges.</li>
+          <li>Adults can rotate brewery/dinner runs while kids sleep — town is compact</li>
+        </ul>
+      </div>
+      <div class="card cons">
+        <h3>The honest downsides</h3>
+        <ul>
+          <li>No lake or ocean. River swimming and pools only. No beach days.</li>
+          <li>4.5 hour drive with a 2yo. Not terrible but not nothing.</li>
+          <li>Small town. By day 5–6 you've eaten at most restaurants.</li>
+          <li>Nightlife is zero. After bedtime it's porch/firepit/board games.</li>
+          <li>Early June water is still cold. Swimmable but bracing.</li>
+          <li>Rain days with toddlers = limited indoor options beyond the house</li>
+          <li>Burlington airport is 45 min away</li>
+          <li>Cell service can be spotty depending on the rental</li>
+        </ul>
+      </div>
     </div>
+
+    <h2>Day trips</h2>
+    <div class="excursion"><div><div class="name">Waterbury — Ben &amp; Jerry's, Cold Hollow Cider, Cabot Cheese</div><div class="desc">The "Vermont sampler" day. All kid-friendly, all have free/cheap tastings.</div></div><div class="dist">15 min</div></div>
+    <div class="excursion"><div><div class="name">Smugglers' Notch (the road, not the resort)</div><div class="desc">Dramatic narrow mountain pass. Short hikes, big boulders to scramble. 4yo heaven.</div></div><div class="dist">20 min</div></div>
+    <div class="excursion"><div><div class="name">Burlington waterfront</div><div class="desc">Lake Champlain, Church Street pedestrian mall, playgrounds, ice cream. Closest thing to a "city day."</div></div><div class="dist">45 min</div></div>
+    <div class="excursion"><div><div class="name">Moss Glen Falls</div><div class="desc">Easy 0.5 mi walk to a beautiful waterfall. Swimming below if it's warm enough.</div></div><div class="dist">10 min</div></div>
+    <div class="excursion"><div><div class="name">Montpelier</div><div class="desc">Smallest state capital in the US. Cute downtown, good food. Low-key half day.</div></div><div class="dist">35 min</div></div>
   </div>
 
-  <h2>Day trip excursions</h2>
-  <div class="excursions">
-    <div class="excursion">
-      <div><div class="name">Waterbury — Ben &amp; Jerry's, Cold Hollow Cider, Cabot Cheese</div><div class="meta">The "Vermont sampler" day. All kid-friendly, all have free/cheap tastings.</div></div>
-      <div class="meta">15 min</div>
+  <!-- MAINE TAB -->
+  <div class="tab-content" id="maine">
+    <div class="map-container" id="map-maine"></div>
+    <div class="stats">
+      <div class="stat"><div class="num">5.5 hrs</div><div class="label">from White Plains</div></div>
+      <div class="stat"><div class="num">PWM</div><div class="label">fly home from Portland</div></div>
+      <div class="stat"><div class="num">62–72°F</div><div class="label">early June highs</div></div>
+      <div class="stat"><div class="num">~15.5 hrs</div><div class="label">daylight / day</div></div>
+      <div class="stat"><div class="num">1.5 hrs</div><div class="label">to airport</div></div>
     </div>
-    <div class="excursion">
-      <div><div class="name">Smugglers' Notch (the road, not the resort)</div><div class="meta">Dramatic narrow mountain pass. Drive through, short hikes, big boulders to scramble. 4yo heaven.</div></div>
-      <div class="meta">20 min</div>
+
+    <h2>The honest case</h2>
+    <div class="grid">
+      <div class="card pros">
+        <h3>Why it works</h3>
+        <ul>
+          <li>The coast is genuinely stunning. Penobscot Bay, harbor towns, lighthouses — it's the postcard.</li>
+          <li>Lobster pounds, clam shacks, the whole Maine food thing. Kids eat lobster mac &amp; cheese, adults eat lobster.</li>
+          <li>Camden Hills State Park — Mt. Battie is a short hike (or drive) with jaw-dropping harbor views</li>
+          <li>Portland day trip (1.5 hrs south) is one of the best food cities in the US per capita</li>
+          <li>Tide pools, rocky beaches, harbor seals — genuinely magical for a 4yo</li>
+          <li>Early June = pre-summer crowds. You'll have the coast mostly to yourselves.</li>
+          <li>More "wow factor" than Vermont — your group will feel like they went somewhere special</li>
+          <li>Good rental houses with ocean views in Camden/Rockport area</li>
+        </ul>
+      </div>
+      <div class="card cons">
+        <h3>The honest downsides</h3>
+        <ul>
+          <li>The ocean is COLD. Like 52°F cold. Nobody's swimming in the ocean in early June. Full stop.</li>
+          <li>5.5 hour drive with a 2yo is a hard day. Probably need a real lunch stop midway.</li>
+          <li>Rocky beaches, not sandy. No building sandcastles, no easy wading. It's beautiful but not "beach vacation."</li>
+          <li>Portland airport is 1.5 hrs from Camden/Rockland. That's a real schlep on departure day.</li>
+          <li>Cooler and foggier than Vermont. Early June can be gray and 58°F for days at a stretch.</li>
+          <li>Less walkable than Stowe — you'll drive to most activities. No equivalent of the Rec Path.</li>
+          <li>Restaurants in midcoast towns are good but thin. Not Portland-level outside Portland.</li>
+          <li>Fog + toddlers + rocky coast = you're watching them like a hawk near the water</li>
+        </ul>
+      </div>
     </div>
-    <div class="excursion">
-      <div><div class="name">Burlington waterfront</div><div class="meta">Lake Champlain, Church Street pedestrian mall, playgrounds, ice cream. Closest thing to a "city day."</div></div>
-      <div class="meta">45 min</div>
-    </div>
-    <div class="excursion">
-      <div><div class="name">Moss Glen Falls</div><div class="meta">Easy 0.5 mi walk to a beautiful waterfall. Doable with both kids. Swimming below the falls if it's warm.</div></div>
-      <div class="meta">10 min</div>
-    </div>
-    <div class="excursion">
-      <div><div class="name">Montpelier</div><div class="meta">Smallest state capital in the US. Cute downtown, good food (Sarducci's, Hunger Mountain Co-op). Low-key half day.</div></div>
-      <div class="meta">35 min</div>
-    </div>
+
+    <h2>Day trips</h2>
+    <div class="excursion"><div><div class="name">Camden Harbor &amp; Mt. Battie</div><div class="desc">Iconic Maine harbor. Drive or hike to summit for the view. Shops and ice cream in town.</div></div><div class="dist">Base</div></div>
+    <div class="excursion"><div><div class="name">Rockland — lobster, art, Main Street</div><div class="desc">Farnsworth Art Museum, working waterfront, lobster direct off the boats.</div></div><div class="dist">10 min</div></div>
+    <div class="excursion"><div><div class="name">Portland food day</div><div class="desc">Eventide, Duckfat, Holy Donut, waterfront. Plan a full day — it's worth the drive.</div></div><div class="dist">1.5 hrs</div></div>
+    <div class="excursion"><div><div class="name">Penobscot Bay boat tour</div><div class="desc">Windjammer or lobster boat tour. Beautiful from the water. Check if the 2yo is old enough.</div></div><div class="dist">Rockland harbor</div></div>
+    <div class="excursion"><div><div class="name">Owls Head Lighthouse</div><div class="desc">Short easy walk to a classic lighthouse on the rocks. Great for photos, manageable with kids.</div></div><div class="dist">15 min</div></div>
+  </div>
+
+  <!-- HEAD TO HEAD -->
+  <div class="compare-section">
+    <h2>Head to head — no sugarcoating</h2>
+    <table>
+      <tr><th></th><th>Stowe, VT</th><th>Midcoast Maine</th></tr>
+      <tr><td>Drive from WP</td><td class="winner">4.5 hrs</td><td>5.5 hrs</td></tr>
+      <tr><td>Airport proximity</td><td class="winner">BTV — 45 min</td><td>PWM — 1.5 hrs</td></tr>
+      <tr><td>Weather in early June</td><td class="winner">65–75°F, mostly sunny</td><td>62–72°F, fog is real</td></tr>
+      <tr><td>Swimming</td><td>River/swimming holes — cold but doable</td><td>Ocean is 52°F — no</td></tr>
+      <tr><td>Daily activity with kids</td><td class="winner">Rec Path every day, easy hikes</td><td>Need to drive to each thing</td></tr>
+      <tr><td>Food scene</td><td class="winner">Strong for the size, walkable</td><td>Thin locally, Portland 1.5 hrs away</td></tr>
+      <tr><td>Wow factor</td><td>Beautiful but familiar "mountains"</td><td class="winner">Coast feels like a real destination</td></tr>
+      <tr><td>Rainy day plan</td><td>Limited — house games</td><td>Limited — house games</td></tr>
+      <tr><td>Rental value (June)</td><td class="winner">Ski houses = off-season deals</td><td>Coast prices already climbing</td></tr>
+      <tr><td>Walkability from house</td><td class="winner">Town is compact, Rec Path connects it</td><td>Car for everything</td></tr>
+      <tr><td>Toddler safety</td><td class="winner">Paths, grass, contained</td><td>Rocky coast, uneven terrain</td></tr>
+      <tr><td>Adult satisfaction by day 6</td><td>Might feel small</td><td class="winner">Coast keeps surprising you</td></tr>
+      <tr><td>Memories your kids tell</td><td>Ben &amp; Jerry's, swimming holes</td><td class="winner">Lobster boats, lighthouses, tide pools</td></tr>
+    </table>
+  </div>
+
+  <!-- Verdict -->
+  <div class="verdict">
+    <h2>The honest verdict</h2>
+    <p><strong>Stowe is the easier, safer, more practical choice.</strong> Shorter drive, better weather odds, walkable, great daily rhythm with the Rec Path, and off-season ski house rentals are a steal. If your priority is "minimize logistics, maximize chill," Stowe wins.</p>
+    <p style="margin-top: 0.75rem;"><strong>Maine is the more memorable choice.</strong> The coast in early June is genuinely special — long golden light, empty harbors, lobster on the rocks. Your group will talk about it more. But you pay for it: longer drive, colder, foggier, less walkable, more driving day-to-day, and the airport is far.</p>
+    <p style="margin-top: 0.75rem;"><strong>With a 2yo and 4yo for a full week?</strong> Stowe. The daily walkability and contained environment matter more than you think when you're managing two little kids for seven days. Maine is the trip you take when the youngest is 5+.</p>
   </div>
 
 </div>
 
-<div class="footer">Built for trip planning — not a real website</div>
+<div class="footer">Built for trip planning — early June 2026</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const map = L.map('map').setView([43.2, -73.2], 7);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; OpenStreetMap &copy; CARTO',
-  maxZoom: 19
-}).addTo(map);
+function initMap(id, center, zoom, spots, routes, excursions) {
+  const map = L.map(id).setView(center, zoom);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OSM &copy; CARTO', maxZoom: 19
+  }).addTo(map);
 
-const spots = [
-  { coords: [41.034, -73.7629], label: "White Plains, NY", icon: "🚗" },
-  { coords: [44.4654, -72.6874], label: "Stowe, VT", icon: "🏔️" },
-  { coords: [44.4759, -73.2122], label: "Burlington (BTV)", icon: "✈️" },
-];
-
-// Route line
-const route = [
-  [41.034, -73.7629],
-  [41.3, -73.6],
-  [42.0, -73.3],
-  [42.7, -73.1],
-  [43.3, -72.9],
-  [44.0, -72.8],
-  [44.4654, -72.6874],
-];
-
-L.polyline(route, { color: '#2d4a3e', weight: 3, opacity: 0.6, dashArray: '8, 8' }).addTo(map);
-
-// BTV connector
-L.polyline([[44.4654, -72.6874], [44.4759, -73.2122]], {
-  color: '#c45c4a', weight: 2, opacity: 0.5, dashArray: '4, 6'
-}).addTo(map);
-
-spots.forEach(s => {
-  const icon = L.divIcon({
-    html: `<div style="font-size:1.5rem;text-align:center">${s.icon}</div>`,
-    iconSize: [30, 30],
-    iconAnchor: [15, 15],
-    className: ''
+  routes.forEach(r => {
+    L.polyline(r.coords, { color: r.color || '#2d4a3e', weight: 3, opacity: 0.6, dashArray: '8,8' }).addTo(map);
   });
-  L.marker(s.coords, { icon }).addTo(map).bindPopup(`<strong>${s.label}</strong>`);
-});
 
-// Excursion markers
-const excursions = [
-  [44.338, -72.756, "Waterbury"],
-  [44.558, -72.793, "Smugglers' Notch"],
-  [44.476, -73.212, "Burlington"],
-  [44.490, -72.680, "Moss Glen Falls"],
-  [44.260, -72.576, "Montpelier"],
-];
+  spots.forEach(s => {
+    const icon = L.divIcon({ html: `<div style="font-size:1.5rem;text-align:center">${s.icon}</div>`, iconSize: [30,30], iconAnchor: [15,15], className: '' });
+    L.marker(s.coords, { icon }).addTo(map).bindPopup(`<strong>${s.label}</strong>`);
+  });
 
-excursions.forEach(([lat, lng, name]) => {
-  L.circleMarker([lat, lng], {
-    radius: 5, fillColor: '#4a9e6e', color: '#fff', weight: 1.5, fillOpacity: 0.8
-  }).addTo(map).bindPopup(name);
-});
+  excursions.forEach(([lat, lng, name]) => {
+    L.circleMarker([lat, lng], { radius: 5, fillColor: '#4a9e6e', color: '#fff', weight: 1.5, fillOpacity: 0.8 }).addTo(map).bindPopup(name);
+  });
+
+  return map;
+}
+
+// Stowe map
+const stoweMap = initMap('map-stowe', [43.0, -73.1], 7,
+  [
+    { coords: [41.034, -73.763], label: "White Plains, NY", icon: "🚗" },
+    { coords: [44.465, -72.687], label: "Stowe, VT", icon: "🏔️" },
+    { coords: [44.476, -73.212], label: "Burlington (BTV)", icon: "✈️" },
+  ],
+  [
+    { coords: [[41.034,-73.763],[41.3,-73.6],[42.0,-73.3],[42.7,-73.1],[43.3,-72.9],[44.0,-72.8],[44.465,-72.687]] },
+    { coords: [[44.465,-72.687],[44.476,-73.212]], color: '#c45c4a' },
+  ],
+  [[44.338,-72.756,"Waterbury"],[44.558,-72.793,"Smugglers' Notch"],[44.490,-72.680,"Moss Glen Falls"],[44.260,-72.576,"Montpelier"]]
+);
+
+// Maine map
+const maineMap = initMap('map-maine', [43.0, -71.0], 7,
+  [
+    { coords: [41.034, -73.763], label: "White Plains, NY", icon: "🚗" },
+    { coords: [44.21, -69.065], label: "Camden, ME", icon: "⛵" },
+    { coords: [43.646, -70.309], label: "Portland (PWM)", icon: "✈️" },
+  ],
+  [
+    { coords: [[41.034,-73.763],[41.3,-73.2],[41.8,-72.5],[42.3,-72.0],[42.8,-71.4],[43.5,-70.5],[44.0,-69.5],[44.21,-69.065]] },
+    { coords: [[44.21,-69.065],[43.646,-70.309]], color: '#c45c4a' },
+  ],
+  [[44.103,-69.109,"Rockland"],[43.646,-70.309,"Portland"],[44.082,-69.049,"Owls Head Lighthouse"],[44.21,-69.065,"Camden Harbor"]]
+);
+
+// Fix Leaflet rendering when tab hidden
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  setTimeout(() => {
+    if (id === 'stowe') stoweMap.invalidateSize();
+    if (id === 'maine') maineMap.invalidateSize();
+  }, 50);
+}
 </script>
 
 </body>
