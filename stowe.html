@@ -63,6 +63,12 @@
   .verdict h2 { margin: 0 0 0.75rem; }
   .verdict p { font-size: 0.95rem; line-height: 1.6; color: #555; }
 
+  /* Photos */
+  .photos { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.5rem; border-radius: 10px; overflow: hidden; }
+  .photos img { width: 100%; height: 180px; object-fit: cover; display: block; }
+  .photos .wide { grid-column: 1 / -1; height: 240px; }
+  .photo-credit { font-size: 0.7rem; color: #aaa; text-align: right; margin-top: 0.25rem; }
+  .photo-credit a { color: #aaa; }
   .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #aaa; }
 </style>
 </head>
@@ -84,6 +90,12 @@
 
   <!-- STOWE TAB -->
   <div class="tab-content active" id="stowe">
+    <div class="photos">
+      <img class="wide" src="https://images.unsplash.com/photo-1690166263588-byQcJBVrLp8?w=900&h=300&fit=crop&q=80" alt="Stowe village aerial view" onerror="this.src='https://images.unsplash.com/photo-1542228262-0eab43aa1349?w=900&h=300&fit=crop&q=80'">
+      <img src="https://images.unsplash.com/photo-1605117882932-f9e32b03fea9?w=450&h=220&fit=crop&q=80" alt="Vermont covered bridge in summer">
+      <img src="https://images.unsplash.com/photo-1600298882525-15b395427f45?w=450&h=220&fit=crop&q=80" alt="Vermont green mountains summer">
+    </div>
+    <div class="photo-credit">Photos via <a href="https://unsplash.com" target="_blank">Unsplash</a></div>
     <div class="map-container" id="map-stowe"></div>
     <div class="stats">
       <div class="stat"><div class="num">4.5 hrs</div><div class="label">from White Plains</div></div>
@@ -133,6 +145,12 @@
 
   <!-- MAINE TAB -->
   <div class="tab-content" id="maine">
+    <div class="photos">
+      <img class="wide" src="https://images.unsplash.com/photo-1562614435-795d9498b399?w=900&h=300&fit=crop&q=80" alt="Camden harbor Maine">
+      <img src="https://images.unsplash.com/photo-1504712598893-24159a89200e?w=450&h=220&fit=crop&q=80" alt="Maine lighthouse coast">
+      <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=450&h=220&fit=crop&q=80" alt="Rocky Maine coastline">
+    </div>
+    <div class="photo-credit">Photos via <a href="https://unsplash.com" target="_blank">Unsplash</a></div>
     <div class="map-container" id="map-maine"></div>
     <div class="stats">
       <div class="stat"><div class="num">5.5 hrs</div><div class="label">from White Plains</div></div>
@@ -182,6 +200,12 @@
 
   <!-- CAPE COD TAB -->
   <div class="tab-content" id="capecod">
+    <div class="photos">
+      <img class="wide" src="https://images.unsplash.com/photo-1531177071211-ed1b7991958b?w=900&h=300&fit=crop&q=80" alt="Cape Cod sandy beach dunes">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=450&h=220&fit=crop&q=80" alt="Sandy beach ocean waves">
+      <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=450&h=220&fit=crop&q=80" alt="Beach boardwalk summer">
+    </div>
+    <div class="photo-credit">Photos via <a href="https://unsplash.com" target="_blank">Unsplash</a></div>
     <div class="map-container" id="map-capecod"></div>
     <div class="stats">
       <div class="stat"><div class="num">3.5 hrs</div><div class="label">from White Plains</div></div>
