@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stowe vs. Maine vs. Cape Cod — June Trip</title>
+<title>June Trip — Where should we go?</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -12,6 +12,7 @@
   .hero h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.02em; }
   .hero p { margin-top: 0.5rem; font-size: 1.1rem; opacity: 0.8; }
   .container { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .container.wide { max-width: 100%; padding: 2rem 1.5rem; }
 
   /* Tabs */
   .tabs { display: flex; gap: 0; margin: 2rem 0 0; }
@@ -51,11 +52,12 @@
   /* Comparison */
   .compare-section { margin: 3rem 0 1rem; }
   .compare-section h2 { text-align: center; margin-bottom: 1.5rem; }
-  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-  th, td { padding: 0.85rem 1rem; text-align: left; font-size: 0.9rem; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -0.5rem; padding: 0 0.5rem; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); min-width: 1100px; }
+  th, td { padding: 0.7rem 0.75rem; text-align: left; font-size: 0.82rem; }
   th { background: #2d4a3e; color: #f5f3ef; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.03em; }
   tr:nth-child(even) { background: #faf9f7; }
-  td:first-child { font-weight: 600; color: #555; width: 28%; }
+  td:first-child { font-weight: 600; color: #555; min-width: 130px; position: sticky; left: 0; background: inherit; z-index: 1; }
   .winner { background: #e8f5ed !important; }
 
   /* Verdict */
@@ -63,19 +65,13 @@
   .verdict h2 { margin: 0 0 0.75rem; }
   .verdict p { font-size: 0.95rem; line-height: 1.6; color: #555; }
 
-  /* Photos */
-  .photos { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.5rem; border-radius: 10px; overflow: hidden; }
-  .photos img { width: 100%; height: 180px; object-fit: cover; display: block; }
-  .photos .wide { grid-column: 1 / -1; height: 240px; }
-  .photo-credit { font-size: 0.7rem; color: #aaa; text-align: right; margin-top: 0.25rem; }
-  .photo-credit a { color: #aaa; }
   .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #aaa; }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <h1>Stowe vs. Maine vs. Cape Cod</h1>
+  <h1>Where should we go?</h1>
   <p>Early June 2026 — 7 people, 5 adults + 2 kids (2yo &amp; 4yo) — one week from White Plains</p>
 </div>
 
@@ -85,17 +81,10 @@
   <div class="tabs">
     <div class="tab active" onclick="showTab('stowe')">Stowe, VT</div>
     <div class="tab" onclick="showTab('maine')">Midcoast Maine</div>
-    <div class="tab" onclick="showTab('capecod')">Cape Cod</div>
   </div>
 
   <!-- STOWE TAB -->
   <div class="tab-content active" id="stowe">
-    <div class="photos">
-      <img class="wide" src="https://images.unsplash.com/photo-1690166263588-byQcJBVrLp8?w=900&h=300&fit=crop&q=80" alt="Stowe village aerial view" onerror="this.src='https://images.unsplash.com/photo-1542228262-0eab43aa1349?w=900&h=300&fit=crop&q=80'">
-      <img src="https://images.unsplash.com/photo-1605117882932-f9e32b03fea9?w=450&h=220&fit=crop&q=80" alt="Vermont covered bridge in summer">
-      <img src="https://images.unsplash.com/photo-1600298882525-15b395427f45?w=450&h=220&fit=crop&q=80" alt="Vermont green mountains summer">
-    </div>
-    <div class="photo-credit">Photos via <a href="https://unsplash.com" target="_blank">Unsplash</a></div>
     <div class="map-container" id="map-stowe"></div>
     <div class="stats">
       <div class="stat"><div class="num">4.5 hrs</div><div class="label">from White Plains</div></div>
@@ -145,12 +134,6 @@
 
   <!-- MAINE TAB -->
   <div class="tab-content" id="maine">
-    <div class="photos">
-      <img class="wide" src="https://images.unsplash.com/photo-1562614435-795d9498b399?w=900&h=300&fit=crop&q=80" alt="Camden harbor Maine">
-      <img src="https://images.unsplash.com/photo-1504712598893-24159a89200e?w=450&h=220&fit=crop&q=80" alt="Maine lighthouse coast">
-      <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=450&h=220&fit=crop&q=80" alt="Rocky Maine coastline">
-    </div>
-    <div class="photo-credit">Photos via <a href="https://unsplash.com" target="_blank">Unsplash</a></div>
     <div class="map-container" id="map-maine"></div>
     <div class="stats">
       <div class="stat"><div class="num">5.5 hrs</div><div class="label">from White Plains</div></div>
@@ -198,92 +181,44 @@
     <div class="excursion"><div><div class="name">Owls Head Lighthouse</div><div class="desc">Short easy walk to a classic lighthouse on the rocks. Great for photos, manageable with kids.</div></div><div class="dist">15 min</div></div>
   </div>
 
-  <!-- CAPE COD TAB -->
-  <div class="tab-content" id="capecod">
-    <div class="photos">
-      <img class="wide" src="https://images.unsplash.com/photo-1531177071211-ed1b7991958b?w=900&h=300&fit=crop&q=80" alt="Cape Cod sandy beach dunes">
-      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=450&h=220&fit=crop&q=80" alt="Sandy beach ocean waves">
-      <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=450&h=220&fit=crop&q=80" alt="Beach boardwalk summer">
-    </div>
-    <div class="photo-credit">Photos via <a href="https://unsplash.com" target="_blank">Unsplash</a></div>
-    <div class="map-container" id="map-capecod"></div>
-    <div class="stats">
-      <div class="stat"><div class="num">3.5 hrs</div><div class="label">from White Plains</div></div>
-      <div class="stat"><div class="num">PVD / BOS</div><div class="label">fly home from Providence or Boston</div></div>
-      <div class="stat"><div class="num">68–75°F</div><div class="label">early June highs</div></div>
-      <div class="stat"><div class="num">~15 hrs</div><div class="label">daylight / day</div></div>
-      <div class="stat"><div class="num">1–1.5 hrs</div><div class="label">to airport</div></div>
-    </div>
+  </div><!-- close .container -->
 
-    <h2>The honest case</h2>
-    <div class="grid">
-      <div class="card pros">
-        <h3>Why it works</h3>
-        <ul>
-          <li>Sandy beaches. Real ones. The kids can dig, wade, splash. This is the only option with actual beach days.</li>
-          <li>Shortest drive of the three — 3.5 hrs including the Sagamore Bridge. Very doable with a 2yo.</li>
-          <li>Cape Cod National Seashore is legitimately stunning — miles of protected dunes and beach</li>
-          <li>Tons of kid infrastructure: mini golf, ice cream shops, playgrounds, bike trails, whale watches</li>
-          <li>The Cape Cod Rail Trail (22 mi paved) is a great Rec Path equivalent for strollers/bikes</li>
-          <li>Provincetown day trip is genuinely fun and unique — art galleries, whale watching, great food</li>
-          <li>Early June is pre-peak — beaches aren't packed yet, restaurants have tables</li>
-          <li>Huge rental market = lots of big houses with yards. Well-established vacation infrastructure.</li>
-        </ul>
-      </div>
-      <div class="card cons">
-        <h3>The honest downsides</h3>
-        <ul>
-          <li>It's Cape Cod. It's not a "discovery." Everyone's been or knows someone who has. Zero novelty for most East Coasters.</li>
-          <li>Ocean water is still mid-60s in early June. Swimmable for brave adults but the 2yo won't last long.</li>
-          <li>The vibe is "family vacation" in the most generic sense. Mini golf and fried clams. Not charming-Vermont or dramatic-Maine.</li>
-          <li>Traffic on Route 6 can be miserable even in early June, especially weekends. One road in, one road out.</li>
-          <li>Restaurants are fine but not exciting. Lots of "seafood shack" energy, fewer destination-worthy spots.</li>
-          <li>Rental prices are already high in June — no off-season discount like Stowe ski houses.</li>
-          <li>The Cape sprawls. Lower Cape (Wellfleet/Truro) is beautiful but far from Upper Cape. You'll drive a lot between towns.</li>
-          <li>No real "town center" vibe unless you're in Chatham or Provincetown. It's suburban/spread out.</li>
-        </ul>
-      </div>
-    </div>
-
-    <h2>Day trips</h2>
-    <div class="excursion"><div><div class="name">Cape Cod National Seashore</div><div class="desc">Coast Guard Beach, Nauset Light Beach — dramatic dunes, long walks, tide pools. The best of the Cape.</div></div><div class="dist">Varies</div></div>
-    <div class="excursion"><div><div class="name">Provincetown</div><div class="desc">End of the Cape. Art galleries, whale watching tours, Commercial Street, Portuguese bakeries. Worth the drive.</div></div><div class="dist">45–60 min</div></div>
-    <div class="excursion"><div><div class="name">Cape Cod Rail Trail</div><div class="desc">22 mi paved bike path through woods and towns. Rent a bike trailer for the 2yo, let the 4yo ride.</div></div><div class="dist">On-Cape</div></div>
-    <div class="excursion"><div><div class="name">Chatham</div><div class="desc">Prettiest town on the Cape. Lighthouse, seal-watching boat tours, fish pier, Main Street shops.</div></div><div class="dist">20–40 min</div></div>
-    <div class="excursion"><div><div class="name">Martha's Vineyard (ferry)</div><div class="desc">Day trip by ferry from Hyannis or Woods Hole. Charming but adds cost and complexity with little kids.</div></div><div class="dist">Ferry + 45 min</div></div>
-  </div>
-
-  <!-- HEAD TO HEAD -->
+  <!-- HEAD TO HEAD — full width -->
+  <div class="container wide">
   <div class="compare-section">
     <h2>Head to head — no sugarcoating</h2>
+    <div class="table-wrap">
     <table>
-      <tr><th></th><th>Stowe, VT</th><th>Midcoast Maine</th><th>Cape Cod</th><th>Acadia / Bar Harbor</th></tr>
-      <tr><td>Drive from WP</td><td>4.5 hrs</td><td>5.5 hrs</td><td class="winner">3.5 hrs</td><td>6.5 hrs</td></tr>
-      <tr><td>Airport proximity</td><td class="winner">BTV — 45 min</td><td>PWM — 1.5 hrs</td><td>PVD/BOS — 1–1.5 hrs</td><td>BHB — 15 min (tiny) / PWM 3 hrs</td></tr>
-      <tr><td>Weather in early June</td><td class="winner">65–75°F, mostly sunny</td><td>62–72°F, fog is real</td><td>68–75°F, can be windy</td><td>58–68°F. Cooler + foggier than all others.</td></tr>
-      <tr><td>Swimming</td><td>River holes — cold but doable</td><td>Ocean is 52°F — no</td><td class="winner">Sandy beaches, ocean ~63°F</td><td>Ocean 50°F — absolutely not. Sand Beach exists but you're not swimming.</td></tr>
-      <tr><td>Daily activity with kids</td><td class="winner">Rec Path every day, easy hikes</td><td>Need to drive to each thing</td><td>Beach every day, Rail Trail</td><td>Carriage roads are incredible for strollers/bikes. But need to drive to trailheads.</td></tr>
-      <tr><td>Food scene</td><td class="winner">Hen of the Wood, Doc Ponds, walkable</td><td>Thin locally, Portland 1.5 hrs</td><td>Fine but generic. Fried clams energy.</td><td>Bar Harbor is lobster + tourist fare. Good, not great. No standout restaurants.</td></tr>
-      <tr><td>Wow factor</td><td>Beautiful but familiar</td><td class="winner">Coast feels like a real destination</td><td>Everyone's been. Zero novelty.</td><td class="winner">National park on the ocean. Cadillac Mountain sunrise. Truly dramatic.</td></tr>
-      <tr><td>Rainy day plan</td><td>Limited — house games</td><td>Limited — house games</td><td class="winner">More indoor kid stuff (aquarium, museums)</td><td>Limited. Bar Harbor has some shops but that's about it.</td></tr>
-      <tr><td>Rental value (June)</td><td class="winner">Ski houses = off-season deals</td><td>Coast prices climbing</td><td>Peak pricing already. Expensive.</td><td>Moderate. Not cheap but not Cape Cod prices.</td></tr>
-      <tr><td>Walkability from house</td><td class="winner">Town is compact, Rec Path connects</td><td>Car for everything</td><td>Car for everything. Cape sprawls.</td><td>Bar Harbor village is walkable. Park requires driving.</td></tr>
-      <tr><td>Toddler safety</td><td class="winner">Paths, grass, contained</td><td>Rocky coast, uneven terrain</td><td>Sandy beaches = good, ocean undertow = watch closely</td><td>Carriage roads = great. Cliffs and rock scrambles = stressful with a 2yo.</td></tr>
-      <tr><td>Adult satisfaction by day 6</td><td>Might feel small</td><td class="winner">Coast keeps surprising you</td><td>Adults might be bored. It's pleasant, not interesting.</td><td class="winner">The park has endless variety. You won't run out of things to do.</td></tr>
-      <tr><td>Memories your kids tell</td><td>Ben &amp; Jerry's, swimming holes</td><td class="winner">Lobster boats, lighthouses, tide pools</td><td>Beach days, whale watching, ice cream</td><td class="winner">Tide pools, carriage roads, seeing the sunrise from a mountain, lobster on the pier</td></tr>
-      <tr><td>Traffic concerns</td><td class="winner">N/A</td><td class="winner">N/A</td><td>Route 6. One road. Weekends are brutal.</td><td>Park Loop Road gets congested. Reservation system helps but adds planning.</td></tr>
-      <tr><td>The real catch</td><td>Might feel too quiet by day 6</td><td>Fog can steal whole days</td><td>It's just… fine</td><td>6.5 hr drive is the longest. With a 2yo that's a very hard day 1.</td></tr>
+      <tr><th></th><th>Stowe, VT</th><th>Midcoast Maine</th><th>Acadia / Bar Harbor</th><th>Lake Placid, NY</th><th>Berkshires, MA</th><th>Finger Lakes, NY</th><th>White Mtns, NH</th><th>Montreal, QC</th><th>Thousand Islands, NY</th></tr>
+      <tr><td>Drive from WP</td><td>4.5 hrs</td><td>5.5 hrs</td><td>6.5 hrs</td><td>4.5 hrs</td><td class="winner">2.5 hrs</td><td>4.5 hrs</td><td>4.5 hrs</td><td>5.5 hrs</td><td>5 hrs</td></tr>
+      <tr><td>Fly home from</td><td class="winner">BTV — 45 min</td><td>PWM — 1.5 hrs</td><td>BHB 15 min (tiny) / PWM 3 hrs</td><td>ALB — 2 hrs</td><td>ALB/BDL — ~1 hr</td><td>SYR/ROC — ~1 hr</td><td>PWM/MHT — ~2 hrs</td><td class="winner">YUL — in the city, major hub</td><td>SYR — 1.5 hrs</td></tr>
+      <tr><td>Weather early June</td><td class="winner">65–75°F, sunny</td><td>62–72°F, fog</td><td>58–68°F, foggiest</td><td>65–75°F, sunny</td><td class="winner">68–78°F, warmest</td><td>68–78°F, warm</td><td>62–72°F, variable</td><td>65–75°F, pleasant</td><td>65–75°F, sunny</td></tr>
+      <tr><td>Swimming</td><td>River holes — bracing</td><td>Ocean 52°F — no</td><td>Ocean 50°F — no</td><td class="winner">Lake! Warmer, calm, safe for kids</td><td>Lake swimming (Prospect, Buel)</td><td class="winner">Lake swimming, warmest water</td><td>River holes — cold</td><td>City pools/splash pads only</td><td>River swimming — cold but doable</td></tr>
+      <tr><td>Daily kid activity</td><td class="winner">Rec Path, easy hikes</td><td>Drive to each thing</td><td>Carriage roads (drive to)</td><td class="winner">Lake beach every day + village walks</td><td>Farms, easy trails, lakes</td><td>Lake + gorge trails</td><td>Storyland theme park(!)</td><td>Parks, Biodome, splash pads, canal</td><td>Boat tours, castle visits, beaches</td></tr>
+      <tr><td>Food scene</td><td class="winner">Hen of the Wood, walkable</td><td>Thin; Portland 1.5 hrs</td><td>Tourist lobster fare</td><td>Decent but thin</td><td class="winner">Great farm-to-table</td><td>Good; winery-adjacent</td><td>Thin. Resort basics.</td><td class="winner">World-class. Bagels, bistros, markets, Joe Beef corridor.</td><td>Very thin. Small-town diners.</td></tr>
+      <tr><td>Wow factor</td><td>Beautiful, familiar</td><td class="winner">Coast = real destination</td><td class="winner">National park on the ocean</td><td>Olympic village + Adirondack lake</td><td>Cultural (Mass MoCA, Tanglewood)</td><td>Gorgeous gorges + lake country</td><td>Rugged mountains</td><td class="winner">It's a city. Totally different vibe. Feels like Europe.</td><td>Islands + castles on the St. Lawrence. Surprisingly magical.</td></tr>
+      <tr><td>Rainy day plan</td><td>Limited</td><td>Limited</td><td>Limited</td><td>Olympic center, museum</td><td class="winner">Mass MoCA, Norman Rockwell</td><td>Corning Glass Museum</td><td>Storyland partly covered</td><td class="winner">Unlimited. It's a city. Museums, indoor markets, restaurants.</td><td>Limited. Very rural.</td></tr>
+      <tr><td>Rental value</td><td class="winner">Ski houses = deals</td><td>Prices climbing</td><td>Moderate</td><td>Moderate</td><td>Moderate</td><td class="winner">Lakefront houses, good value</td><td>Moderate</td><td>Hotels/Airbnbs — moderate, weaker CAD helps</td><td class="winner">Waterfront cottages, good value</td></tr>
+      <tr><td>Walkability</td><td class="winner">Compact + Rec Path</td><td>Car for everything</td><td>Bar Harbor walkable, park not</td><td class="winner">Village + Mirror Lake on foot</td><td>Great Barrington walkable</td><td>Car for everything</td><td>N. Conway walkable-ish</td><td class="winner">Extremely walkable. Metro system. Don't need a car.</td><td>Car for everything</td></tr>
+      <tr><td>Toddler safety</td><td class="winner">Paths, grass, contained</td><td>Rocky coast, uneven</td><td>Cliffs + 2yo = stress</td><td class="winner">Calm lake, flat paths</td><td>Gentle terrain, farms</td><td>Gorge trails need watching</td><td>Rugged trails</td><td>City sidewalks, parks — normal urban caution</td><td>Water everywhere — watch the docks</td></tr>
+      <tr><td>Adult satisfaction day 6</td><td>Might feel small</td><td class="winner">Coast surprises you</td><td class="winner">Endless park variety</td><td>Town might feel thin</td><td>Culture keeps adults engaged</td><td>Wineries wasted on kid trip</td><td>Hiking gets repetitive</td><td class="winner">You will not be bored. New restaurant every night. Festivals, neighborhoods.</td><td>Relaxing but samey by day 5</td></tr>
+      <tr><td>Kids will remember</td><td>Ben &amp; Jerry's, swim holes</td><td class="winner">Lobster boats, lighthouses</td><td class="winner">Tide pools, mountain sunrise</td><td>Lake days, Olympic ski jump</td><td>Less kid-memorable</td><td>Watkins Glen gorge</td><td class="winner">Storyland, waterfalls, train</td><td>Biodome, canal boats, bagels bigger than their head</td><td>Boldt Castle, boat rides through islands</td></tr>
+      <tr><td>The real catch</td><td>Too quiet by day 6</td><td>Fog steals whole days</td><td>6.5 hr drive with a 2yo</td><td>Food thin for a week</td><td>Adults + kids in tow</td><td>Wineries are the draw</td><td>Less charming town</td><td>It's a city trip, not a nature retreat. Totally different vacation. Passports needed.</td><td>Very remote. Thin on dining/activities. More of a long weekend than a week.</td></tr>
     </table>
+    </div>
   </div>
+  </div><!-- close .container.wide -->
 
+  <div class="container">
   <!-- Verdict -->
   <div class="verdict">
     <h2>The honest verdict</h2>
     <p><strong>Stowe is the easiest, most practical choice.</strong> Walkable, great daily rhythm with the Rec Path, excellent food, and off-season ski house rentals are a steal. If your priority is "minimize logistics, maximize chill," Stowe wins.</p>
-    <p style="margin-top: 0.75rem;"><strong>Maine is the most memorable choice.</strong> The coast in early June is genuinely special — long golden light, empty harbors, lobster on the rocks. Your group will talk about it more. But you pay for it: longer drive, colder, foggier, less walkable, and the airport is far.</p>
-    <p style="margin-top: 0.75rem;"><strong>Cape Cod is the most kid-friendly on paper</strong> — sandy beaches, ice cream, mini golf, whale watching. But it's also the least interesting for adults, the most expensive, the most generic, and Route 6 traffic will test your patience. It's a fine vacation. It's not a special one. Everyone at home will say "oh nice" instead of "tell me more."</p>
-    <p style="margin-top: 0.75rem;"><strong>Acadia is the dream destination</strong> — a national park on the ocean, carriage roads perfect for strollers, Cadillac Mountain at sunrise, tide pools everywhere. If this were adults-only, it might win outright. But the 6.5 hour drive with a 2yo is the longest by far, the weather is the coldest and foggiest, and flying home means either a tiny regional airport (BHB) or 3 hours to Portland. The park's reservation system also adds a planning layer you don't need on vacation.</p>
-    <p style="margin-top: 0.75rem;"><strong>With a 2yo and 4yo for a full week?</strong> Still Stowe. The daily walkability and contained environment matter more than you think when you're managing two little kids for seven days. Cape Cod wins on beach access but loses on everything that makes a week feel easy. Acadia and Midcoast Maine are trips you take when the youngest is 5+.</p>
+    <p style="margin-top: 0.75rem;"><strong>Lake Placid is the dark horse.</strong> Everything Stowe has plus a lake — Mirror Lake is right in town. Olympic history is a bonus. Food is thinner and the airport (Albany, 2 hrs) is worse, but the lake changes the daily rhythm in a big way with kids.</p>
+    <p style="margin-top: 0.75rem;"><strong>Maine (midcoast or Acadia) is the most memorable.</strong> The coast in early June is genuinely special. But you pay for it: longer drive, colder, foggier, less walkable, and the airport logistics are the worst of the bunch.</p>
+    <p style="margin-top: 0.75rem;"><strong>Montreal is the wildcard.</strong> Completely different trip — a world-class city that feels like Europe. Best food of any option by a mile. Unlimited rainy-day plans. The Biodome alone could fill a day with kids. But it's a city vacation, not a nature retreat, and you need passports. If your group wants culture + restaurants + urban energy, this is the one.</p>
+    <p style="margin-top: 0.75rem;"><strong>Berkshires</strong> are closest and most culturally rich, but more "adults with kids in tow." <strong>Finger Lakes</strong> have the warmest swimming but the main draw (wineries) is wasted. <strong>White Mountains</strong> have Storyland (genuine kid paradise) but the town is weaker. <strong>Thousand Islands</strong> are surprisingly magical but better as a long weekend — thin on dining for a full week.</p>
+    <p style="margin-top: 0.75rem;"><strong>With a 2yo and 4yo for a full week?</strong> Stowe or Lake Placid. Walkability and a contained environment matter more than you think when managing two little kids for seven days. Montreal if your group leans urban.</p>
   </div>
 
 </div>
@@ -342,20 +277,6 @@ const maineMap = initMap('map-maine', [43.0, -71.0], 7,
   [[44.103,-69.109,"Rockland"],[43.646,-70.309,"Portland"],[44.082,-69.049,"Owls Head Lighthouse"],[44.21,-69.065,"Camden Harbor"]]
 );
 
-// Cape Cod map
-const capecodMap = initMap('map-capecod', [41.7, -71.5], 8,
-  [
-    { coords: [41.034, -73.763], label: "White Plains, NY", icon: "🚗" },
-    { coords: [41.67, -70.0], label: "Cape Cod", icon: "🏖️" },
-    { coords: [41.724, -71.428], label: "Providence (PVD)", icon: "✈️" },
-  ],
-  [
-    { coords: [[41.034,-73.763],[41.2,-73.2],[41.4,-72.5],[41.6,-71.8],[41.7,-71.2],[41.75,-70.6],[41.67,-70.0]] },
-    { coords: [[41.67,-70.0],[41.724,-71.428]], color: '#c45c4a' },
-  ],
-  [[41.86,-69.97,"Provincetown"],[41.682,-69.96,"Truro/National Seashore"],[41.672,-70.07,"Wellfleet"],[41.68,-69.99,"Chatham"],[41.65,-70.3,"Hyannis"]]
-);
-
 // Fix Leaflet rendering when tab hidden
 function showTab(id) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -365,7 +286,6 @@ function showTab(id) {
   setTimeout(() => {
     if (id === 'stowe') stoweMap.invalidateSize();
     if (id === 'maine') maineMap.invalidateSize();
-    if (id === 'capecod') capecodMap.invalidateSize();
   }, 50);
 }
 </script>
