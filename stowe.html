@@ -74,6 +74,16 @@
   .mini-table li { padding: 0.3rem 0; padding-left: 1.5rem; position: relative; font-size: 0.88rem; line-height: 1.45; }
   .mini-table li::before { counter-increment: item; content: counter(item); position: absolute; left: 0; color: #2d4a3e; font-weight: 700; font-size: 0.8rem; }
   .mini-table .note { font-size: 0.75rem; color: #999; font-style: italic; }
+  /* Combo itinerary */
+  .itinerary { margin: 1.5rem 0; }
+  .itin-leg { background: #f5f3ef; border-radius: 8px; padding: 1.25rem; margin: 0.75rem 0; border-left: 4px solid #2d4a3e; }
+  .itin-leg.drive { border-left-color: #c45c4a; background: #faf5f4; }
+  .itin-leg h3 { font-size: 1rem; color: #2d4a3e; margin-bottom: 0.4rem; }
+  .itin-leg.drive h3 { color: #c45c4a; }
+  .itin-leg p { font-size: 0.9rem; line-height: 1.5; color: #555; margin: 0.2rem 0; }
+  .itin-leg ul { list-style: none; padding: 0; margin: 0.4rem 0 0; }
+  .itin-leg li { font-size: 0.88rem; line-height: 1.5; padding: 0.15rem 0 0.15rem 1.2rem; position: relative; }
+  .itin-leg li::before { content: "·"; position: absolute; left: 0; font-weight: 700; color: #2d4a3e; }
   .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #aaa; }
 </style>
 </head>
@@ -92,6 +102,7 @@
     <div class="tab" onclick="showTab('maine')">Midcoast Maine</div>
     <div class="tab" onclick="showTab('acadia')">Acadia / Bar Harbor</div>
     <div class="tab" onclick="showTab('montreal')">Montreal</div>
+    <div class="tab" onclick="showTab('combo')" style="background:#2d4a3e22; font-weight:700;">Stowe + Montreal</div>
   </div>
 
   <!-- STOWE TAB -->
@@ -492,6 +503,95 @@
     </div>
   </div>
 
+  <!-- COMBO TAB -->
+  <div class="tab-content" id="combo">
+    <div class="map-container" id="map-combo"></div>
+    <div class="stats">
+      <div class="stat"><div class="num">4.5 + 2.5 hrs</div><div class="label">two short drives</div></div>
+      <div class="stat"><div class="num">YUL</div><div class="label">fly home from Montreal</div></div>
+      <div class="stat"><div class="num">8–9 days</div><div class="label">ideal total length</div></div>
+      <div class="stat"><div class="num">2 stays</div><div class="label">one house + one Airbnb</div></div>
+      <div class="stat"><div class="num">🇺🇸 → 🇨🇦</div><div class="label">passports required</div></div>
+    </div>
+
+    <h2>The route</h2>
+    <div class="itinerary">
+      <div class="itin-leg drive">
+        <h3>Day 1: White Plains → Stowe (4.5 hrs)</h3>
+        <p>Leave morning, arrive by lunch. Stop in Albany or Rutland for a break. Settle into the house, explore the village, early dinner.</p>
+      </div>
+
+      <div class="itin-leg">
+        <h3>Days 1–4: Stowe — decompress mode</h3>
+        <p>Let the kids set the pace. No agenda pressure.</p>
+        <ul>
+          <li>Rec Path every morning — stroller, scooter, coffee</li>
+          <li>Swimming holes in the afternoon when it's warm (Moss Glen, Bingham Falls)</li>
+          <li>Lake Elmore beach day (25 min) — sandy beach, lifeguards, perfect for toddlers</li>
+          <li>Ben &amp; Jerry's factory trip (15 min)</li>
+          <li>Walk to Doc Ponds, The Bench, or Harrison's for dinner</li>
+          <li>Firepit nights after the kids are down</li>
+          <li>Smugglers' Notch boulders for the 4yo</li>
+          <li>Adults rotate a night out at Hen of the Wood (book ahead)</li>
+        </ul>
+      </div>
+
+      <div class="itin-leg drive">
+        <h3>Day 5: Stowe → Montreal (2.5 hrs)</h3>
+        <p>Easy drive north. Cross at Highgate Springs / St-Armand — usually quick on a weekday. Arrive by lunch, grab bagels at St-Viateur, settle into the Airbnb. Walk the neighborhood.</p>
+      </div>
+
+      <div class="itin-leg">
+        <h3>Days 5–8: Montreal — switch gears</h3>
+        <p>Urban energy. New restaurant every night. The adults get their payoff.</p>
+        <ul>
+          <li>Day 1: Old Montreal — cobblestones, Notre-Dame, Old Port splash pad + carousel, waterfront walk</li>
+          <li>Day 2: Biodome (half day) + Parc La Fontaine playground + dinner in the Plateau</li>
+          <li>Day 3: Jean-Talon Market morning, Mont-Royal afternoon (Kondiaronk lookout), cocktails at Cloakroom or Atwater</li>
+          <li>Day 4: Lachine Canal bike ride to Atwater Market, or Parc Jean-Drapeau island day</li>
+          <li>Sunday bonus: Tam-tam drum circle on Mont-Royal — free, magical, kids love it</li>
+          <li>Every night: Joe Beef corridor, Schwartz's, Mon Lapin, Lawrence — rotate adults out for the best meals of the trip</li>
+        </ul>
+      </div>
+
+      <div class="itin-leg drive">
+        <h3>Day 8 or 9: Fly home from YUL</h3>
+        <p>Major international airport, 20 min from downtown. Direct flights to most US cities. Drop the rental car, done.</p>
+      </div>
+    </div>
+
+    <h2>Why this works</h2>
+    <div class="grid">
+      <div class="card pros">
+        <h3>The case for the combo</h3>
+        <ul>
+          <li>Solves Stowe's "too quiet by day 6" problem — you leave before it gets old</li>
+          <li>Solves Montreal's "full week in a city with toddlers" problem — 3-4 days is the sweet spot</li>
+          <li>Two totally different vibes: nature → city. The trip has an arc.</li>
+          <li>The drives are short — 4.5 hrs then 2.5 hrs. Both manageable with a 2yo.</li>
+          <li>YUL is the easiest airport of any option. Major hub, in the city.</li>
+          <li>Best food of any itinerary — Hen of the Wood + Joe Beef + Schwartz's + Mon Lapin in one trip</li>
+          <li>Routing is perfectly linear: south → north → fly home. No backtracking.</li>
+          <li>Adults get porch/firepit nights AND world-class cocktail bars. Both halves deliver.</li>
+        </ul>
+      </div>
+      <div class="card cons">
+        <h3>The honest downsides</h3>
+        <ul>
+          <li>Two accommodations = two check-ins, two pack/unpacks. With toddlers, moving day is a lost day.</li>
+          <li>Stowe ski house deals are better for full weeks — 4 nights may cost nearly as much as 7.</li>
+          <li>Montreal Airbnb for 7 people with enough space is harder to find than a big Vermont house.</li>
+          <li>Border crossing adds 15–60 min of uncertainty. Have all 7 passports ready (including kids).</li>
+          <li>More planning than a single-destination trip. Two sets of restaurants to research, two areas to learn.</li>
+          <li>If it rains the whole Stowe leg, you might wish you'd just done Montreal for the full week.</li>
+          <li>Currency switch — minor but you'll want CAD/tap-to-pay ready for Montreal.</li>
+          <li>The 2yo won't remember any of this. You're really doing this for the adults and the 4yo.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
   </div><!-- close .container -->
 
   <!-- HEAD TO HEAD — full width -->
@@ -525,11 +625,11 @@
   <!-- Verdict -->
   <div class="verdict">
     <h2>The honest verdict</h2>
-    <p><strong>Stowe is the easiest, most practical choice.</strong> Walkable, great daily rhythm with the Rec Path, excellent food, and off-season ski house rentals are a steal. If your priority is "minimize logistics, maximize chill," Stowe wins.</p>
-    <p style="margin-top: 0.75rem;"><strong>Maine (midcoast or Acadia) is the most memorable.</strong> The coast in early June is genuinely special — long golden light, empty harbors, lobster on the rocks. Acadia adds national park drama and carriage roads perfect for strollers. But you pay for it: longer drives, colder, foggier, less walkable, and the airport logistics are the worst of the bunch.</p>
-    <p style="margin-top: 0.75rem;"><strong>Finger Lakes have the best swimming</strong> — warmest lake water of any option, gorgeous gorges, and lakefront house rentals are a good deal. The catch is honest: the main draw is wineries, and that's wasted on a group with two toddlers. You'll have a nice time but might feel like you're in the wrong place for your crew.</p>
-    <p style="margin-top: 0.75rem;"><strong>Montreal is the wildcard.</strong> Completely different trip — a world-class city that feels like Europe. Best food by a mile. Unlimited rainy-day plans. The Biodome alone could fill a day with kids. But it's a city vacation, not a nature retreat, and you need passports.</p>
-    <p style="margin-top: 0.75rem;"><strong>With a 2yo and 4yo for a full week?</strong> Stowe. The daily walkability and contained environment matter more than you think when managing two little kids for seven days. Montreal if your group leans urban.</p>
+    <p><strong>The combo is the move: Stowe (4 days) → Montreal (3–4 days).</strong> You get nature + city, porch firepits + world-class cocktail bars, swimming holes + the Biodome. The drives are short, the routing is linear, and you fly home from a major airport. It solves every weakness of doing either place alone.</p>
+    <p style="margin-top: 0.75rem;"><strong>If one destination only?</strong> Stowe for pure ease. Walkable, contained, great daily rhythm with the Rec Path, and off-season ski house rentals are a steal. Add Lake Elmore (25 min) for beach days. You might get antsy by day 6 but you won't be stressed.</p>
+    <p style="margin-top: 0.75rem;"><strong>Maine (midcoast or Acadia)</strong> is the most dramatic and memorable, but the logistics tax — longer drives, fog, cold water, awkward airports — is real with two toddlers. Save it for when the youngest is 5+.</p>
+    <p style="margin-top: 0.75rem;"><strong>Montreal alone for a full week</strong> would be incredible for the adults but 7 days in a city with a 2yo is a lot. 3–4 days is the sweet spot — which is exactly what the combo gives you.</p>
+    <p style="margin-top: 0.75rem;"><strong>Decision tree:</strong> Passports valid for all 7? → Stowe + Montreal combo. No passports? → Stowe for the week, add Lake Elmore and a Burlington day trip.</p>
   </div>
 
 </div>
@@ -616,8 +716,24 @@ const montrealMap = initMap('map-montreal', [43.0, -73.5], 7,
   [[45.56,-73.60,"Jean-Talon Market"],[45.504,-73.556,"Old Montreal"],[45.56,-73.55,"Biodome"],[45.51,-73.59,"Mont-Royal"],[45.48,-73.57,"Lachine Canal"]]
 );
 
+// Combo map — shows full route
+const comboMap = initMap('map-combo', [43.2, -73.2], 6,
+  [
+    { coords: [41.034, -73.763], label: "White Plains, NY", icon: "🚗" },
+    { coords: [44.465, -72.687], label: "Stowe, VT (Days 1–4)", icon: "🏔️" },
+    { coords: [45.501, -73.567], label: "Montreal (Days 5–8)", icon: "🇨🇦" },
+    { coords: [45.457, -73.749], label: "Fly home (YUL)", icon: "✈️" },
+  ],
+  [
+    { coords: [[41.034,-73.763],[41.3,-73.6],[42.0,-73.3],[42.7,-73.1],[43.3,-72.9],[44.0,-72.8],[44.465,-72.687]], color: '#2d4a3e' },
+    { coords: [[44.465,-72.687],[44.8,-72.8],[45.0,-73.1],[45.3,-73.3],[45.501,-73.567]], color: '#c45c4a' },
+    { coords: [[45.501,-73.567],[45.457,-73.749]], color: '#888' },
+  ],
+  [[44.338,-72.756,"Waterbury / Ben & Jerry's"],[44.490,-72.680,"Moss Glen Falls"],[44.72,-72.51,"Lake Elmore"],[45.56,-73.60,"Jean-Talon Market"],[45.504,-73.556,"Old Montreal"],[45.56,-73.55,"Biodome"]]
+);
+
 // Fix Leaflet rendering when tab hidden
-const maps = { stowe: stoweMap, maine: maineMap, acadia: acadiaMap, montreal: montrealMap };
+const maps = { stowe: stoweMap, maine: maineMap, acadia: acadiaMap, montreal: montrealMap, combo: comboMap };
 function showTab(id) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
