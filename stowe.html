@@ -84,6 +84,23 @@
   .itin-leg ul { list-style: none; padding: 0; margin: 0.4rem 0 0; }
   .itin-leg li { font-size: 0.88rem; line-height: 1.5; padding: 0.15rem 0 0.15rem 1.2rem; position: relative; }
   .itin-leg li::before { content: "·"; position: absolute; left: 0; font-weight: 700; color: #2d4a3e; }
+  /* TLDR */
+  .tldr { background: #fff; border-radius: 12px; padding: 2rem; margin: 0 0 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .tldr h2 { color: #2d4a3e; margin: 0 0 1rem; font-size: 1.3rem; }
+  .tldr-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1rem 0; }
+  @media (max-width: 650px) { .tldr-options { grid-template-columns: 1fr; } }
+  .tldr-option { background: #f5f3ef; border-radius: 8px; padding: 1.25rem; border-top: 4px solid #2d4a3e; }
+  .tldr-option.recommended { border-top-color: #4a9e6e; background: #f0f8f3; }
+  .tldr-option h3 { font-size: 1.05rem; margin-bottom: 0.5rem; color: #2d4a3e; }
+  .tldr-option .route { font-size: 0.85rem; color: #777; margin-bottom: 0.5rem; }
+  .tldr-option p { font-size: 0.9rem; line-height: 1.5; color: #555; }
+  .tldr-option .tag { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 4px; margin-bottom: 0.5rem; }
+  .tldr-option.recommended .tag { background: #4a9e6e; color: #fff; }
+  .tldr-tradeoffs { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #e8e5e0; }
+  .tldr-tradeoffs h3 { font-size: 0.95rem; margin-bottom: 0.6rem; color: #2d4a3e; }
+  .tldr-tradeoffs ul { list-style: none; padding: 0; }
+  .tldr-tradeoffs li { font-size: 0.88rem; line-height: 1.5; padding: 0.25rem 0 0.25rem 1.3rem; position: relative; }
+  .tldr-tradeoffs li::before { content: "vs"; position: absolute; left: 0; font-weight: 700; font-size: 0.7rem; color: #c45c4a; }
   .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #aaa; }
 </style>
 </head>
@@ -95,6 +112,41 @@
 </div>
 
 <div class="container">
+
+  <!-- TLDR -->
+  <div class="tldr">
+    <h2>The two options</h2>
+    <div class="tldr-options">
+      <div class="tldr-option recommended">
+        <span class="tag">Leaning this way</span>
+        <h3>Option A: Stowe + Montreal</h3>
+        <div class="route">White Plains → Stowe, VT (4.5 hrs) → Montreal (2.5 hrs) → fly home YUL</div>
+        <p><strong>Stowe (4 days):</strong> Mountain village, big rental house with a yard, paved Rec Path along the river every morning, swimming holes, Ben &amp; Jerry's factory, walk to great restaurants. Decompress mode.</p>
+        <p style="margin-top: 0.5rem;"><strong>Montreal (3-4 days):</strong> World-class food city that feels like Europe. Biodome for the kids, incredible restaurants and cocktail bars for the adults, walkable everywhere. Fly home from a major airport.</p>
+        <p style="margin-top: 0.5rem;"><strong>Need passports for everyone including kids.</strong></p>
+        <p style="margin-top: 0.5rem;"><em>Best food trip. Best contrast — nature then city.</em></p>
+      </div>
+      <div class="tldr-option">
+        <h3>Option B: Portland + Coastal Maine</h3>
+        <div class="route">White Plains → Portland, ME (4.5 hrs) → Camden or Acadia (2-4 hrs) → fly home PWM</div>
+        <p><strong>Portland (3 days):</strong> Amazing food city — lobster rolls, Eventide, Duckfat, Old Port, Peaks Island ferry day trip. Walkable harbor town.</p>
+        <p style="margin-top: 0.5rem;"><strong>Coast (4-5 days):</strong> Camden (harbor towns, lobster boats, lighthouses) or Acadia/Bar Harbor (national park on the ocean, carriage roads for strollers, tide pools, Cadillac Mountain sunrise).</p>
+        <p style="margin-top: 0.5rem;"><strong>No passports needed.</strong></p>
+        <p style="margin-top: 0.5rem;"><em>Best nature trip. Best lobster.</em></p>
+      </div>
+    </div>
+    <div class="tldr-tradeoffs">
+      <h3>Key tradeoffs</h3>
+      <ul>
+        <li><strong>Swimming:</strong> Option A has swimming (river holes + lake near Stowe). Option B the ocean is freezing — nobody's swimming.</li>
+        <li><strong>Kid rhythm:</strong> Option A has easier, more contained kid days (Stowe half). Option B is more dramatic scenery but more demanding with toddlers.</li>
+        <li><strong>Passports:</strong> Option A needs them for all 7 people including kids. Option B doesn't.</li>
+        <li><strong>Food:</strong> Both incredible, just different — Montreal is bistros, bagels, and cocktail bars. Maine is lobster, oysters, and harbor shacks.</li>
+        <li><strong>Rainy days:</strong> Option A is resilient (Montreal has unlimited indoor options). Option B is rough (coastal Maine has almost nothing indoors).</li>
+        <li><strong>Vibe contrast:</strong> Option A = maximum contrast (mountain village → European city). Option B = one deepening story (food city → dramatic coast).</li>
+      </ul>
+    </div>
+  </div>
 
   <!-- Tabs -->
   <div class="tabs">
