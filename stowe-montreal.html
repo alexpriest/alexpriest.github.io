@@ -3405,9 +3405,9 @@ img { max-width: 100%; }
     [45.47,-73.68],[45.46,-73.72],[45.457,-73.749]
   ];
 
-  L.polyline(leg1Coords, { color: '#2d6b4a', weight: 3, opacity: 0.6, smoothFactor: 2 }).addTo(map);
-  L.polyline(leg2Coords, { color: '#1a3a5c', weight: 3, opacity: 0.6, smoothFactor: 2 }).addTo(map);
-  L.polyline(toAirportCoords, { color: '#6b6b6b', weight: 2, opacity: 0.4, dashArray: '6,8', smoothFactor: 2 }).addTo(map);
+  var leg1Line = L.polyline(leg1Coords, { color: '#2d6b4a', weight: 3, opacity: 0, smoothFactor: 2 }).addTo(map);
+  var leg2Line = L.polyline(leg2Coords, { color: '#1a3a5c', weight: 3, opacity: 0, smoothFactor: 2 }).addTo(map);
+  var airportLine = L.polyline(toAirportCoords, { color: '#6b6b6b', weight: 2, opacity: 0, dashArray: '6,8', smoothFactor: 2 }).addTo(map);
 
   // Major markers
   var majorSpots = [
@@ -4145,56 +4145,47 @@ img { max-width: 100%; }
   })();
 
   /* ==========================================
-     #3 ANIMATED ROUTE DRAWING ON MAP
+     #3 ANIMATED ROUTE REVEAL ON MAP
      ========================================== */
   (function initRouteAnimation() {
-    // After map renders, find SVG paths and set them up for scroll-triggered animation
-    setTimeout(function() {
-      var svgPaths = document.querySelectorAll('#map .leaflet-overlay-pane svg path');
-      if (!svgPaths.length) return;
+    var day1 = document.getElementById('day1');
+    var day5 = document.getElementById('day5');
+    var leg1Revealed = false;
+    var leg2Revealed = false;
 
-      // Set up each path with dasharray/dashoffset for draw animation
-      svgPaths.forEach(function(path) {
-        var length = path.getTotalLength();
-        if (!length || length < 10) return;
-        path.style.strokeDasharray = length;
-        path.style.strokeDashoffset = length;
-        path.style.transition = 'stroke-dashoffset 1.8s ease-in-out';
+    function fadeInLine(line, targetOpacity, duration) {
+      var start = 0;
+      var step = targetOpacity / (duration / 16);
+      var current = 0;
+      function animate() {
+        current += step;
+        if (current >= targetOpacity) {
+          line.setStyle({ opacity: targetOpacity });
+          return;
+        }
+        line.setStyle({ opacity: current });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    var routeObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        if (entry.target === day1 && !leg1Revealed) {
+          leg1Revealed = true;
+          fadeInLine(leg1Line, 0.6, 1200);
+        }
+        if (entry.target === day5 && !leg2Revealed) {
+          leg2Revealed = true;
+          fadeInLine(leg2Line, 0.6, 1200);
+          setTimeout(function() { fadeInLine(airportLine, 0.4, 800); }, 600);
+        }
       });
+    }, { threshold: 0.2 });
 
-      // Leg 1 corresponds to Day 1 (drive to Stowe), Leg 2 to Day 5 (drive to Montreal)
-      var day1 = document.getElementById('day1');
-      var day5 = document.getElementById('day5');
-      var leg1Drawn = false;
-      var leg2Drawn = false;
-
-      var routeObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (!entry.isIntersecting) return;
-
-          if (entry.target === day1 && !leg1Drawn) {
-            leg1Drawn = true;
-            // First path = leg 1
-            if (svgPaths[0]) {
-              svgPaths[0].style.strokeDashoffset = '0';
-            }
-          }
-          if (entry.target === day5 && !leg2Drawn) {
-            leg2Drawn = true;
-            // Second and third paths = leg 2 and airport
-            if (svgPaths[1]) svgPaths[1].style.strokeDashoffset = '0';
-            if (svgPaths[2]) {
-              setTimeout(function() {
-                svgPaths[2].style.strokeDashoffset = '0';
-              }, 800);
-            }
-          }
-        });
-      }, { threshold: 0.2 });
-
-      if (day1) routeObserver.observe(day1);
-      if (day5) routeObserver.observe(day5);
-    }, 1500); // Wait for Leaflet to render SVG paths
+    if (day1) routeObserver.observe(day1);
+    if (day5) routeObserver.observe(day5);
   })();
 
   /* ==========================================
