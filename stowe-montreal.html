@@ -3130,22 +3130,48 @@ img { max-width: 100%; }
     subdomains: 'abcd'
   }).addTo(map);
 
-  // Route polylines
+  // Route polylines — dense waypoints following actual highways
+  // Leg 1: White Plains → I-87 N → I-787 → I-87 N → VT-89 → Stowe
   var leg1Coords = [
-    [41.034,-73.763],[41.3,-73.6],[42.0,-73.3],[42.7,-73.1],
-    [43.08,-73.78],[43.3,-72.9],[44.0,-72.8],[44.338,-72.756],[44.465,-72.687]
+    [41.034,-73.763],[41.08,-73.77],[41.14,-73.80],[41.20,-73.82],
+    [41.30,-73.84],[41.40,-73.85],[41.50,-73.87],[41.60,-73.88],
+    [41.70,-73.89],[41.80,-73.89],[41.90,-73.88],[42.00,-73.86],
+    [42.10,-73.85],[42.20,-73.83],[42.30,-73.82],[42.40,-73.80],
+    [42.50,-73.79],[42.60,-73.78],[42.65,-73.76],
+    [42.72,-73.76],[42.80,-73.75],[42.87,-73.74],
+    [42.95,-73.73],[43.00,-73.74],[43.08,-73.78],
+    [43.15,-73.76],[43.23,-73.72],[43.30,-73.68],
+    [43.38,-73.60],[43.45,-73.50],[43.50,-73.40],
+    [43.55,-73.30],[43.60,-73.20],[43.65,-73.12],
+    [43.70,-73.05],[43.78,-73.00],[43.85,-72.95],
+    [43.92,-72.90],[44.00,-72.86],[44.08,-72.83],
+    [44.15,-72.80],[44.22,-72.78],[44.28,-72.76],
+    [44.34,-72.76],[44.38,-72.74],[44.42,-72.72],
+    [44.465,-72.687]
   ];
+  // Leg 2: Stowe → Burlington → I-89 N → border → Montreal
   var leg2Coords = [
-    [44.465,-72.687],[44.476,-73.212],[44.8,-72.8],
-    [45.0,-73.1],[45.3,-73.3],[45.501,-73.567]
+    [44.465,-72.687],[44.47,-72.70],[44.48,-72.73],
+    [44.49,-72.78],[44.49,-72.83],[44.49,-72.88],
+    [44.48,-72.93],[44.48,-72.98],[44.47,-73.03],
+    [44.47,-73.08],[44.47,-73.13],[44.476,-73.212],
+    [44.52,-73.18],[44.56,-73.15],[44.60,-73.12],
+    [44.65,-73.10],[44.70,-73.08],[44.75,-73.06],
+    [44.80,-73.05],[44.85,-73.04],[44.90,-73.05],
+    [44.95,-73.08],[45.00,-73.12],[45.05,-73.16],
+    [45.10,-73.20],[45.15,-73.24],[45.20,-73.28],
+    [45.25,-73.32],[45.30,-73.36],[45.35,-73.40],
+    [45.40,-73.46],[45.45,-73.50],[45.48,-73.54],
+    [45.501,-73.567]
   ];
   var toAirportCoords = [
-    [45.501,-73.567],[45.457,-73.749]
+    [45.501,-73.567],[45.49,-73.60],[45.48,-73.64],
+    [45.47,-73.68],[45.46,-73.72],[45.457,-73.749]
   ];
 
-  L.polyline(leg1Coords, { color: '#2d6b4a', weight: 3, opacity: 0.6, smoothFactor: 1.5 }).addTo(map);
-  L.polyline(leg2Coords, { color: '#1a3a5c', weight: 3, opacity: 0.6, smoothFactor: 1.5 }).addTo(map);
-  L.polyline(toAirportCoords, { color: '#6b6b6b', weight: 2, opacity: 0.4, dashArray: '6,8' }).addTo(map);
+  L.polyline(leg1Coords, { color: '#2d6b4a', weight: 3, opacity: 0.6, smoothFactor: 2 }).addTo(map);
+  L.polyline(leg2Coords, { color: '#1a3a5c', weight: 3, opacity: 0.6, smoothFactor: 2 }).addTo(map);
+  L.polyline(toAirportCoords, { color: '#6b6b6b', weight: 2, opacity: 0.4, dashArray: '6,8', smoothFactor: 2 }).addTo(map);
 
   // Major markers
   var majorSpots = [
@@ -3166,27 +3192,20 @@ img { max-width: 100%; }
       .bindPopup('<strong>' + s.label + '</strong><br><span style="color:#888;font-size:0.8rem">' + s.sub + '</span>');
   });
 
-  // Minor stops
-  var minorStops = [
-    [43.08, -73.78, 'Saratoga Springs', 'Lunch stop'],
-    [44.338, -72.756, 'Waterbury', 'Ben & Jerry\'s, cider donuts'],
-    [44.558, -72.793, 'Smugglers\' Notch', 'Boulder scrambling'],
-    [44.490, -72.680, 'Moss Glen Falls', 'Waterfall hike'],
-    [44.72, -72.51, 'Lake Elmore', 'Beach day'],
-    [44.476, -73.212, 'Burlington', 'Optional stop'],
-    [45.56, -73.60, 'Jean-Talon Market', 'Best outdoor market'],
-    [45.504, -73.556, 'Old Montreal', 'Bota Bota spa'],
-    [45.56, -73.55, 'Biodome', 'Four ecosystems'],
-    [45.51, -73.59, 'Mont-Royal', 'City views'],
+  // Key stops only (not all minor dots)
+  var keyStops = [
+    [43.08, -73.78, 'Saratoga Springs', 'Lunch stop', '#2d6b4a'],
+    [44.338, -72.756, 'Waterbury', 'Ben & Jerry\'s', '#2d6b4a'],
+    [44.476, -73.212, 'Burlington', 'Optional stop', '#1a3a5c'],
   ];
 
-  minorStops.forEach(function(s) {
+  keyStops.forEach(function(s) {
     L.circleMarker([s[0], s[1]], {
-      radius: 5,
-      fillColor: '#2d6b4a',
+      radius: 4,
+      fillColor: s[4],
       color: '#fff',
       weight: 1.5,
-      fillOpacity: 0.85
+      fillOpacity: 0.7
     }).addTo(map).bindPopup('<strong>' + s[2] + '</strong><br><span style="color:#888;font-size:0.8rem">' + s[3] + '</span>');
   });
 
