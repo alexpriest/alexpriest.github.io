@@ -1975,10 +1975,18 @@ img { max-width: 100%; }
 <div class="user-modal-overlay" id="userModal">
   <div class="user-modal">
     <h2>Who's joining the trip?</h2>
-    <p class="modal-subtitle">Pick your name and color so everyone can see your reactions and votes.</p>
-    <div class="input-group">
-      <input type="text" id="modalFirstName" placeholder="First name" maxlength="20" autocomplete="given-name">
-      <input type="text" id="modalLastName" placeholder="Last name" maxlength="20" autocomplete="family-name">
+    <p class="modal-subtitle">Pick your name and a color.</p>
+    <div class="input-group" style="flex-direction:column">
+      <select id="modalNameSelect" style="width:100%;padding:0.85rem 1rem;border:1px solid var(--border);border-radius:10px;font-family:var(--font-body);font-size:0.95rem;background:rgba(255,255,255,0.8);color:var(--text);appearance:none;-webkit-appearance:none;background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>&quot;);background-repeat:no-repeat;background-position:right 1rem center;cursor:pointer;">
+        <option value="" disabled selected>Select your name...</option>
+        <option value="Alex|Priest">Alex Priest</option>
+        <option value="Miranda|Gale">Miranda Gale</option>
+        <option value="AJ|Adams">AJ Adams</option>
+        <option value="Ashley|Adams">Ashley Adams</option>
+        <option value="Jack|Villani">Jack Villani</option>
+      </select>
+      <input type="hidden" id="modalFirstName">
+      <input type="hidden" id="modalLastName">
     </div>
     <div class="color-picker-label">Choose your color</div>
     <div class="color-picker" id="colorPicker"></div>
@@ -2831,6 +2839,15 @@ img { max-width: 100%; }
     modalSubmit.disabled = !(firstName && lastName && selectedColor);
   }
 
+  var modalNameSelect = document.getElementById('modalNameSelect');
+  modalNameSelect.addEventListener('change', function() {
+    var parts = this.value.split('|');
+    modalFirstName.value = parts[0] || '';
+    modalLastName.value = parts[1] || '';
+    validateModal();
+    buildColorPicker();
+  });
+  // Keep old listeners as no-ops for hidden fields
   modalFirstName.addEventListener('input', function() { validateModal(); buildColorPicker(); });
   modalLastName.addEventListener('input', function() { validateModal(); buildColorPicker(); });
 
@@ -2839,10 +2856,12 @@ img { max-width: 100%; }
     if (currentUser) {
       modalFirstName.value = currentUser.firstName || '';
       modalLastName.value = currentUser.lastName || '';
+      modalNameSelect.value = (currentUser.firstName || '') + '|' + (currentUser.lastName || '');
       selectedColor = currentUser.color || null;
     } else {
       modalFirstName.value = '';
       modalLastName.value = '';
+      modalNameSelect.value = '';
       selectedColor = null;
     }
     buildColorPicker();
@@ -2851,7 +2870,7 @@ img { max-width: 100%; }
     requestAnimationFrame(function() {
       modalOverlay.classList.add('visible');
     });
-    modalFirstName.focus();
+    modalNameSelect.focus();
   }
 
   function hideModal() {
@@ -3510,11 +3529,11 @@ img { max-width: 100%; }
             commentEl.className = 'day-comment';
 
             var avatar = document.createElement('div');
-            avatar.className = 'comment-avatar';
-            // Use current color from allUsers
+            avatar.className = 'comment-avatar avatar';
             var commentColor = (allUsers[c.userId] && allUsers[c.userId].color) || c.color || '#999';
             avatar.style.backgroundColor = commentColor;
-            avatar.textContent = c.initials || '??';
+            avatar.textContent = (allUsers[c.userId] && allUsers[c.userId].initials) || c.initials || '??';
+            avatar.setAttribute('data-uid', c.userId);
 
             var content = document.createElement('div');
             content.className = 'comment-content';
@@ -3672,10 +3691,11 @@ img { max-width: 100%; }
             entry.className = 'note-entry';
 
             var avatar = document.createElement('div');
-            avatar.className = 'note-avatar';
+            avatar.className = 'note-avatar avatar';
             var noteColor = (allUsers[n.userId] && allUsers[n.userId].color) || n.color || '#999';
             avatar.style.backgroundColor = noteColor;
-            avatar.textContent = n.initials || '??';
+            avatar.textContent = (allUsers[n.userId] && allUsers[n.userId].initials) || n.initials || '??';
+            avatar.setAttribute('data-uid', n.userId);
 
             var body = document.createElement('div');
             body.className = 'note-body';
