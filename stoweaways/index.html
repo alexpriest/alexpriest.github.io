@@ -1185,6 +1185,53 @@ img { max-width: 100%; }
   background: transparent;
 }
 
+/* Claim button for data-max="1" items */
+.claim-btn {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.claim-btn:hover {
+  border-color: var(--stowe);
+  color: var(--stowe);
+  background: rgba(45,107,74,0.04);
+}
+
+.claim-btn.claimed {
+  border-color: transparent;
+  background: rgba(45,107,74,0.08);
+  color: var(--stowe);
+  cursor: default;
+}
+
+.claim-btn.mine {
+  border-color: var(--reaction-active-border);
+  background: var(--reaction-active-bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.claim-btn.mine:hover {
+  border-color: #d4a494;
+}
+
+.claim-owner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
 /* ============================================
    Info List (non-interactive bullet lists)
    ============================================ */
@@ -4433,8 +4480,36 @@ li.info-item .check-meta {
         var checkRef = firebaseReady ? db.ref('checklist/' + itemId) : null;
         var tallyEl = li.querySelector('.check-tally');
         var avatarContainer = li.querySelector('.avatar-row');
-
         var maxCount = parseInt(li.getAttribute('data-max'), 10) || 7;
+        var isClaimable = (maxCount === 1);
+
+        // For claimable items, replace check-box with claim button
+        if (isClaimable) {
+          var checkBox = li.querySelector('.check-box');
+          if (checkBox) checkBox.style.display = 'none';
+
+          var claimBtn = document.createElement('button');
+          claimBtn.className = 'claim-btn';
+          claimBtn.textContent = "I'll do this";
+          li.insertBefore(claimBtn, li.querySelector('.check-text'));
+
+          // Prevent li click from firing when clicking claim button
+          claimBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (!currentUser) { showModal(false); return; }
+            if (!checkRef) return;
+
+            var userCheckRef = checkRef.child(currentUser.userId);
+            if (claimBtn.classList.contains('mine')) {
+              // Unclaim
+              userCheckRef.remove();
+            } else if (!claimBtn.classList.contains('claimed')) {
+              // Claim it
+              userCheckRef.set(true);
+            }
+            // If someone else claimed it, do nothing
+          });
+        }
 
         // Real-time listener
         if (checkRef) {
@@ -4444,68 +4519,80 @@ li.info-item .check-meta {
             var count = userIds.length;
             var myChecked = currentUser && data[currentUser.userId];
 
-            // Update tally using data-max
-            if (count > 0) {
-              tallyEl.textContent = count + '/' + maxCount;
-            } else {
+            if (isClaimable) {
+              // Claimable item: show who claimed it
+              var claimedBy = userIds.length > 0 ? userIds[0] : null;
+              var claimant = claimedBy ? allUsers[claimedBy] : null;
+
               tallyEl.textContent = '';
-            }
+              if (avatarContainer) avatarContainer.innerHTML = '';
 
-            // For data-max="1" items, show as complete when anyone checks it
-            var isComplete = (maxCount === 1 && count >= 1);
-
-            // Update checked state — use CURRENT color from allUsers
-            if (myChecked) {
-              li.classList.add('checked');
-              if (currentUser) {
-                var currentColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
-                li.querySelector('.check-box').style.color = currentColor;
+              if (myChecked) {
+                // I claimed this
+                claimBtn.className = 'claim-btn mine';
+                claimBtn.innerHTML = '✓ I\'m on it <span style="font-weight:400;opacity:0.6;margin-left:0.25rem">(unclaim)</span>';
+                li.classList.add('checked');
                 li.querySelector('.check-text').style.opacity = '0.7';
+              } else if (claimant) {
+                // Someone else claimed it
+                claimBtn.className = 'claim-btn claimed';
+                var ownerColor = (allUsers[claimedBy] && allUsers[claimedBy].color) || '#999';
+                claimBtn.innerHTML = '<span class="claim-owner"><span class="avatar" data-uid="' + claimedBy + '" style="width:18px;height:18px;font-size:0.45rem;background:' + ownerColor + ';display:inline-flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:700">' + (claimant.initials || '??') + '</span> ' + (claimant.firstName || 'Someone') + ' has this</span>';
+                li.classList.remove('checked');
+                li.querySelector('.check-text').style.opacity = '0.7';
+              } else {
+                // Unclaimed
+                claimBtn.className = 'claim-btn';
+                claimBtn.textContent = "I'll do this";
+                li.classList.remove('checked');
+                li.querySelector('.check-text').style.opacity = '';
               }
             } else {
-              li.classList.remove('checked');
-              li.querySelector('.check-box').style.color = '';
-              li.querySelector('.check-text').style.opacity = '';
+              // Regular checkbox item (data-max="7")
+              if (count > 0) {
+                tallyEl.textContent = count + '/' + maxCount;
+              } else {
+                tallyEl.textContent = '';
+              }
+
+              if (myChecked) {
+                li.classList.add('checked');
+                if (currentUser) {
+                  var currentColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
+                  li.querySelector('.check-box').style.color = currentColor;
+                  li.querySelector('.check-text').style.opacity = '0.7';
+                }
+              } else {
+                li.classList.remove('checked');
+                li.querySelector('.check-box').style.color = '';
+                li.querySelector('.check-text').style.opacity = '';
+              }
+
+              if (avatarContainer) {
+                renderAvatarRow(avatarContainer, data, 3);
+              }
             }
 
-            // Mark complete state for max=1 items
-            if (isComplete && !myChecked) {
-              li.querySelector('.check-text').style.opacity = '0.7';
-              tallyEl.style.color = 'var(--stowe)';
-            } else if (!isComplete) {
-              tallyEl.style.color = '';
-            }
-            if (isComplete) {
-              tallyEl.style.color = 'var(--stowe)';
-            }
-
-            // Render avatar dots
-            if (avatarContainer) {
-              renderAvatarRow(avatarContainer, data, 3);
-            }
+            if (typeof updateProgress === 'function') updateProgress();
           }, function(err) {
             console.warn('Checklist listener error:', err);
           });
         }
 
-        // Click handler
-        li.addEventListener('click', function(e) {
-          // Don't toggle check when clicking a link
-          if (e.target.closest('a')) return;
-          if (!currentUser) {
-            showModal(false);
-            return;
-          }
-          if (!checkRef) return;
-
-          var userCheckRef = checkRef.child(currentUser.userId);
-          // Toggle based on current UI state — real-time listener updates UI
-          if (li.classList.contains('checked')) {
-            userCheckRef.remove();
-          } else {
-            userCheckRef.set(true);
-          }
-        });
+        // Click handler for regular items only (claimable items use button)
+        if (!isClaimable) {
+          li.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            if (!currentUser) { showModal(false); return; }
+            if (!checkRef) return;
+            var userCheckRef = checkRef.child(currentUser.userId);
+            if (li.classList.contains('checked')) {
+              userCheckRef.remove();
+            } else {
+              userCheckRef.set(true);
+            }
+          });
+        }
       });
     });
   }
