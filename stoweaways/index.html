@@ -1195,46 +1195,34 @@ img { max-width: 100%; }
   background: rgba(45,107,74,0.06);
 }
 
-/* Claimed: solid circle with initials */
+/* Claimed: faded color circle with initials — indicates "in progress" */
 .claim-slot.claimed,
 .claim-slot.mine {
   border: 2px solid transparent;
   color: #fff;
   cursor: pointer;
+  opacity: 0.45;
 }
 
-/* Claimed by someone else: not clickable */
 .claim-slot.claimed:not(.mine) {
   cursor: default;
 }
 
-/* Mine hover: show checkmark overlay to indicate "mark as done" */
+/* Mine hover: show checkmark, bump opacity to hint "click to complete" */
 .claim-slot.mine .slot-initials { display: inline; }
 .claim-slot.mine .slot-check { display: none; }
 .claim-slot.mine:hover .slot-initials { display: none; }
 .claim-slot.mine:hover .slot-check { display: inline; }
-.claim-slot.mine:hover { opacity: 0.85; }
+.claim-slot.mine:hover { opacity: 0.8; }
 
-/* Done: solid circle with checkmark, green ring */
+/* Done: full opacity, green ring — clearly complete */
 .claim-slot.done {
+  opacity: 1;
   border: 2px solid var(--stowe);
 }
 
 .claim-slot.done:not(.mine) {
   cursor: default;
-}
-
-/* Name label next to the slot */
-.claim-slot .claim-name {
-  position: absolute;
-  left: calc(100% + 0.4rem);
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.68rem;
-  color: var(--text-light);
-  white-space: nowrap;
-  font-family: var(--font-body);
-  font-weight: 500;
 }
 
 /* ---- Personal Packing (checkboxes) ---- */
@@ -4610,20 +4598,13 @@ img { max-width: 100%; }
               slot.style.backgroundColor = myColor;
               slot.innerHTML = checkSvg;
               slot.setAttribute('data-uid', currentUser.userId);
-              slot.title = 'Done! Click to unclaim.';
-              var nameLabel = document.createElement('span');
-              nameLabel.className = 'claim-name';
-              nameLabel.textContent = 'Done';
-              nameLabel.style.color = 'var(--stowe)';
-              nameLabel.style.fontWeight = '600';
-              slot.appendChild(nameLabel);
+              slot.title = 'Click to unclaim';
               li.classList.add('is-claimed');
               li.classList.add('is-done');
             } else if (isMine) {
               var myColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
               slot.className = 'claim-slot mine';
               slot.style.backgroundColor = myColor;
-              // Initials shown normally, checkmark shown on hover (via CSS)
               var initSpan = document.createElement('span');
               initSpan.className = 'slot-initials';
               initSpan.textContent = currentUser.initials;
@@ -4634,10 +4615,6 @@ img { max-width: 100%; }
               slot.appendChild(checkSpan);
               slot.setAttribute('data-uid', currentUser.userId);
               slot.title = 'Click to mark done';
-              var nameLabel = document.createElement('span');
-              nameLabel.className = 'claim-name';
-              nameLabel.textContent = currentUser.firstName || '';
-              slot.appendChild(nameLabel);
               li.classList.add('is-claimed');
               li.classList.remove('is-done');
             } else if (claimant && isDone) {
@@ -4647,11 +4624,6 @@ img { max-width: 100%; }
               slot.innerHTML = checkSvg;
               slot.setAttribute('data-uid', claimedBy);
               slot.title = (claimant.firstName || 'Someone') + ' completed this';
-              var nameLabel = document.createElement('span');
-              nameLabel.className = 'claim-name';
-              nameLabel.textContent = (claimant.firstName || '') + ' ✓';
-              nameLabel.style.color = 'var(--stowe)';
-              slot.appendChild(nameLabel);
               li.classList.add('is-claimed');
               li.classList.add('is-done');
             } else if (claimant) {
@@ -4661,10 +4633,6 @@ img { max-width: 100%; }
               slot.textContent = claimant.initials || '??';
               slot.setAttribute('data-uid', claimedBy);
               slot.title = (claimant.firstName || 'Someone') + ' is on it';
-              var nameLabel = document.createElement('span');
-              nameLabel.className = 'claim-name';
-              nameLabel.textContent = claimant.firstName || '';
-              slot.appendChild(nameLabel);
               li.classList.add('is-claimed');
               li.classList.remove('is-done');
             } else {
