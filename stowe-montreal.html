@@ -395,27 +395,13 @@ img { max-width: 100%; }
 /* ============================================
    Route Section (split layout)
    ============================================ */
-.route-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
-}
-
-.route-header {
+.map-section {
   max-width: 960px;
-  margin: 0 auto 2rem;
-}
-
-.route-layout {
-  display: grid;
-  grid-template-columns: 2fr 3fr;
-  gap: 3rem;
-  align-items: start;
+  margin: 0 auto;
+  padding: 0 1.5rem 2rem;
 }
 
 .map-container {
-  position: sticky;
-  top: 3.5rem;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.12);
@@ -423,7 +409,7 @@ img { max-width: 100%; }
 }
 
 #map {
-  height: 520px;
+  height: 400px;
   width: 100%;
 }
 
@@ -434,6 +420,16 @@ img { max-width: 100%; }
   color: var(--text-light);
   text-align: center;
   border-top: 1px solid var(--border);
+}
+
+.route-section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.route-header {
+  margin: 0 0 2rem;
 }
 
 /* ============================================
@@ -2141,17 +2137,8 @@ img { max-width: 100%; }
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .route-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .map-container {
-    position: relative;
-    top: 0;
-  }
-
   #map {
-    height: 350px;
+    height: 300px;
   }
 
   .accom-grid {
@@ -2363,6 +2350,8 @@ img { max-width: 100%; }
      ============================================ -->
 <nav class="toc-bar" id="tocBar">
   <div class="toc-bar-inner">
+    <a class="toc-link" data-target="route-map">Map</a>
+    <span class="toc-separator">&middot;</span>
     <a class="toc-link" data-target="stay">Stay</a>
     <span class="toc-separator">&middot;</span>
     <a class="toc-link" data-target="itinerary">Itinerary</a>
@@ -2461,6 +2450,15 @@ img { max-width: 100%; }
 <!-- ============================================
      THE ROUTE (Split Layout: Map + Day Cards)
      ============================================ -->
+<!-- Map Section -->
+<div class="map-section" id="route-map">
+  <div class="map-container fade-in">
+    <div id="map"></div>
+    <div class="map-caption">White Plains → Stowe, VT (4.5 hrs) → Montreal (2.5 hrs) → fly home from YUL</div>
+  </div>
+</div>
+
+<!-- Itinerary Section -->
 <section class="route-section" id="itinerary">
   <div class="route-header">
     <div class="section-label">The Route</div>
@@ -2468,14 +2466,6 @@ img { max-width: 100%; }
     <div class="section-divider"></div>
   </div>
 
-  <div class="route-layout">
-    <!-- Sticky map -->
-    <div class="map-container">
-      <div id="map"></div>
-      <div class="map-caption">Route updates as you scroll through each day</div>
-    </div>
-
-    <!-- Scrolling day cards -->
     <div class="day-cards">
 
       <!-- Day 1: Drive -->
@@ -2636,7 +2626,6 @@ img { max-width: 100%; }
       </div>
 
     </div>
-  </div>
 </section>
 
 <!-- ============================================
@@ -3405,9 +3394,13 @@ img { max-width: 100%; }
     [45.47,-73.68],[45.46,-73.72],[45.457,-73.749]
   ];
 
-  var leg1Line = L.polyline(leg1Coords, { color: '#2d6b4a', weight: 3, opacity: 0, smoothFactor: 2 }).addTo(map);
-  var leg2Line = L.polyline(leg2Coords, { color: '#1a3a5c', weight: 3, opacity: 0, smoothFactor: 2 }).addTo(map);
-  var airportLine = L.polyline(toAirportCoords, { color: '#6b6b6b', weight: 2, opacity: 0, dashArray: '6,8', smoothFactor: 2 }).addTo(map);
+  var leg1Line = L.polyline(leg1Coords, { color: '#2d6b4a', weight: 3.5, opacity: 0.7, smoothFactor: 2 }).addTo(map);
+  var leg2Line = L.polyline(leg2Coords, { color: '#1a3a5c', weight: 3.5, opacity: 0.7, smoothFactor: 2 }).addTo(map);
+  var airportLine = L.polyline(toAirportCoords, { color: '#6b6b6b', weight: 2, opacity: 0.5, dashArray: '6,8', smoothFactor: 2 }).addTo(map);
+
+  // Fit map to show full route
+  var allCoords = leg1Coords.concat(leg2Coords).concat(toAirportCoords);
+  map.fitBounds(L.latLngBounds(allCoords), { padding: [30, 30] });
 
   // Major markers
   var majorSpots = [
@@ -3476,18 +3469,6 @@ img { max-width: 100%; }
       if (entry.isIntersecting) {
         if (!entry.target.classList.contains('visible')) {
           entry.target.classList.add('visible');
-        }
-
-        var card = entry.target;
-        var dayId = card.getAttribute('id');
-        if (dayId !== activeDay) {
-          activeDay = dayId;
-          var lat = parseFloat(card.getAttribute('data-lat'));
-          var lng = parseFloat(card.getAttribute('data-lng'));
-          var zoom = parseInt(card.getAttribute('data-zoom'), 10);
-          if (!isNaN(lat) && !isNaN(lng)) {
-            map.flyTo([lat, lng], zoom, { duration: 1.2, easeLinearity: 0.4 });
-          }
         }
       }
     });
@@ -4144,49 +4125,6 @@ img { max-width: 100%; }
     updateProgress();
   })();
 
-  /* ==========================================
-     #3 ANIMATED ROUTE REVEAL ON MAP
-     ========================================== */
-  (function initRouteAnimation() {
-    var day1 = document.getElementById('day1');
-    var day5 = document.getElementById('day5');
-    var leg1Revealed = false;
-    var leg2Revealed = false;
-
-    function fadeInLine(line, targetOpacity, duration) {
-      var start = 0;
-      var step = targetOpacity / (duration / 16);
-      var current = 0;
-      function animate() {
-        current += step;
-        if (current >= targetOpacity) {
-          line.setStyle({ opacity: targetOpacity });
-          return;
-        }
-        line.setStyle({ opacity: current });
-        requestAnimationFrame(animate);
-      }
-      animate();
-    }
-
-    var routeObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
-        if (entry.target === day1 && !leg1Revealed) {
-          leg1Revealed = true;
-          fadeInLine(leg1Line, 0.6, 1200);
-        }
-        if (entry.target === day5 && !leg2Revealed) {
-          leg2Revealed = true;
-          fadeInLine(leg2Line, 0.6, 1200);
-          setTimeout(function() { fadeInLine(airportLine, 0.4, 800); }, 600);
-        }
-      });
-    }, { threshold: 0.2 });
-
-    if (day1) routeObserver.observe(day1);
-    if (day5) routeObserver.observe(day5);
-  })();
 
   /* ==========================================
      #5 EMOJI PARTICLE BURST
