@@ -1085,51 +1085,176 @@ img { max-width: 100%; }
 }
 
 /* ============================================
-   Logistics Checklist
+   Logistics — Kitchen Table Planning
    ============================================ */
-.checklist-grid {
+.logistics-spread {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-.check-group {
-  background: var(--card-bg-solid);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border);
+@media (max-width: 700px) {
+  .logistics-spread { grid-template-columns: 1fr; }
 }
 
-.check-group h3 {
+/* Shared paper card base */
+.paper-card {
+  background: #fff;
+  border-radius: 3px;
+  padding: 2rem 1.75rem;
+  position: relative;
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.06),
+    0 6px 16px rgba(0,0,0,0.04),
+    0 0 0 0.5px rgba(0,0,0,0.04);
+}
+
+.paper-card h3 {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--primary);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
 }
 
-.check-group ul { list-style: none; }
+/* Subtle rotations for "scattered on table" feel */
+.paper-card:nth-child(1) { transform: rotate(-0.4deg); }
+.paper-card:nth-child(2) { transform: rotate(0.3deg); }
+.paper-card:nth-child(3) { transform: rotate(0.5deg); }
+.paper-card:nth-child(4) { transform: rotate(-0.3deg); }
 
-.check-group li {
+.paper-card:hover {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.08),
+    0 12px 28px rgba(0,0,0,0.06),
+    0 0 0 0.5px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+}
+
+/* ---- Group To-Dos (claimable) ---- */
+.paper-card.group-todos {
+  border-top: 3px solid var(--stowe);
+}
+
+.paper-card.group-todos ul { list-style: none; }
+
+.paper-card.group-todos li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px dashed rgba(0,0,0,0.06);
   font-size: 0.88rem;
-  color: var(--text-muted);
-  line-height: 1.55;
-  padding: 0.45rem 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.paper-card.group-todos li:last-child { border-bottom: none; }
+
+.paper-card.group-todos li .todo-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.paper-card.group-todos li.is-claimed .todo-text {
+  opacity: 0.5;
+  text-decoration: line-through;
+  text-decoration-color: rgba(0,0,0,0.15);
+}
+
+/* Claim slot — dashed circle when unclaimed */
+.claim-slot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px dashed rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: transparent;
+  position: relative;
+}
+
+.claim-slot:hover {
+  border-color: var(--stowe);
+  background: rgba(45,107,74,0.04);
+  color: var(--stowe);
+}
+
+.claim-slot:hover::after {
+  content: '+';
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--stowe);
+}
+
+/* Claimed state — filled with owner's avatar */
+.claim-slot.claimed {
+  border: none;
+  cursor: default;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.6rem;
+}
+
+.claim-slot.mine {
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.6rem;
+}
+
+.claim-slot.mine:hover {
+  opacity: 0.7;
+}
+
+.claim-slot .claim-name {
+  position: absolute;
+  left: calc(100% + 0.4rem);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.68rem;
+  color: var(--text-light);
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+/* ---- Personal Packing (checkboxes) ---- */
+.paper-card.packing {
+  border-top: 3px solid var(--montreal);
+}
+
+.paper-card.packing ul { list-style: none; }
+
+.paper-card.packing li {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  padding: 0.45rem 0;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.5;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s ease;
 }
 
-.check-group li:hover {
-  background: rgba(0,0,0,0.02);
+.paper-card.packing li:hover {
+  background: rgba(0,0,0,0.015);
 }
 
-.check-group li .check-box {
+.paper-card.packing li .pack-check {
   width: 16px;
   height: 16px;
   min-width: 16px;
@@ -1137,34 +1262,37 @@ img { max-width: 100%; }
   border: 1.5px solid var(--border);
   transition: all 0.2s ease;
   flex-shrink: 0;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.check-group li.checked .check-box {
+.paper-card.packing li.checked .pack-check {
   border-color: currentColor;
   background: currentColor;
 }
 
-.check-group li.checked .check-box::after {
+.paper-card.packing li.checked .pack-check::after {
   content: '';
-  position: absolute;
-  top: 1px;
-  left: 3.5px;
   width: 4px;
   height: 7px;
   border: solid #fff;
   border-width: 0 1.5px 1.5px 0;
   transform: rotate(45deg);
+  margin-top: -1px;
 }
 
-.check-group li .check-text {
+.paper-card.packing li .pack-text {
   flex: 1;
   min-width: 0;
 }
 
-.check-group li .check-meta {
+.paper-card.packing li.checked .pack-text {
+  opacity: 0.5;
+}
+
+.paper-card.packing li .pack-meta {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -1172,105 +1300,77 @@ img { max-width: 100%; }
   margin-left: auto;
 }
 
-.check-group li .check-tally {
+.paper-card.packing li .pack-tally {
   font-size: 0.7rem;
   font-weight: 600;
   color: var(--text-light);
   white-space: nowrap;
 }
 
-/* No left border on checked items */
-.check-group li.checked {
-  border-left: none;
-  background: transparent;
+/* ---- Good to Know (memo style) ---- */
+.paper-card.memo {
+  background: #fefcf5;
+  border-left: 3px solid var(--spa);
 }
 
-/* Claim button for data-max="1" items */
-.claim-btn {
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 0.25rem 0.65rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
+.paper-card.memo ul { list-style: none; }
 
-.claim-btn:hover {
-  border-color: var(--stowe);
-  color: var(--stowe);
-  background: rgba(45,107,74,0.04);
-}
-
-.claim-btn.claimed {
-  border-color: transparent;
-  background: rgba(45,107,74,0.08);
-  color: var(--stowe);
-  cursor: default;
-}
-
-.claim-btn.mine {
-  border-color: var(--reaction-active-border);
-  background: var(--reaction-active-bg);
-  color: var(--text);
-  cursor: pointer;
-}
-
-.claim-btn.mine:hover {
-  border-color: #d4a494;
-}
-
-.claim-owner {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.75rem;
-  color: var(--text-light);
-}
-
-/* ============================================
-   Info List (non-interactive bullet lists)
-   ============================================ */
-.info-list ul {
-  list-style: none;
-}
-
-li.info-item.info-item {
-  cursor: default;
-  padding: 0.5rem 0 0.5rem 1.5rem;
+.paper-card.memo li {
+  padding: 0.4rem 0 0.4rem 1.2rem;
   position: relative;
-  display: block;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
-  line-height: 1.55;
-  gap: 0;
+  line-height: 1.6;
 }
-li.info-item.info-item::before {
-  content: '\2022';
+
+.paper-card.memo li::before {
+  content: '\2192';
   position: absolute;
-  left: 0.2rem;
-  top: 0.5rem;
-  color: var(--text-light);
-  font-size: 1.1rem;
-  line-height: 1.55;
-  width: auto;
-  height: auto;
-  min-width: 0;
-  border: none;
-  border-radius: 0;
-  background: none;
+  left: 0;
+  color: var(--spa);
+  font-size: 0.8rem;
 }
-li.info-item:hover {
-  background: transparent;
-  padding-left: 1.5rem;
+
+/* ---- Budget (receipt style) ---- */
+.paper-card.receipt {
+  background: #fefefe;
+  font-family: var(--font-body);
+  border-top: 2px dashed rgba(0,0,0,0.1);
+  border-bottom: 2px dashed rgba(0,0,0,0.1);
+  border-radius: 2px;
+  padding: 1.75rem 1.5rem;
 }
-li.info-item .check-box,
-li.info-item .check-meta {
-  display: none;
+
+.paper-card.receipt h3 {
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.paper-card.receipt ul { list-style: none; }
+
+.paper-card.receipt li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+  border-bottom: 1px dotted rgba(0,0,0,0.08);
+}
+
+.paper-card.receipt li:last-child { border-bottom: none; }
+
+.paper-card.receipt .receipt-item { flex: 1; }
+.paper-card.receipt .receipt-price {
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: 1rem;
+  color: var(--primary);
 }
 
 /* ============================================
@@ -2247,14 +2347,6 @@ li.info-item .check-meta {
   transform: scale(1.01);
 }
 
-.check-group li {
-  transition: background 0.2s ease, padding-left 0.2s ease;
-}
-
-.check-group li:hover {
-  padding-left: 4px;
-}
-
 .name-option:hover .name-option-initials {
   animation: wobble 0.4s ease;
 }
@@ -2284,10 +2376,6 @@ li.info-item .check-meta {
   }
 
   .road-stops-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .checklist-grid {
     grid-template-columns: 1fr;
   }
 
@@ -3090,64 +3178,72 @@ li.info-item .check-meta {
   <h2 class="section-title">Logistics</h2>
   <div class="section-divider"></div>
 
-  <div class="checklist-grid">
-    <div class="check-group fade-in" data-checklist="before">
-      <h3>Before you go</h3>
+  <div class="logistics-spread fade-in">
+
+    <!-- Group To-Dos -->
+    <div class="paper-card group-todos" data-checklist="group">
+      <h3>Group To-Dos</h3>
+      <p style="font-size:0.78rem;color:var(--text-light);margin:-0.75rem 0 1rem;font-style:italic">Click the circle to claim a task. Only you can unclaim it.</p>
       <ul>
-        <li data-item="passports" data-max="7"><span class="check-box"></span><span class="check-text">Valid passports for all 7 (including both kids &mdash; check expiry dates now)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="book-stowe" data-max="1"><span class="check-box"></span><span class="check-text">Book Stowe house (VRBO/Airbnb &mdash; June 11-15)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="book-montreal" data-max="1"><span class="check-box"></span><span class="check-text">Book Montreal apartment (Airbnb &mdash; June 15-19)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="book-hen" data-max="1"><span class="check-box"></span><span class="check-text">Book <a href="https://henofthewood.com" target="_blank" rel="noopener" class="place-link">Hen of the Wood</a> dinner (Waterbury &mdash; June 13)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="book-bota" data-max="1"><span class="check-box"></span><span class="check-text">Book <a href="https://botabota.ca/en/" target="_blank" rel="noopener" class="place-link">Bota Bota</a> spa (June 17 afternoon)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="book-mtl-dinner" data-max="1"><span class="check-box"></span><span class="check-text">Book Montreal dinner (<a href="https://www.joebeef.ca" target="_blank" rel="noopener" class="place-link">Joe Beef</a> / <a href="https://www.monlapin.ca" target="_blank" rel="noopener" class="place-link">Mon Lapin</a> / <a href="https://www.lawrencerestaurant.com" target="_blank" rel="noopener" class="place-link">Lawrence</a> &mdash; June 17 or 18)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="rent-car" data-max="1"><span class="check-box"></span><span class="check-text">Rent car large enough for 7 + luggage (minivan or large SUV)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="book-flights" data-max="7"><span class="check-box"></span><span class="check-text">Book flights home from YUL (June 19)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="car-seats" data-max="1"><span class="check-box"></span><span class="check-text">Car seats: 2 (bring your own or rent with car)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="book-sitters" data-max="1"><span class="check-box"></span><span class="check-text">Book sitters for Stowe + Montreal dinner nights</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-stowe" data-max="1"><span class="claim-slot"></span><span class="todo-text">Book Stowe house (VRBO/Airbnb — June 11-15)</span></li>
+        <li data-item="book-montreal" data-max="1"><span class="claim-slot"></span><span class="todo-text">Book Montreal apartment (Airbnb — June 15-19)</span></li>
+        <li data-item="book-hen" data-max="1"><span class="claim-slot"></span><span class="todo-text">Book <a href="https://henofthewood.com" target="_blank" rel="noopener" class="place-link">Hen of the Wood</a> dinner (Waterbury — Sat June 13)</span></li>
+        <li data-item="book-bota" data-max="1"><span class="claim-slot"></span><span class="todo-text">Book <a href="https://botabota.ca/en/" target="_blank" rel="noopener" class="place-link">Bota Bota</a> spa (Wed June 17 afternoon)</span></li>
+        <li data-item="book-mtl-dinner" data-max="1"><span class="claim-slot"></span><span class="todo-text">Book Montreal dinner (<a href="https://www.joebeef.ca" target="_blank" rel="noopener" class="place-link">Joe Beef</a> / <a href="https://www.monlapin.ca" target="_blank" rel="noopener" class="place-link">Mon Lapin</a> / <a href="https://www.lawrencerestaurant.com" target="_blank" rel="noopener" class="place-link">Lawrence</a>)</span></li>
+        <li data-item="rent-car" data-max="1"><span class="claim-slot"></span><span class="todo-text">Rent car — minivan or large SUV for 7 + luggage</span></li>
+        <li data-item="book-sitters" data-max="1"><span class="claim-slot"></span><span class="todo-text">Book sitters for Stowe + Montreal dinner nights</span></li>
+        <li data-item="car-seats" data-max="1"><span class="claim-slot"></span><span class="todo-text">Car seats: 2 (bring your own or rent with car)</span></li>
+        <li data-item="stroller" data-max="1"><span class="claim-slot"></span><span class="todo-text">Stroller for the 2yo (Rec Path is paved)</span></li>
+        <li data-item="scooter" data-max="1"><span class="claim-slot"></span><span class="todo-text">Scooter or balance bike for the 4yo</span></li>
+        <li data-item="carrier" data-max="1"><span class="claim-slot"></span><span class="todo-text">Baby carrier/hiking backpack for waterfall hikes</span></li>
       </ul>
     </div>
 
-    <div class="check-group fade-in" data-checklist="packing">
-      <h3>Packing notes</h3>
+    <!-- Personal Packing -->
+    <div class="paper-card packing" data-checklist="packing">
+      <h3>Personal Packing</h3>
+      <p style="font-size:0.78rem;color:var(--text-light);margin:-0.75rem 0 1rem;font-style:italic">Check off your own items. See who else is ready.</p>
       <ul>
-        <li data-item="layers" data-max="7"><span class="check-box"></span><span class="check-text">Layers &mdash; Stowe mornings are 55&deg;F, afternoons 70&deg;F+</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="swimsuits" data-max="7"><span class="check-box"></span><span class="check-text">Swimsuits + towels for swimming holes and Lake Elmore</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="water-shoes" data-max="7"><span class="check-box"></span><span class="check-text">Water shoes for rocky river bottoms</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="rain-jackets" data-max="7"><span class="check-box"></span><span class="check-text">Rain jackets (Vermont weather is unpredictable)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="stroller" data-max="1"><span class="check-box"></span><span class="check-text">Stroller for the 2yo (Rec Path is paved)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="scooter" data-max="1"><span class="check-box"></span><span class="check-text">Scooter or balance bike for the 4yo (Rec Path)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="carrier" data-max="1"><span class="check-box"></span><span class="check-text">Baby carrier/hiking backpack for waterfall hikes</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="sunscreen" data-max="7"><span class="check-box"></span><span class="check-text">Sunscreen + bug spray (early June = blackfly season in VT)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="cad-cash" data-max="7"><span class="check-box"></span><span class="check-text">CAD cash not strictly needed &mdash; tap-to-pay works everywhere in Montreal</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="passports" data-max="7"><span class="pack-check"></span><span class="pack-text">Valid passports for all 7 (including kids — check expiry dates)</span><span class="pack-meta"><span class="pack-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-flights" data-max="7"><span class="pack-check"></span><span class="pack-text">Book flights home from YUL (Friday June 19)</span><span class="pack-meta"><span class="pack-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="layers" data-max="7"><span class="pack-check"></span><span class="pack-text">Layers — Stowe mornings are 55°F, afternoons 70°F+</span><span class="pack-meta"><span class="pack-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="swimsuits" data-max="7"><span class="pack-check"></span><span class="pack-text">Swimsuits + towels for swimming holes and Lake Elmore</span><span class="pack-meta"><span class="pack-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="water-shoes" data-max="7"><span class="pack-check"></span><span class="pack-text">Water shoes for rocky river bottoms</span><span class="pack-meta"><span class="pack-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="rain-jackets" data-max="7"><span class="pack-check"></span><span class="pack-text">Rain jackets (Vermont weather is unpredictable)</span><span class="pack-meta"><span class="pack-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="sunscreen" data-max="7"><span class="pack-check"></span><span class="pack-text">Sunscreen + bug spray (early June = blackfly season in VT)</span><span class="pack-meta"><span class="pack-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="cad-cash" data-max="7"><span class="pack-check"></span><span class="pack-text">Tap-to-pay set up (CAD cash not needed in Montreal)</span><span class="pack-meta"><span class="pack-tally"></span><span class="avatar-row"></span></span></li>
       </ul>
     </div>
 
-    <div class="check-group info-list fade-in">
-      <h3>Budget rough estimates</h3>
+    <!-- Good to Know -->
+    <div class="paper-card memo">
+      <h3>Good to Know</h3>
       <ul>
-        <li class="info-item">Stowe house (4 nights): $1,000&ndash;1,600 total</li>
-        <li class="info-item">Montreal apartment (4 nights): $800&ndash;1,400 CAD total</li>
-        <li class="info-item">Rental car (9 days): $500&ndash;800 total</li>
-        <li class="info-item">Gas: ~$120 total</li>
-        <li class="info-item">Bota Bota spa (per person): ~$70-90 CAD</li>
-        <li class="info-item">Groceries: ~$400-500 total for the group</li>
-        <li class="info-item">Dining out: ~$100-150/dinner for the group (varies wildly)</li>
-        <li class="info-item">Activities: Most free &mdash; budget ~$200 total for paid activities</li>
+        <li>Montreal is French-first. Menus, signs, greetings in French. Everyone speaks English but open with "bonjour."</li>
+        <li>Tipping in Quebec is same as US — 15-20%</li>
+        <li>Quebec uses CAD (~0.73 USD) — your dollar goes further</li>
+        <li>Blackfly season in Vermont peaks late May / early June. Bring DEET. They're annoying near water.</li>
+        <li>Lake Elmore has lifeguards but verify they're staffing by June 14</li>
+        <li>Stowe Rec Path is open year-round but can be muddy after rain in early June</li>
+        <li>Montreal Airbnb regulations exist — book licensed properties</li>
       </ul>
     </div>
 
-    <div class="check-group info-list fade-in">
-      <h3>Good to know</h3>
+    <!-- Budget -->
+    <div class="paper-card receipt">
+      <h3>Budget Estimates</h3>
       <ul>
-        <li class="info-item">Montreal is French-first. Menus, signs, greetings in French. Everyone speaks English but open with "bonjour."</li>
-        <li class="info-item">Tipping in Quebec is same as US &mdash; 15-20%</li>
-        <li class="info-item">Quebec uses CAD (~0.73 USD) &mdash; your dollar goes further</li>
-        <li class="info-item">Blackfly season in Vermont peaks late May / early June. Bring DEET. They're annoying near water.</li>
-        <li class="info-item">Lake Elmore has lifeguards but verify they're staffing by June 14</li>
-        <li class="info-item">Stowe Rec Path is open year-round but mud can be an issue in early June after rain</li>
-        <li class="info-item">Montreal Airbnb regulations exist &mdash; book licensed properties</li>
+        <li><span class="receipt-item">Stowe house (4 nights)</span><span class="receipt-price">$1,000–1,600 total</span></li>
+        <li><span class="receipt-item">Montreal apartment (4 nights)</span><span class="receipt-price">$800–1,400 CAD total</span></li>
+        <li><span class="receipt-item">Rental car (9 days)</span><span class="receipt-price">$500–800 total</span></li>
+        <li><span class="receipt-item">Gas</span><span class="receipt-price">~$120 total</span></li>
+        <li><span class="receipt-item">Bota Bota spa</span><span class="receipt-price">~$70-90 CAD/person</span></li>
+        <li><span class="receipt-item">Groceries</span><span class="receipt-price">~$400-500 total</span></li>
+        <li><span class="receipt-item">Dining out</span><span class="receipt-price">~$100-150/dinner</span></li>
+        <li><span class="receipt-item">Activities</span><span class="receipt-price">~$200 total</span></li>
       </ul>
     </div>
+
   </div>
 </section>
 
@@ -4066,7 +4162,7 @@ li.info-item .check-meta {
           });
           // Re-render checkbox colors for current user
           if (currentUser) {
-            document.querySelectorAll('.check-group li.checked .check-box').forEach(function(box) {
+            document.querySelectorAll('.paper-card.packing li.checked .pack-check').forEach(function(box) {
               var li = box.closest('li[data-item]');
               if (!li) return;
               // Re-read from Firebase isn't needed — just update the color
@@ -4470,48 +4566,86 @@ li.info-item .check-meta {
      CHECKLISTS (Firebase-backed)
      ========================================== */
   function initChecklists() {
-    var checklistGroups = document.querySelectorAll('.check-group[data-checklist]');
-
-    checklistGroups.forEach(function(group) {
-      var items = group.querySelectorAll('li[data-item]');
-
-      items.forEach(function(li) {
+    // GROUP TO-DOS (claimable, data-max="1")
+    var groupCard = document.querySelector('.paper-card.group-todos');
+    if (groupCard) {
+      var groupItems = groupCard.querySelectorAll('li[data-item]');
+      groupItems.forEach(function(li) {
         var itemId = li.getAttribute('data-item');
         var checkRef = firebaseReady ? db.ref('checklist/' + itemId) : null;
-        var tallyEl = li.querySelector('.check-tally');
-        var avatarContainer = li.querySelector('.avatar-row');
-        var maxCount = parseInt(li.getAttribute('data-max'), 10) || 7;
-        var isClaimable = (maxCount === 1);
+        var slot = li.querySelector('.claim-slot');
 
-        // For claimable items, replace check-box with claim button
-        if (isClaimable) {
-          var checkBox = li.querySelector('.check-box');
-          if (checkBox) checkBox.style.display = 'none';
+        if (checkRef) {
+          checkRef.on('value', function(snapshot) {
+            var data = snapshot.val() || {};
+            var userIds = Object.keys(data);
+            var claimedBy = userIds.length > 0 ? userIds[0] : null;
+            var claimant = claimedBy ? allUsers[claimedBy] : null;
+            var isMine = currentUser && claimedBy === currentUser.userId;
 
-          var claimBtn = document.createElement('button');
-          claimBtn.className = 'claim-btn';
-          claimBtn.textContent = "I'll do this";
-          li.insertBefore(claimBtn, li.querySelector('.check-text'));
+            // Remove old claim-name if exists
+            var oldName = slot.querySelector('.claim-name');
+            if (oldName) oldName.remove();
 
-          // Prevent li click from firing when clicking claim button
-          claimBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (!currentUser) { showModal(false); return; }
-            if (!checkRef) return;
-
-            var userCheckRef = checkRef.child(currentUser.userId);
-            if (claimBtn.classList.contains('mine')) {
-              // Unclaim
-              userCheckRef.remove();
-            } else if (!claimBtn.classList.contains('claimed')) {
-              // Claim it
-              userCheckRef.set(true);
+            if (isMine) {
+              var myColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
+              slot.className = 'claim-slot mine';
+              slot.style.backgroundColor = myColor;
+              slot.textContent = currentUser.initials;
+              slot.setAttribute('data-uid', currentUser.userId);
+              slot.title = 'Click to unclaim';
+              li.classList.add('is-claimed');
+            } else if (claimant) {
+              var ownerColor = (allUsers[claimedBy] && allUsers[claimedBy].color) || '#999';
+              slot.className = 'claim-slot claimed';
+              slot.style.backgroundColor = ownerColor;
+              slot.textContent = claimant.initials || '??';
+              slot.setAttribute('data-uid', claimedBy);
+              slot.title = (claimant.firstName || 'Someone') + ' has this';
+              // Add name label
+              var nameLabel = document.createElement('span');
+              nameLabel.className = 'claim-name';
+              nameLabel.textContent = claimant.firstName || '';
+              slot.appendChild(nameLabel);
+              li.classList.add('is-claimed');
+            } else {
+              slot.className = 'claim-slot';
+              slot.style.backgroundColor = '';
+              slot.textContent = '';
+              slot.removeAttribute('data-uid');
+              slot.title = "Click to claim this task";
+              li.classList.remove('is-claimed');
             }
-            // If someone else claimed it, do nothing
+
+            if (typeof updateProgress === 'function') updateProgress();
           });
         }
 
-        // Real-time listener
+        slot.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (!currentUser) { showModal(false); return; }
+          if (!checkRef) return;
+          var userRef = checkRef.child(currentUser.userId);
+          if (slot.classList.contains('mine')) {
+            userRef.remove();
+          } else if (!slot.classList.contains('claimed')) {
+            userRef.set(true);
+          }
+        });
+      });
+    }
+
+    // PERSONAL PACKING (checkboxes, data-max="7")
+    var packingCard = document.querySelector('.paper-card.packing');
+    if (packingCard) {
+      var packItems = packingCard.querySelectorAll('li[data-item]');
+      packItems.forEach(function(li) {
+        var itemId = li.getAttribute('data-item');
+        var checkRef = firebaseReady ? db.ref('checklist/' + itemId) : null;
+        var tallyEl = li.querySelector('.pack-tally');
+        var avatarContainer = li.querySelector('.avatar-row');
+        var maxCount = parseInt(li.getAttribute('data-max'), 10) || 7;
+
         if (checkRef) {
           checkRef.on('value', function(snapshot) {
             var data = snapshot.val() || {};
@@ -4519,82 +4653,42 @@ li.info-item .check-meta {
             var count = userIds.length;
             var myChecked = currentUser && data[currentUser.userId];
 
-            if (isClaimable) {
-              // Claimable item: show who claimed it
-              var claimedBy = userIds.length > 0 ? userIds[0] : null;
-              var claimant = claimedBy ? allUsers[claimedBy] : null;
-
-              tallyEl.textContent = '';
-              if (avatarContainer) avatarContainer.innerHTML = '';
-
-              if (myChecked) {
-                // I claimed this
-                claimBtn.className = 'claim-btn mine';
-                claimBtn.innerHTML = '✓ I\'m on it <span style="font-weight:400;opacity:0.6;margin-left:0.25rem">(unclaim)</span>';
-                li.classList.add('checked');
-                li.querySelector('.check-text').style.opacity = '0.7';
-              } else if (claimant) {
-                // Someone else claimed it
-                claimBtn.className = 'claim-btn claimed';
-                var ownerColor = (allUsers[claimedBy] && allUsers[claimedBy].color) || '#999';
-                claimBtn.innerHTML = '<span class="claim-owner"><span class="avatar" data-uid="' + claimedBy + '" style="width:18px;height:18px;font-size:0.45rem;background:' + ownerColor + ';display:inline-flex;align-items:center;justify-content:center;border-radius:50%;color:#fff;font-weight:700">' + (claimant.initials || '??') + '</span> ' + (claimant.firstName || 'Someone') + ' has this</span>';
-                li.classList.remove('checked');
-                li.querySelector('.check-text').style.opacity = '0.7';
-              } else {
-                // Unclaimed
-                claimBtn.className = 'claim-btn';
-                claimBtn.textContent = "I'll do this";
-                li.classList.remove('checked');
-                li.querySelector('.check-text').style.opacity = '';
-              }
+            if (count > 0) {
+              tallyEl.textContent = count + '/' + maxCount;
             } else {
-              // Regular checkbox item (data-max="7")
-              if (count > 0) {
-                tallyEl.textContent = count + '/' + maxCount;
-              } else {
-                tallyEl.textContent = '';
-              }
+              tallyEl.textContent = '';
+            }
 
-              if (myChecked) {
-                li.classList.add('checked');
-                if (currentUser) {
-                  var currentColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
-                  li.querySelector('.check-box').style.color = currentColor;
-                  li.querySelector('.check-text').style.opacity = '0.7';
-                }
-              } else {
-                li.classList.remove('checked');
-                li.querySelector('.check-box').style.color = '';
-                li.querySelector('.check-text').style.opacity = '';
-              }
+            if (myChecked) {
+              li.classList.add('checked');
+              var currentColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color || '#999';
+              li.querySelector('.pack-check').style.color = currentColor;
+            } else {
+              li.classList.remove('checked');
+              li.querySelector('.pack-check').style.color = '';
+            }
 
-              if (avatarContainer) {
-                renderAvatarRow(avatarContainer, data, 3);
-              }
+            if (avatarContainer) {
+              renderAvatarRow(avatarContainer, data, 3);
             }
 
             if (typeof updateProgress === 'function') updateProgress();
-          }, function(err) {
-            console.warn('Checklist listener error:', err);
           });
         }
 
-        // Click handler for regular items only (claimable items use button)
-        if (!isClaimable) {
-          li.addEventListener('click', function(e) {
-            if (e.target.closest('a')) return;
-            if (!currentUser) { showModal(false); return; }
-            if (!checkRef) return;
-            var userCheckRef = checkRef.child(currentUser.userId);
-            if (li.classList.contains('checked')) {
-              userCheckRef.remove();
-            } else {
-              userCheckRef.set(true);
-            }
-          });
-        }
+        li.addEventListener('click', function(e) {
+          if (e.target.closest('a')) return;
+          if (!currentUser) { showModal(false); return; }
+          if (!checkRef) return;
+          var userRef = checkRef.child(currentUser.userId);
+          if (li.classList.contains('checked')) {
+            userRef.remove();
+          } else {
+            userRef.set(true);
+          }
+        });
       });
-    });
+    }
   }
 
   initChecklists();
@@ -5178,7 +5272,7 @@ li.info-item .check-meta {
     db.ref('checklist').on('value', function(snap) {
       var data = snap.val() || {};
       var done = 0;
-      var totalItems = document.querySelectorAll('.check-group[data-checklist] li[data-item]').length;
+      var totalItems = document.querySelectorAll('.paper-card[data-checklist] li[data-item]').length;
       // Count items that have at least one check
       Object.keys(data).forEach(function(itemKey) {
         var checkers = data[itemKey] || {};
