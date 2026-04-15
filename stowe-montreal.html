@@ -27,8 +27,8 @@
   --text-muted: #6b6b6b;
   --text-light: #999;
   --border: #e8e5e0;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'PP Editorial New', 'Playfair Display', Georgia, serif;
+  --font-body: 'PP Neue Montreal', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Flexoki palette */
   --fx-red: #D14D41;
@@ -381,6 +381,17 @@ img { max-width: 100%; }
   border-color: var(--primary);
 }
 
+.accom-tip {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg);
+  border-radius: 8px;
+  border-left: 3px solid var(--border);
+}
+
 /* ============================================
    Route Section (split layout)
    ============================================ */
@@ -456,21 +467,10 @@ img { max-width: 100%; }
   box-shadow: 0 6px 28px rgba(0,0,0,0.08);
 }
 
-/* Color stripe on the left */
+/* No left border on day cards */
 .day-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 5px;
+  display: none;
 }
-
-.day-card[data-type="drive"]::before { background: var(--travel); }
-.day-card[data-type="stowe"]::before { background: var(--stowe); }
-.day-card[data-type="montreal"]::before { background: var(--montreal); }
-.day-card[data-type="spa"]::before { background: var(--spa); }
-.day-card[data-type="fly"]::before { background: var(--fly); }
 
 .day-header {
   display: flex;
@@ -569,6 +569,79 @@ img { max-width: 100%; }
   font-weight: 600;
 }
 
+/* Ask Claude button */
+.ask-claude-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-light);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  position: relative;
+}
+
+.ask-claude-btn:hover {
+  color: var(--text);
+  border-color: #ccc;
+  background: var(--bg);
+}
+
+.ask-claude-btn .ask-claude-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.ask-claude-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ask-claude-btn:hover .ask-claude-tooltip {
+  display: block;
+}
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--primary);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  z-index: 20000;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* Emoji reactions row */
 .reactions {
   display: flex;
@@ -651,7 +724,7 @@ img { max-width: 100%; }
   font-size: 0.6rem;
   font-weight: 700;
   color: #fff;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   border: 2px solid var(--bg);
   margin-left: -6px;
   transition: transform 0.2s ease, opacity 0.3s ease;
@@ -670,7 +743,7 @@ img { max-width: 100%; }
   font-size: 0.55rem;
   font-weight: 700;
   color: var(--text-muted);
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   border: 2px solid var(--bg);
   margin-left: -6px;
   background: var(--border);
@@ -1037,6 +1110,186 @@ img { max-width: 100%; }
   white-space: nowrap;
 }
 
+/* No left border on checked items */
+.check-group li.checked {
+  border-left: none;
+  background: transparent;
+}
+
+/* ============================================
+   Info List (non-interactive bullet lists)
+   ============================================ */
+.info-list ul {
+  list-style: none;
+}
+
+.info-list li {
+  cursor: default;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.info-list li::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+  color: var(--text-light);
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.info-list li .check-box,
+.info-list li .check-meta {
+  display: none !important;
+}
+
+.info-list li:hover {
+  background: transparent;
+}
+
+/* ============================================
+   Collaborative Notes Table
+   ============================================ */
+.notes-table {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.notes-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  background: var(--card-bg-solid);
+}
+
+.notes-row:nth-child(even) {
+  background: #faf8f5;
+}
+
+.notes-row-date {
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+}
+
+.notes-row-content {
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.note-entry {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  position: relative;
+}
+
+.note-entry .note-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.note-entry .note-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.note-entry .note-author {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.note-entry .note-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.note-entry .note-delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: var(--text-light);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  padding: 0 0.25rem;
+  font-family: var(--font-body);
+  line-height: 1;
+}
+
+.note-entry:hover .note-delete-btn {
+  opacity: 0.5;
+}
+
+.note-entry .note-delete-btn:hover {
+  opacity: 1;
+  color: var(--fx-red);
+}
+
+.note-input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.note-input-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.65rem;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.note-input-row input:focus {
+  border-color: var(--stowe);
+}
+
+.note-input-row button {
+  padding: 0.4rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.note-input-row button:hover {
+  background: #253d2d;
+}
+
 /* ============================================
    Footer
    ============================================ */
@@ -1351,7 +1604,7 @@ img { max-width: 100%; }
 }
 
 /* ============================================
-   Per-Day Comments
+   Per-Day Comments (always visible input)
    ============================================ */
 .day-comments-section {
   margin-top: 1rem;
@@ -1365,26 +1618,18 @@ img { max-width: 100%; }
   gap: 0.35rem;
   font-size: 0.82rem;
   color: var(--text-muted);
-  cursor: pointer;
+  cursor: default;
   background: none;
   border: none;
   font-family: var(--font-body);
   padding: 0.3rem 0.5rem;
   border-radius: 6px;
-  transition: background 0.2s ease;
-}
-
-.day-comments-toggle:hover {
-  background: rgba(0,0,0,0.03);
+  margin-bottom: 0.5rem;
 }
 
 .day-comments-body {
-  display: none;
-  margin-top: 0.75rem;
-}
-
-.day-comments-body.open {
   display: block;
+  margin-top: 0.5rem;
 }
 
 .day-comment {
@@ -1392,6 +1637,7 @@ img { max-width: 100%; }
   gap: 0.6rem;
   margin-bottom: 0.75rem;
   align-items: flex-start;
+  position: relative;
 }
 
 .day-comment .comment-avatar {
@@ -1434,6 +1680,31 @@ img { max-width: 100%; }
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.5;
+}
+
+.day-comment .comment-delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  padding: 0 0.3rem;
+  font-family: var(--font-body);
+  line-height: 1;
+}
+
+.day-comment:hover .comment-delete-btn {
+  opacity: 0.4;
+}
+
+.day-comment .comment-delete-btn:hover {
+  opacity: 1;
+  color: var(--fx-red);
 }
 
 .day-comment-input-row {
@@ -1573,9 +1844,32 @@ img { max-width: 100%; }
   .checklist-grid {
     grid-template-columns: 1fr;
   }
+
+  .notes-row {
+    grid-template-columns: 1fr;
+  }
+
+  .notes-row-date {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+  }
 }
 
 @media (max-width: 600px) {
+  .hero {
+    min-height: 70vh;
+    padding: 3rem 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1584,13 +1878,18 @@ img { max-width: 100%; }
     grid-column: 1 / -1;
   }
 
-  .hero {
-    min-height: 70vh;
-    padding: 3rem 1.5rem;
+  .toc-bar-inner {
+    justify-content: flex-start;
+    padding: 0.5rem 1rem;
+  }
+
+  .toc-link {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.5rem;
   }
 
   .day-card {
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
 
   .spa-feature {
@@ -1617,6 +1916,63 @@ img { max-width: 100%; }
   .color-swatch {
     width: 40px;
     height: 40px;
+  }
+
+  .user-pill .pill-name {
+    font-size: 0.72rem;
+  }
+
+  .user-pill .pill-avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 0.55rem;
+  }
+
+  .user-pill {
+    padding: 0.3rem 0.7rem 0.3rem 0.3rem;
+    gap: 0.35rem;
+  }
+
+  .reaction-btn {
+    padding: 0.4rem 0.55rem;
+    min-width: 44px;
+    font-size: 0.75rem;
+  }
+
+  .reaction-btn .emoji {
+    font-size: 0.9rem;
+  }
+
+  .reactions {
+    gap: 0.35rem;
+  }
+
+  .day-comment-input-row {
+    flex-direction: column;
+  }
+
+  .day-comment-input-row input,
+  .day-comment-input-row button {
+    width: 100%;
+  }
+
+  .notes-row {
+    grid-template-columns: 1fr;
+  }
+
+  .notes-row-date {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+  }
+
+  .note-input-row {
+    flex-direction: column;
+  }
+
+  .note-input-row input,
+  .note-input-row button {
+    width: 100%;
   }
 }
 </style>
@@ -1654,6 +2010,9 @@ img { max-width: 100%; }
   </div>
 </div>
 
+<!-- Toast container -->
+<div class="toast" id="toast"></div>
+
 <!-- ============================================
      HERO
      ============================================ -->
@@ -1683,6 +2042,8 @@ img { max-width: 100%; }
     <a class="toc-link" data-target="road-stops">Road Stops</a>
     <span class="toc-separator">&middot;</span>
     <a class="toc-link" data-target="weigh-in">Weigh In</a>
+    <span class="toc-separator">&middot;</span>
+    <a class="toc-link" data-target="notes">Notes</a>
     <span class="toc-separator">&middot;</span>
     <a class="toc-link" data-target="logistics">Logistics</a>
   </div>
@@ -1737,6 +2098,7 @@ img { max-width: 100%; }
         <li>Off-season ski houses = great deals in June</li>
         <li>Budget: ~$250&ndash;400/night for a big house</li>
       </ul>
+      <div class="accom-tip">Look near Mountain Road or Main Street for walkability. The area around the Stowe Community Church is ideal &mdash; 10-min walk to most restaurants.</div>
       <div class="accom-links">
         <a class="accom-link" href="https://www.vrbo.com/search?destination=Stowe%2C+VT&startDate=2026-06-11&endDate=2026-06-15&adults=5&children=2" target="_blank" rel="noopener">Search VRBO &rarr;</a>
         <a class="accom-link" href="https://www.airbnb.com/s/Stowe--VT/homes?checkin=2026-06-11&checkout=2026-06-15&adults=5&children=2&min_bedrooms=3" target="_blank" rel="noopener">Search Airbnb &rarr;</a>
@@ -1753,8 +2115,9 @@ img { max-width: 100%; }
         <li>Near a park (Parc La Fontaine, Parc Jeanne-Mance)</li>
         <li>Look for outdoor space &mdash; balcony, terrace, small yard</li>
         <li>Near a metro stop for rainy days</li>
-        <li>Budget: ~$300&ndash;500/night (CAD favorable)</li>
+        <li>Budget: ~$200&ndash;350/night (CAD favorable)</li>
       </ul>
+      <div class="accom-tip">The Plateau between Parc La Fontaine and Mont-Royal is the sweet spot. Mile End (north of Laurier) is quieter with families. Avoid Old Montreal for accommodation &mdash; it's touristy and far from the best restaurants.</div>
       <div class="accom-links">
         <a class="accom-link" href="https://www.vrbo.com/search?destination=Le+Plateau-Mont-Royal%2C+Montreal&startDate=2026-06-15&endDate=2026-06-19&adults=5&children=2" target="_blank" rel="noopener">Search VRBO &rarr;</a>
         <a class="accom-link" href="https://www.airbnb.com/s/Le-Plateau-Mont-Royal--Montreal/homes?checkin=2026-06-15&checkout=2026-06-19&adults=5&children=2&min_bedrooms=3" target="_blank" rel="noopener">Search Airbnb &rarr;</a>
@@ -1786,14 +2149,14 @@ img { max-width: 100%; }
       <!-- Day 1: Drive -->
       <div class="day-card" data-type="drive" data-day="1" data-lat="42.75" data-lng="-73.2" data-zoom="7" id="day1">
         <div class="day-header">
-          <span class="day-date">Wednesday, June 11</span>
+          <span class="day-date">Thursday, June 11</span>
           <span class="day-badge">Travel day</span>
         </div>
         <h3>White Plains &rarr; Stowe (4.5 hrs)</h3>
         <p>Leave by 8-9am to arrive before the afternoon nap meltdown. The drive is mostly I-87 north through the Hudson Valley, then cuts east into Vermont on Route 89.</p>
         <ul>
-          <li><strong>Stop 1: Saratoga Springs, NY (~2 hrs in)</strong> &mdash; Stretch legs at Congress Park, grab lunch at <a href="https://www.google.com/search?q=Hattie%27s+Restaurant+Saratoga+Springs" target="_blank" rel="noopener" class="place-link">Hattie's</a> (Southern comfort food, kid-friendly) or <a href="https://www.google.com/search?q=Uncommon+Grounds+Saratoga+Springs" target="_blank" rel="noopener" class="place-link">Uncommon Grounds</a> coffee</li>
-          <li><strong>Stop 2: Waterbury, VT (~4 hrs in, 15 min from Stowe)</strong> &mdash; <a href="https://coldhollow.com" target="_blank" rel="noopener" class="place-link">Cold Hollow Cider Mill</a> for cider donuts. Or save <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener" class="place-link">Ben &amp; Jerry's</a> for another day.</li>
+          <li><strong>Stop 1: Saratoga Springs, NY (~2 hrs in)</strong> &mdash; Stretch legs at Congress Park, grab lunch at <a href="https://www.hattiesrestaurant.com" target="_blank" rel="noopener" class="place-link">Hattie's</a> (Southern comfort food, kid-friendly) or <a href="https://www.google.com/maps/search/Uncommon+Grounds+Saratoga+Springs" target="_blank" rel="noopener" class="place-link">Uncommon Grounds</a> coffee</li>
+          <li><strong>Stop 2: Waterbury, VT (~4 hrs in, 15 min from Stowe)</strong> &mdash; <a href="https://coldhollow.com" target="_blank" rel="noopener" class="place-link">Cold Hollow Cider Mill</a> for cider donuts. Save <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener" class="place-link">Ben &amp; Jerry's</a> for Day 3.</li>
           <li>Arrive Stowe ~1-2pm. Unpack, explore the village, early dinner.</li>
         </ul>
         <div class="meal-tip"><strong>First dinner:</strong> <a href="https://www.benchvt.com" target="_blank" rel="noopener" class="place-link">The Bench</a> (wood-fired pizza, relaxed, kid-friendly) or <a href="https://www.docponds.com" target="_blank" rel="noopener" class="place-link">Doc Ponds</a> (pub food, great cocktails) &mdash; both walkable, no reservation needed</div>
@@ -1803,56 +2166,56 @@ img { max-width: 100%; }
       <!-- Day 2: Stowe -->
       <div class="day-card" data-type="stowe" data-day="2" data-lat="44.465" data-lng="-72.687" data-zoom="12" id="day2">
         <div class="day-header">
-          <span class="day-date">Thursday, June 12</span>
+          <span class="day-date">Friday, June 12</span>
           <span class="day-badge">Stowe</span>
         </div>
         <h3>Settle in &mdash; Rec Path + village day</h3>
         <p>No agenda. Let the kids set the pace. This is your decompression day.</p>
         <ul>
-          <li><strong>Morning:</strong> <a href="https://www.google.com/search?q=Stowe+Recreation+Path+Vermont" target="_blank" rel="noopener" class="place-link">Stowe Recreation Path</a> &mdash; grab coffee, put the 2yo in the stroller, let the 4yo scooter. 5.3 miles paved along the West Branch river. Go as far as you want and turn back.</li>
-          <li><strong>Afternoon:</strong> Explore the village. Stowe Golf Park (mini golf) or just wander. Find the covered bridge on the Rec Path.</li>
+          <li><strong>Morning:</strong> <a href="https://www.stowe.com/explore-the-resort/during-your-stay/recreation-path.aspx" target="_blank" rel="noopener" class="place-link">Stowe Recreation Path</a> &mdash; grab coffee, put the 2yo in the stroller, let the 4yo scooter. 5.3 miles paved along the West Branch river. Go as far as you want and turn back.</li>
+          <li><strong>Afternoon:</strong> Explore the village. <a href="https://www.stowegolfpark.com" target="_blank" rel="noopener" class="place-link">Stowe Golf Park</a> (mini golf) or just wander. Find the covered bridge on the Rec Path.</li>
           <li><strong>If it's warm:</strong> Wade in the river at one of the Rec Path access points. The water is cold but the kids won't care.</li>
         </ul>
-        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.google.com/search?q=Harrison%27s+Restaurant+Stowe+VT" target="_blank" rel="noopener" class="place-link">Harrison's</a> &mdash; American fare, wood beams, cozy. Walk there and back. Book a table.</div>
+        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.harrisonsstowe.com" target="_blank" rel="noopener" class="place-link">Harrison's</a> &mdash; American fare, wood beams, cozy. Walk there and back. Book a table.</div>
         <div class="reactions" data-key="day2"></div>
       </div>
 
       <!-- Day 3: Stowe -->
       <div class="day-card" data-type="stowe" data-day="3" data-lat="44.51" data-lng="-72.76" data-zoom="11" id="day3">
         <div class="day-header">
-          <span class="day-date">Friday, June 13</span>
+          <span class="day-date">Saturday, June 13</span>
           <span class="day-badge">Stowe</span>
         </div>
         <h3>Waterfall + swimming holes</h3>
         <ul>
-          <li><strong>Morning:</strong> <a href="https://www.google.com/search?q=Moss+Glen+Falls+Stowe+VT" target="_blank" rel="noopener" class="place-link">Moss Glen Falls</a> (10 min drive) &mdash; easy 10-minute walk to a beautiful waterfall. The 4yo can hike it, carry the 2yo. Swimming below the falls if it's warm enough.</li>
-          <li><strong>Midday:</strong> <a href="https://www.google.com/search?q=Bingham+Falls+Stowe+VT" target="_blank" rel="noopener" class="place-link">Bingham Falls</a> (near <a href="https://www.google.com/search?q=Smugglers+Notch+Vermont" target="_blank" rel="noopener" class="place-link">Smugglers' Notch</a>) &mdash; quarter-mile hike to falls + swimming holes upstream. More adventurous. Optional.</li>
+          <li><strong>Morning:</strong> <a href="https://vtstateparks.com/moss-glen-stowe.html" target="_blank" rel="noopener" class="place-link">Moss Glen Falls</a> (10 min drive) &mdash; easy 10-minute walk to a beautiful waterfall. The 4yo can hike it, carry the 2yo. Swimming below the falls if it's warm enough.</li>
+          <li><strong>Midday:</strong> <a href="https://www.google.com/maps/search/Bingham+Falls+Stowe+Vermont" target="_blank" rel="noopener" class="place-link">Bingham Falls</a> (near <a href="https://vtstateparks.com/smugglers-notch.html" target="_blank" rel="noopener" class="place-link">Smugglers' Notch</a>) &mdash; quarter-mile hike to falls + swimming holes upstream. More adventurous. Optional.</li>
           <li><strong>Afternoon:</strong> <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener" class="place-link">Ben &amp; Jerry's</a> factory (15 min in Waterbury). 30-minute tour, ice cream at the end. Hit <a href="https://coldhollow.com" target="_blank" rel="noopener" class="place-link">Cold Hollow Cider Mill</a> next door for donuts if you didn't on Day 1.</li>
         </ul>
-        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://henofthewood.com" target="_blank" rel="noopener" class="place-link">Hen of the Wood</a> (Waterbury, 15 min) &mdash; the best meal of the Stowe leg. Farm-to-table, changes daily. <strong>Book ahead.</strong> Consider getting a sitter and making this an adults-only dinner.</div>
+        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://henofthewood.com" target="_blank" rel="noopener" class="place-link">Hen of the Wood</a> (Waterbury, 15 min) &mdash; the best meal of the Stowe leg. Farm-to-table, changes daily. <strong>Book ahead.</strong> Get a sitter &mdash; this is an adults-only dinner.</div>
         <div class="reactions" data-key="day3"></div>
       </div>
 
       <!-- Day 4: Stowe -->
       <div class="day-card" data-type="stowe" data-day="4" data-lat="44.55" data-lng="-72.6" data-zoom="10" id="day4">
         <div class="day-header">
-          <span class="day-date">Saturday, June 14</span>
+          <span class="day-date">Sunday, June 14</span>
           <span class="day-badge">Stowe</span>
         </div>
         <h3>Lake Elmore beach day + Smugglers' Notch</h3>
         <ul>
-          <li><strong>Morning:</strong> Drive to <a href="https://www.google.com/search?q=Smugglers+Notch+Vermont" target="_blank" rel="noopener" class="place-link">Smugglers' Notch</a> (20 min) &mdash; dramatic narrow pass through the mountains. Stop to scramble on the giant boulders. The 4yo will be in heaven. Keep the 2yo close.</li>
-          <li><strong>Afternoon:</strong> <a href="https://www.google.com/search?q=Lake+Elmore+State+Park+Vermont" target="_blank" rel="noopener" class="place-link">Lake Elmore State Park</a> (25 min from Stowe) &mdash; sandy beach, roped swimming area, lifeguards. Pack a cooler and towels. This is the "beach day" of the trip &mdash; calm lake water, warm-ish by mid-June, perfect for toddlers.</li>
+          <li><strong>Morning:</strong> Drive to <a href="https://vtstateparks.com/smugglers-notch.html" target="_blank" rel="noopener" class="place-link">Smugglers' Notch</a> (20 min) &mdash; dramatic narrow pass through the mountains. Stop to scramble on the giant boulders. The 4yo will be in heaven. Keep the 2yo close.</li>
+          <li><strong>Afternoon:</strong> <a href="https://vtstateparks.com/elmore.html" target="_blank" rel="noopener" class="place-link">Lake Elmore State Park</a> (25 min from Stowe) &mdash; sandy beach, roped swimming area, lifeguards. Pack a cooler and towels. This is the "beach day" of the trip &mdash; calm lake water, warm-ish by mid-June, perfect for toddlers.</li>
           <li><strong>Evening:</strong> Back to Stowe. Last firepit night. Rec Path sunset walk.</li>
         </ul>
-        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.google.com/search?q=Plate+Restaurant+Stowe+VT" target="_blank" rel="noopener" class="place-link">Plate</a> (small plates, natural wine, intimate) or <a href="https://www.docponds.com" target="_blank" rel="noopener" class="place-link">Doc Ponds</a> if you want something casual. Adults: end the night at <a href="https://www.google.com/search?q=Apres+Cocktails+Wine+Stowe+VT" target="_blank" rel="noopener" class="place-link">Apr&egrave;s Cocktails &amp; Wine</a> &mdash; hidden inside a day spa, craft cocktails.</div>
+        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.platestowe.com" target="_blank" rel="noopener" class="place-link">Plate</a> (small plates, natural wine, intimate) or <a href="https://www.docponds.com" target="_blank" rel="noopener" class="place-link">Doc Ponds</a> if you want something casual. Get a sitter, grab cocktails at <a href="https://www.apresstowe.com" target="_blank" rel="noopener" class="place-link">Apr&egrave;s</a> after.</div>
         <div class="reactions" data-key="day4"></div>
       </div>
 
       <!-- Day 5: Drive -->
       <div class="day-card" data-type="drive" data-day="5" data-lat="44.9" data-lng="-73.0" data-zoom="8" id="day5">
         <div class="day-header">
-          <span class="day-date">Sunday, June 15</span>
+          <span class="day-date">Monday, June 15</span>
           <span class="day-badge">Travel day</span>
         </div>
         <h3>Stowe &rarr; Montreal (2.5 hrs)</h3>
@@ -1863,68 +2226,68 @@ img { max-width: 100%; }
           <li><strong>Border tip:</strong> Have all 7 passports handy (including kids). Declare any food you're bringing. They'll ask where you're staying and how long.</li>
           <li><strong>Arrive Montreal ~2-3pm.</strong> Settle into the apartment. Walk the neighborhood.</li>
         </ul>
-        <div class="meal-tip"><strong>First Montreal meal:</strong> Walk to St-Viateur Bagels (Mile End) &mdash; watch them come out of the wood-fired oven. Grab a dozen. Then wander to Parc La Fontaine or Parc Jeanne-Mance and let the kids run.</div>
+        <div class="meal-tip"><strong>First Montreal meal:</strong> Walk to <a href="https://www.stviateurbagel.com" target="_blank" rel="noopener" class="place-link">St-Viateur Bagels</a> (Mile End) &mdash; watch them come out of the wood-fired oven. Grab a dozen. Then wander to <a href="https://www.google.com/maps/search/Parc+La+Fontaine+Montreal" target="_blank" rel="noopener" class="place-link">Parc La Fontaine</a> or Parc Jeanne-Mance and let the kids run.</div>
         <div class="reactions" data-key="day5"></div>
       </div>
 
       <!-- Day 6: Montreal -->
       <div class="day-card" data-type="montreal" data-day="6" data-lat="45.505" data-lng="-73.555" data-zoom="13" id="day6">
         <div class="day-header">
-          <span class="day-date">Monday, June 16</span>
+          <span class="day-date">Tuesday, June 16</span>
           <span class="day-badge">Montreal</span>
         </div>
         <h3>Old Montreal + Old Port</h3>
         <ul>
           <li><strong>Morning:</strong> Walk the cobblestones of Old Montreal. <a href="https://www.basiliquenotredame.ca/en" target="_blank" rel="noopener" class="place-link">Notre-Dame Basilica</a> (stunning interior, the 4yo will be awed by the blue light). Place d'Armes square.</li>
-          <li><strong>Midday:</strong> Old Port waterfront &mdash; splash pad (free!), carousel, harborside walk. The 2yo will be happy here for hours.</li>
+          <li><strong>Midday:</strong> <a href="https://www.oldportofmontreal.com" target="_blank" rel="noopener" class="place-link">Old Port</a> waterfront &mdash; splash pad (free!), carousel, harborside walk. The 2yo will be happy here for hours.</li>
           <li><strong>Afternoon:</strong> Clock Tower Beach area or boat tour of the harbor.</li>
         </ul>
-        <div class="meal-tip"><strong>Lunch:</strong> <a href="https://www.google.com/search?q=Olive+et+Gourmando+Montreal" target="_blank" rel="noopener" class="place-link">Olive et Gourmando</a> (Old Montreal, legendary sandwiches). <strong>Dinner:</strong> <a href="https://www.schwartzsdeli.com" target="_blank" rel="noopener" class="place-link">Schwartz's Deli</a> &mdash; smoked meat sandwiches since 1928. Cash only, line out the door, worth it. Kids love it (it's basically a diner).</div>
+        <div class="meal-tip"><strong>Lunch:</strong> <a href="https://www.oliveetgourmando.com" target="_blank" rel="noopener" class="place-link">Olive et Gourmando</a> (Old Montreal, legendary sandwiches). <strong>Dinner:</strong> <a href="https://www.schwartzsdeli.com" target="_blank" rel="noopener" class="place-link">Schwartz's Deli</a> &mdash; smoked meat sandwiches since 1928. Cash only, line out the door, worth it. Kids love it (it's basically a diner).</div>
         <div class="reactions" data-key="day6"></div>
       </div>
 
       <!-- Day 7: Spa day -->
       <div class="day-card" data-type="spa" data-day="7" data-lat="45.53" data-lng="-73.56" data-zoom="12" id="day7">
         <div class="day-header">
-          <span class="day-date">Tuesday, June 17</span>
+          <span class="day-date">Wednesday, June 17</span>
           <span class="day-badge">Spa day</span>
         </div>
         <h3>Biodome + Bota Bota spa</h3>
-        <p>Split the group. This is the day the adults get their payoff.</p>
+        <p>Get a sitter for the afternoon and evening. Everyone does the Biodome in the morning, then the adults hit the spa while the sitter has the kids.</p>
         <ul>
           <li><strong>Morning (everyone):</strong> <a href="https://espacepourlavie.ca/en/biodome" target="_blank" rel="noopener" class="place-link">Biodome</a> &mdash; four ecosystems under one roof. Penguins, rainforest, lynx, fish. Half-day minimum. The 4yo will be obsessed. The 2yo will love the penguins.</li>
-          <li><strong>Afternoon (adults rotate):</strong> 2-3 adults take the kids to Parc Maisonneuve (right next to Biodome, big open green space, playground). The other 2-3 adults go to the spa.</li>
+          <li><strong>Afternoon:</strong> Sitter takes kids to Parc Maisonneuve. Adults go to Bota Bota spa.</li>
         </ul>
-        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.monlapin.ca" target="_blank" rel="noopener" class="place-link">Mon Lapin</a> (Little Italy, French-Italian, natural wine) &mdash; book ahead. Or <a href="https://www.joebeef.ca" target="_blank" rel="noopener" class="place-link">Joe Beef</a> if you can get a table (book months ahead, try calling day-of for cancellations).</div>
+        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.monlapin.ca" target="_blank" rel="noopener" class="place-link">Mon Lapin</a> (Little Italy, French-Italian, natural wine) &mdash; book ahead. Or <a href="https://www.joebeef.ca" target="_blank" rel="noopener" class="place-link">Joe Beef</a> if you can get a table. Sitter with the kids.</div>
         <div class="reactions" data-key="day7"></div>
       </div>
 
       <!-- Day 8: Montreal -->
       <div class="day-card" data-type="montreal" data-day="8" data-lat="45.525" data-lng="-73.585" data-zoom="13" id="day8">
         <div class="day-header">
-          <span class="day-date">Wednesday, June 18</span>
+          <span class="day-date">Thursday, June 18</span>
           <span class="day-badge">Montreal</span>
         </div>
         <h3>Market + mountain + last night out</h3>
         <ul>
           <li><strong>Morning:</strong> <a href="https://www.marchespublics-mtl.com/en/marches/jean-talon-market/" target="_blank" rel="noopener" class="place-link">Jean-Talon Market</a> &mdash; the best outdoor market in North America. Cheese, pastries, fruit, flowers, prepared food. Let the 4yo pick lunch. The 2yo eats samples.</li>
-          <li><strong>Afternoon:</strong> <a href="https://www.google.com/search?q=Mont-Royal+Montreal" target="_blank" rel="noopener" class="place-link">Mont-Royal</a> &mdash; easy walk or drive to Kondiaronk lookout for panoramic city views. Playground at Parc Jeanne-Mance on the way down. Beaver Lake if kids have energy.</li>
-          <li><strong>Evening:</strong> This is the big night. Adults rotate out for the best meal of the trip.</li>
+          <li><strong>Afternoon:</strong> <a href="https://www.lemontroyal.qc.ca/en" target="_blank" rel="noopener" class="place-link">Mont-Royal</a> &mdash; easy walk or drive to Kondiaronk lookout for panoramic city views. Playground at Parc Jeanne-Mance on the way down. Beaver Lake if kids have energy.</li>
+          <li><strong>Evening:</strong> The big night. Sitter with the kids. Best meal of the trip.</li>
         </ul>
-        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.google.com/search?q=Lawrence+Restaurant+Mile+End+Montreal" target="_blank" rel="noopener" class="place-link">Lawrence</a> (Mile End, Michelin Recommended, seasonal) or <a href="https://www.google.com/search?q=Mastard+Restaurant+Montreal" target="_blank" rel="noopener" class="place-link">Mastard</a> (creative, vegetable-forward). <strong>After dinner:</strong> <a href="https://www.google.com/search?q=Cloakroom+Bar+Montreal" target="_blank" rel="noopener" class="place-link">Cloakroom</a> (no-menu, 25 seats, tell them what you like, they make it) or <a href="https://www.google.com/search?q=Atwater+Cocktail+Club+Montreal" target="_blank" rel="noopener" class="place-link">Atwater Cocktail Club</a> (hidden entrance, world-class).</div>
+        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.lawrencerestaurant.com" target="_blank" rel="noopener" class="place-link">Lawrence</a> (Mile End, Michelin Recommended, seasonal) or <a href="https://www.google.com/maps/search/Mastard+Restaurant+Montreal" target="_blank" rel="noopener" class="place-link">Mastard</a> (creative, vegetable-forward). <strong>After:</strong> <a href="https://www.google.com/maps/search/Cloakroom+Bar+Montreal" target="_blank" rel="noopener" class="place-link">Cloakroom</a> (no-menu, 25 seats) or <a href="https://www.google.com/maps/search/Atwater+Cocktail+Club+Montreal" target="_blank" rel="noopener" class="place-link">Atwater Cocktail Club</a> (hidden entrance, world-class).</div>
         <div class="reactions" data-key="day8"></div>
       </div>
 
       <!-- Day 9: Fly home -->
       <div class="day-card" data-type="fly" data-day="9" data-lat="45.47" data-lng="-73.74" data-zoom="11" id="day9">
         <div class="day-header">
-          <span class="day-date">Thursday, June 19</span>
+          <span class="day-date">Friday, June 19</span>
           <span class="day-badge">Fly home</span>
         </div>
         <h3>Montreal &rarr; Home (YUL)</h3>
         <ul>
           <li>Sleep in. Slow morning. Pack up.</li>
-          <li><strong>Last stop:</strong> Fairmount Bagels (the other legendary bagel shop, 2 min from St-Viateur) &mdash; grab a bag for the plane.</li>
+          <li><strong>Last stop:</strong> <a href="https://www.fairmountbagel.com" target="_blank" rel="noopener" class="place-link">Fairmount Bagels</a> (the other legendary bagel shop, 2 min from St-Viateur) &mdash; grab a bag for the plane.</li>
           <li><strong>YUL airport is 20 min from the Plateau.</strong> Major international hub, direct flights to most US cities.</li>
           <li>Drop the rental car at the airport. Done.</li>
         </ul>
@@ -1948,7 +2311,7 @@ img { max-width: 100%; }
     <div class="spa-tagline">A floating Nordic spa on a restored 1950s ferry in the Old Port of Montreal</div>
     <p>Five decks of saunas, steam rooms, outdoor hot tubs, cold plunges, and relaxation areas &mdash; all on a boat on the St. Lawrence River with views of Old Montreal. The water circuit alternates hot &rarr; cold &rarr; rest, repeat. Deeply relaxing. Phones are banned (except Thursdays).</p>
     <p><strong>Facilities:</strong> 4 saunas with river views, eucalyptus steam bath, outdoor whirlpool baths, cold plunge pools, restaurant on board, garden terrace</p>
-    <p><strong>When:</strong> Tuesday June 17 afternoon &mdash; while half the group has the kids at the park after the Biodome. Book 2-3 hours.</p>
+    <p><strong>When:</strong> Wednesday June 17 afternoon &mdash; sitter has the kids after the Biodome. Book 2-3 hours.</p>
     <p><strong>Cost:</strong> ~$70-90 CAD per person for the water circuit. Massages additional.</p>
     <p><strong>Location:</strong> Old Port, right on the waterfront. 15 min from the Plateau by metro or taxi.</p>
     <a class="spa-book-link" href="https://botabota.ca/en/" target="_blank" rel="noopener">Book at botabota.ca &rarr;</a>
@@ -1975,9 +2338,9 @@ img { max-width: 100%; }
     <div class="road-leg fade-in">
       <h3>Leg 1: White Plains &rarr; Stowe</h3>
       <ul>
-        <li><strong>Saratoga Springs, NY (2 hrs)</strong> &mdash; Good midpoint. Congress Park for the kids, <a href="https://www.google.com/search?q=Hattie%27s+Restaurant+Saratoga+Springs" target="_blank" rel="noopener" class="place-link">Hattie's</a> for fried chicken, or just a coffee stop at <a href="https://www.google.com/search?q=Uncommon+Grounds+Saratoga+Springs" target="_blank" rel="noopener" class="place-link">Uncommon Grounds</a>.</li>
+        <li><strong>Saratoga Springs, NY (2 hrs)</strong> &mdash; Good midpoint. Congress Park for the kids, <a href="https://www.hattiesrestaurant.com" target="_blank" rel="noopener" class="place-link">Hattie's</a> for fried chicken, or just a coffee stop at <a href="https://www.google.com/maps/search/Uncommon+Grounds+Saratoga+Springs" target="_blank" rel="noopener" class="place-link">Uncommon Grounds</a>.</li>
         <li><strong>Manchester, VT (3.5 hrs via Route 7)</strong> &mdash; If you take the scenic route. Cute town, outlet shopping, Hildene (Lincoln family estate).</li>
-        <li><strong>Waterbury, VT (4 hrs)</strong> &mdash; 15 min from Stowe. <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener" class="place-link">Ben &amp; Jerry's</a>, <a href="https://coldhollow.com" target="_blank" rel="noopener" class="place-link">Cold Hollow Cider Mill</a>, <a href="https://www.google.com/search?q=Cabot+Cheese+Waterbury+VT" target="_blank" rel="noopener" class="place-link">Cabot Cheese</a>. You'll come back here during the trip, so you can skip on arrival day.</li>
+        <li><strong>Waterbury, VT (4 hrs)</strong> &mdash; 15 min from Stowe. <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener" class="place-link">Ben &amp; Jerry's</a>, <a href="https://coldhollow.com" target="_blank" rel="noopener" class="place-link">Cold Hollow Cider Mill</a>, <a href="https://www.cabotcheese.coop" target="_blank" rel="noopener" class="place-link">Cabot Cheese</a>. You'll come back here during the trip, so you can skip on arrival day.</li>
       </ul>
     </div>
 
@@ -1985,7 +2348,7 @@ img { max-width: 100%; }
       <h3>Leg 2: Stowe &rarr; Montreal</h3>
       <ul>
         <li><strong>Burlington, VT (45 min from Stowe)</strong> &mdash; Church Street pedestrian mall, Lake Champlain waterfront, <a href="https://henofthewood.com" target="_blank" rel="noopener" class="place-link">Hen of the Wood</a>'s second location. Worth a stop if you have time.</li>
-        <li><strong>Shelburne, VT (1 hr from Stowe)</strong> &mdash; Shelburne Farms (working farm, walking trails, lake views) and Shelburne Museum (art + Americana, outdoor campus).</li>
+        <li><strong>Shelburne, VT (1 hr from Stowe)</strong> &mdash; <a href="https://shelburnefarms.org" target="_blank" rel="noopener" class="place-link">Shelburne Farms</a> (working farm, walking trails, lake views) and <a href="https://shelburnemuseum.org" target="_blank" rel="noopener" class="place-link">Shelburne Museum</a> (art + Americana, outdoor campus).</li>
         <li><strong>Border crossing at Highgate Springs / Saint-Armand</strong> &mdash; Usually the quickest crossing on this route. Avoid Champlain/Lacolle on weekends.</li>
       </ul>
     </div>
@@ -2109,6 +2472,108 @@ img { max-width: 100%; }
 </section>
 
 <!-- ============================================
+     TRIP NOTES (Collaborative)
+     ============================================ -->
+<section class="section" id="notes">
+  <div class="section-label">Collaborative</div>
+  <h2 class="section-title">Trip Notes</h2>
+  <div class="section-divider"></div>
+
+  <div class="notes-table" id="notesTable">
+    <div class="notes-row" data-note-day="drive-1">
+      <div class="notes-row-date">Thu Jun 11<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Drive to Stowe</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-row" data-note-day="stowe-1">
+      <div class="notes-row-date">Fri Jun 12<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Rec Path + village</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-row" data-note-day="stowe-2">
+      <div class="notes-row-date">Sat Jun 13<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Waterfalls + swimming</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-row" data-note-day="stowe-3">
+      <div class="notes-row-date">Sun Jun 14<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Lake Elmore + Smugglers'</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-row" data-note-day="drive-2">
+      <div class="notes-row-date">Mon Jun 15<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Drive to Montreal</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-row" data-note-day="mtl-1">
+      <div class="notes-row-date">Tue Jun 16<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Old Montreal + Old Port</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-row" data-note-day="mtl-2">
+      <div class="notes-row-date">Wed Jun 17<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Biodome + Spa</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-row" data-note-day="mtl-3">
+      <div class="notes-row-date">Thu Jun 18<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Market + mountain</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="notes-row" data-note-day="fly-home">
+      <div class="notes-row-date">Fri Jun 19<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Fly home</span></div>
+      <div class="notes-row-content">
+        <div class="notes-list"></div>
+        <div class="note-input-row">
+          <input type="text" placeholder="Add a note..." maxlength="500">
+          <button>Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
      LOGISTICS
      ============================================ -->
 <section class="section" id="logistics">
@@ -2125,7 +2590,7 @@ img { max-width: 100%; }
         <li data-item="book-montreal" data-max="1"><span class="check-box"></span><span class="check-text">Book Montreal apartment (Airbnb &mdash; June 15-19)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
         <li data-item="book-hen" data-max="1"><span class="check-box"></span><span class="check-text">Book <a href="https://henofthewood.com" target="_blank" rel="noopener" class="place-link">Hen of the Wood</a> dinner (Waterbury &mdash; June 13)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
         <li data-item="book-bota" data-max="1"><span class="check-box"></span><span class="check-text">Book <a href="https://botabota.ca/en/" target="_blank" rel="noopener" class="place-link">Bota Bota</a> spa (June 17 afternoon)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
-        <li data-item="book-mtl-dinner" data-max="1"><span class="check-box"></span><span class="check-text">Book Montreal dinner (<a href="https://www.joebeef.ca" target="_blank" rel="noopener" class="place-link">Joe Beef</a> / <a href="https://www.monlapin.ca" target="_blank" rel="noopener" class="place-link">Mon Lapin</a> / <a href="https://www.google.com/search?q=Lawrence+Restaurant+Mile+End+Montreal" target="_blank" rel="noopener" class="place-link">Lawrence</a> &mdash; June 17 or 18)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-mtl-dinner" data-max="1"><span class="check-box"></span><span class="check-text">Book Montreal dinner (<a href="https://www.joebeef.ca" target="_blank" rel="noopener" class="place-link">Joe Beef</a> / <a href="https://www.monlapin.ca" target="_blank" rel="noopener" class="place-link">Mon Lapin</a> / <a href="https://www.lawrencerestaurant.com" target="_blank" rel="noopener" class="place-link">Lawrence</a> &mdash; June 17 or 18)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
         <li data-item="rent-car" data-max="1"><span class="check-box"></span><span class="check-text">Rent car large enough for 7 + luggage (minivan or large SUV)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
         <li data-item="book-flights" data-max="7"><span class="check-box"></span><span class="check-text">Book flights home from YUL (June 19)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
         <li data-item="car-seats" data-max="1"><span class="check-box"></span><span class="check-text">Car seats: 2 (bring your own or rent with car)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
@@ -2147,21 +2612,21 @@ img { max-width: 100%; }
       </ul>
     </div>
 
-    <div class="check-group fade-in">
+    <div class="check-group info-list fade-in">
       <h3>Budget rough estimates</h3>
       <ul>
-        <li>Stowe house (4 nights): $1,000&ndash;1,600</li>
-        <li>Montreal apartment (4 nights): $1,200&ndash;2,000 CAD</li>
-        <li>Rental car (9 days): $500&ndash;800</li>
+        <li>Stowe house (4 nights): $1,000&ndash;1,600 total</li>
+        <li>Montreal apartment (4 nights): $800&ndash;1,400 CAD total</li>
+        <li>Rental car (9 days): $500&ndash;800 total</li>
         <li>Gas: ~$120 total</li>
-        <li>Bota Bota spa (2-3 people): $200-270 CAD</li>
-        <li>Groceries: ~$300-400 for the week</li>
-        <li>Dining out: $150-250/day for the group</li>
-        <li>Activities: Most are free or cheap (parks, paths, falls)</li>
+        <li>Bota Bota spa (per person): ~$70-90 CAD</li>
+        <li>Groceries: ~$400-500 total for the group</li>
+        <li>Dining out: ~$100-150/dinner for the group (varies wildly)</li>
+        <li>Activities: Most free &mdash; budget ~$200 total for paid activities</li>
       </ul>
     </div>
 
-    <div class="check-group fade-in">
+    <div class="check-group info-list fade-in">
       <h3>Good to know</h3>
       <ul>
         <li>Montreal is French-first. Menus, signs, greetings in French. Everyone speaks English but open with "bonjour."</li>
@@ -2263,6 +2728,18 @@ img { max-width: 100%; }
   }
 
   /* ==========================================
+     TOAST HELPER
+     ========================================== */
+  function showToast(message) {
+    var toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('visible');
+    setTimeout(function() {
+      toast.classList.remove('visible');
+    }, 3500);
+  }
+
+  /* ==========================================
      AVATAR HELPERS
      ========================================== */
   function createAvatarEl(user, size) {
@@ -2272,7 +2749,9 @@ img { max-width: 100%; }
     el.style.width = size + 'px';
     el.style.height = size + 'px';
     el.style.fontSize = (size * 0.25) + 'px';
-    el.style.backgroundColor = user.color || '#999';
+    // Always use current color from allUsers
+    var currentColor = (allUsers[user.userId] && allUsers[user.userId].color) || user.color || '#999';
+    el.style.backgroundColor = currentColor;
     el.textContent = user.initials || '??';
     el.title = (user.firstName || '') + ' ' + (user.lastName || '');
     return el;
@@ -2311,6 +2790,7 @@ img { max-width: 100%; }
 
   function buildColorPicker() {
     colorPicker.innerHTML = '';
+    // Re-read allUsers to get latest taken colors
     var takenColors = {};
     Object.keys(allUsers).forEach(function(uid) {
       if (uid !== (currentUser && currentUser.userId)) {
@@ -2405,7 +2885,7 @@ img { max-width: 100%; }
 
     saveLocalUser(currentUser);
 
-    // Write to Firebase
+    // Write to Firebase (updates user record with current color)
     if (firebaseReady) {
       db.ref('users/' + userId).set({
         firstName: firstName,
@@ -2474,6 +2954,10 @@ img { max-width: 100%; }
     if (firebaseReady) {
       db.ref('users').on('value', function(snapshot) {
         allUsers = snapshot.val() || {};
+        // Ensure each user has a userId key for avatar rendering
+        Object.keys(allUsers).forEach(function(uid) {
+          allUsers[uid].userId = uid;
+        });
         // If we have a current user, check if modal needed
         if (!currentUser) {
           showModal(false);
@@ -2800,11 +3284,12 @@ img { max-width: 100%; }
             // For data-max="1" items, show as complete when anyone checks it
             var isComplete = (maxCount === 1 && count >= 1);
 
-            // Update checked state
+            // Update checked state — use CURRENT color from allUsers
             if (myChecked) {
               li.classList.add('checked');
               if (currentUser) {
-                li.querySelector('.check-box').style.color = currentUser.color;
+                var currentColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
+                li.querySelector('.check-box').style.color = currentColor;
                 li.querySelector('.check-text').style.opacity = '0.7';
               }
             } else {
@@ -2898,7 +3383,7 @@ img { max-width: 100%; }
   });
 
   /* ==========================================
-     PER-DAY COMMENTS (Firebase-backed)
+     PER-DAY COMMENTS (Firebase-backed, always visible input)
      ========================================== */
   function formatTimestamp(ts) {
     var d = new Date(ts);
@@ -2920,7 +3405,7 @@ img { max-width: 100%; }
       var section = document.createElement('div');
       section.className = 'day-comments-section';
 
-      var toggle = document.createElement('button');
+      var toggle = document.createElement('div');
       toggle.className = 'day-comments-toggle';
       toggle.innerHTML = '\uD83D\uDCAC <span class="comment-count-label">0 comments</span>';
 
@@ -2948,11 +3433,6 @@ img { max-width: 100%; }
       section.appendChild(toggle);
       section.appendChild(body);
       card.appendChild(section);
-
-      // Toggle expand/collapse
-      toggle.addEventListener('click', function() {
-        body.classList.toggle('open');
-      });
 
       // Post comment
       function postComment() {
@@ -3009,7 +3489,9 @@ img { max-width: 100%; }
 
             var avatar = document.createElement('div');
             avatar.className = 'comment-avatar';
-            avatar.style.backgroundColor = c.color || '#999';
+            // Use current color from allUsers
+            var commentColor = (allUsers[c.userId] && allUsers[c.userId].color) || c.color || '#999';
+            avatar.style.backgroundColor = commentColor;
             avatar.textContent = c.initials || '??';
 
             var content = document.createElement('div');
@@ -3036,6 +3518,20 @@ img { max-width: 100%; }
             content.appendChild(text);
             commentEl.appendChild(avatar);
             commentEl.appendChild(content);
+
+            // Delete button for own comments
+            if (currentUser && c.userId === currentUser.userId) {
+              var deleteBtn = document.createElement('button');
+              deleteBtn.className = 'comment-delete-btn';
+              deleteBtn.textContent = '\u00D7';
+              deleteBtn.title = 'Delete comment';
+              deleteBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                firebase.database().ref('comments/' + dayId + '/' + c.id).remove();
+              });
+              commentEl.appendChild(deleteBtn);
+            }
+
             commentsList.appendChild(commentEl);
           });
         });
@@ -3044,6 +3540,151 @@ img { max-width: 100%; }
   }
 
   initDayComments();
+
+  /* ==========================================
+     ASK CLAUDE BUTTON (per day card)
+     ========================================== */
+  function initAskClaude() {
+    var dayCards = document.querySelectorAll('.day-card[id]');
+
+    dayCards.forEach(function(card) {
+      var header = card.querySelector('.day-header');
+      var dayDate = header.querySelector('.day-date').textContent;
+      var dayTitle = card.querySelector('h3').textContent;
+
+      var btn = document.createElement('button');
+      btn.className = 'ask-claude-btn';
+      btn.innerHTML = '<span class="ask-claude-icon">\u2728</span> Ask Claude <span class="ask-claude-tooltip">Ask Claude about this day</span>';
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+
+        // Extract text content from the card
+        var cardText = dayDate + '\n' + dayTitle + '\n\n';
+        var paragraphs = card.querySelectorAll(':scope > p');
+        paragraphs.forEach(function(p) { cardText += p.textContent + '\n'; });
+        var listItems = card.querySelectorAll(':scope > ul > li');
+        listItems.forEach(function(li) { cardText += '- ' + li.textContent + '\n'; });
+        var mealTip = card.querySelector('.meal-tip');
+        if (mealTip) { cardText += '\n' + mealTip.textContent; }
+
+        var prompt = 'I\'m planning a group trip. Here\'s the itinerary for ' + dayDate + ':\n\n' + cardText + '\n\nI\'d like your help refining this. Ask me anything \u2014 restaurant alternatives, activity suggestions, timing, logistics, etc.';
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(prompt).then(function() {
+          showToast('Prompt copied! Paste it into Claude to get personalized suggestions.');
+        }).catch(function() {
+          showToast('Could not copy to clipboard. Try again.');
+        });
+
+        // Open Claude in new tab
+        window.open('https://claude.ai/new', '_blank');
+      });
+
+      header.appendChild(btn);
+    });
+  }
+
+  initAskClaude();
+
+  /* ==========================================
+     COLLABORATIVE NOTES (Firebase-backed)
+     ========================================== */
+  function initNotes() {
+    var rows = document.querySelectorAll('.notes-row[data-note-day]');
+
+    rows.forEach(function(row) {
+      var dayId = row.getAttribute('data-note-day');
+      var notesList = row.querySelector('.notes-list');
+      var input = row.querySelector('.note-input-row input');
+      var addBtn = row.querySelector('.note-input-row button');
+
+      function addNote() {
+        if (!currentUser) {
+          showModal(false);
+          return;
+        }
+        var text = input.value.trim();
+        if (!text) return;
+        if (!firebaseReady) return;
+
+        db.ref('notes/' + dayId).push({
+          userId: currentUser.userId,
+          name: currentUser.firstName + ' ' + currentUser.lastName,
+          initials: currentUser.initials,
+          color: currentUser.color,
+          text: text,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+
+        input.value = '';
+      }
+
+      addBtn.addEventListener('click', addNote);
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') addNote();
+      });
+
+      // Listen for notes
+      if (firebaseReady) {
+        db.ref('notes/' + dayId).on('value', function(snapshot) {
+          var data = snapshot.val() || {};
+          var notes = [];
+          Object.keys(data).forEach(function(key) {
+            var n = data[key];
+            n.id = key;
+            notes.push(n);
+          });
+          notes.sort(function(a, b) { return (a.timestamp || 0) - (b.timestamp || 0); });
+
+          notesList.innerHTML = '';
+          notes.forEach(function(n) {
+            var entry = document.createElement('div');
+            entry.className = 'note-entry';
+
+            var avatar = document.createElement('div');
+            avatar.className = 'note-avatar';
+            var noteColor = (allUsers[n.userId] && allUsers[n.userId].color) || n.color || '#999';
+            avatar.style.backgroundColor = noteColor;
+            avatar.textContent = n.initials || '??';
+
+            var body = document.createElement('div');
+            body.className = 'note-body';
+
+            var author = document.createElement('span');
+            author.className = 'note-author';
+            author.textContent = n.name || 'Unknown';
+
+            var text = document.createElement('span');
+            text.className = 'note-text';
+            text.textContent = ' ' + n.text;
+
+            body.appendChild(author);
+            body.appendChild(text);
+            entry.appendChild(avatar);
+            entry.appendChild(body);
+
+            // Delete button for own notes
+            if (currentUser && n.userId === currentUser.userId) {
+              var deleteBtn = document.createElement('button');
+              deleteBtn.className = 'note-delete-btn';
+              deleteBtn.textContent = '\u00D7';
+              deleteBtn.title = 'Delete note';
+              deleteBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                firebase.database().ref('notes/' + dayId + '/' + n.id).remove();
+              });
+              entry.appendChild(deleteBtn);
+            }
+
+            notesList.appendChild(entry);
+          });
+        });
+      }
+    });
+  }
+
+  initNotes();
 
 })();
 </script>
