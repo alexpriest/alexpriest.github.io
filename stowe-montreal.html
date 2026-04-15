@@ -29,6 +29,16 @@
   --border: #e8e5e0;
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Flexoki palette */
+  --fx-red: #D14D41;
+  --fx-orange: #DA702C;
+  --fx-yellow: #D0A215;
+  --fx-green: #879A39;
+  --fx-cyan: #3AA99F;
+  --fx-blue: #4385BE;
+  --fx-purple: #8B7EC8;
+  --fx-magenta: #CE5D97;
 }
 
 /* ============================================
@@ -562,19 +572,22 @@ img { max-width: 100%; }
 /* Emoji reactions row */
 .reactions {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.5rem;
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .reaction-btn {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.25rem;
   font-size: 0.82rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 20px;
+  padding: 0.4rem 0.6rem 0.35rem;
+  border-radius: 12px;
   border: 1px solid var(--border);
   background: transparent;
   cursor: pointer;
@@ -582,6 +595,7 @@ img { max-width: 100%; }
   font-family: var(--font-body);
   color: var(--text-muted);
   user-select: none;
+  min-width: 48px;
 }
 
 .reaction-btn:hover {
@@ -592,6 +606,12 @@ img { max-width: 100%; }
 .reaction-btn.active {
   background: #fef3ee;
   border-color: #e8c9b8;
+}
+
+.reaction-btn .reaction-top {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .reaction-btn .emoji {
@@ -608,6 +628,57 @@ img { max-width: 100%; }
   font-size: 0.75rem;
   font-weight: 600;
   min-width: 0.5em;
+}
+
+.reaction-avatars {
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+/* ============================================
+   Avatar Bubbles
+   ============================================ */
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  border: 2px solid var(--bg);
+  margin-left: -6px;
+  transition: transform 0.2s ease, opacity 0.3s ease;
+  flex-shrink: 0;
+}
+.avatar:first-child { margin-left: 0; }
+.avatar:hover { transform: scale(1.15); z-index: 2; }
+
+.avatar-overflow {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  border: 2px solid var(--bg);
+  margin-left: -6px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.avatar-row {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 /* ============================================
@@ -836,6 +907,7 @@ img { max-width: 100%; }
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
 }
 
 .vote-option-label {
@@ -843,12 +915,23 @@ img { max-width: 100%; }
   font-weight: 500;
 }
 
+.vote-option-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
 .vote-option-count {
   font-size: 0.85rem;
   font-weight: 600;
   opacity: 0.6;
-  min-width: 3em;
+  min-width: 1.5em;
   text-align: right;
+}
+
+.vote-avatars .avatar {
+  border-color: var(--primary);
 }
 
 .vote-note {
@@ -889,12 +972,21 @@ img { max-width: 100%; }
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.55;
-  padding: 0.3rem 0 0.3rem 1.75rem;
+  padding: 0.45rem 0 0.45rem 1.75rem;
   position: relative;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
-.check-group li::before {
-  content: '';
+.check-group li:hover {
+  background: rgba(0,0,0,0.02);
+}
+
+.check-group li .check-box {
   position: absolute;
   left: 0;
   top: 0.45rem;
@@ -902,6 +994,45 @@ img { max-width: 100%; }
   height: 14px;
   border-radius: 4px;
   border: 1.5px solid var(--border);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.check-group li.checked .check-box {
+  border-color: currentColor;
+  background: currentColor;
+}
+
+.check-group li.checked .check-box::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 3.5px;
+  width: 4px;
+  height: 7px;
+  border: solid #fff;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+
+.check-group li .check-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.check-group li .check-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.check-group li .check-tally {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-light);
+  white-space: nowrap;
 }
 
 /* ============================================
@@ -952,6 +1083,260 @@ img { max-width: 100%; }
 .leaflet-control-attribution { font-size: 0.65rem !important; }
 .leaflet-popup-content-wrapper { border-radius: 10px !important; box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important; }
 .leaflet-popup-content { font-family: var(--font-body) !important; font-size: 0.85rem !important; margin: 10px 14px !important; }
+
+/* ============================================
+   User Identity Modal
+   ============================================ */
+.user-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 47, 35, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.user-modal-overlay.visible {
+  opacity: 1;
+}
+
+.user-modal {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  padding: 2.5rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(20px) scale(0.96);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.user-modal-overlay.visible .user-modal {
+  transform: translateY(0) scale(1);
+}
+
+.user-modal h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+.user-modal .modal-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.user-modal .input-group {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.user-modal input[type="text"] {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-modal input[type="text"]:focus {
+  border-color: var(--stowe);
+  box-shadow: 0 0 0 3px rgba(45, 107, 74, 0.1);
+}
+
+.user-modal input[type="text"]::placeholder {
+  color: var(--text-light);
+}
+
+.color-picker-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-light);
+  margin-bottom: 0.75rem;
+}
+
+.color-picker {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.color-swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-body);
+  position: relative;
+}
+
+.color-swatch:hover:not(.taken) {
+  transform: scale(1.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.color-swatch.selected {
+  border-color: var(--primary);
+  transform: scale(1.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.color-swatch.taken {
+  opacity: 0.35;
+  cursor: default;
+  filter: grayscale(0.5);
+}
+
+.user-modal .submit-btn {
+  width: 100%;
+  padding: 0.85rem;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+}
+
+.user-modal .submit-btn:hover:not(:disabled) {
+  background: #253d2d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(26, 47, 35, 0.25);
+}
+
+.user-modal .submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   User Pill (top-right)
+   ============================================ */
+.user-pill-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9000;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem 0.4rem 0.4rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 100px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+}
+
+.user-pill:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.user-pill .pill-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.user-pill .pill-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.user-pill-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  padding: 0.4rem;
+  min-width: 160px;
+  opacity: 0;
+  transform: translateY(-4px) scale(0.96);
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.user-pill-dropdown.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.user-pill-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.user-pill-dropdown button:hover {
+  background: var(--bg);
+}
 
 /* ============================================
    Responsive
@@ -1017,10 +1402,54 @@ img { max-width: 100%; }
   .vote-section {
     padding: 3rem 1rem;
   }
+
+  .user-modal {
+    padding: 2rem 1.5rem;
+  }
+
+  .user-modal .input-group {
+    flex-direction: column;
+  }
+
+  .color-swatch {
+    width: 40px;
+    height: 40px;
+  }
 }
 </style>
 </head>
 <body>
+
+<!-- ============================================
+     USER IDENTITY MODAL (hidden by default)
+     ============================================ -->
+<div class="user-modal-overlay" id="userModal">
+  <div class="user-modal">
+    <h2>Who's joining the trip?</h2>
+    <p class="modal-subtitle">Pick your name and color so everyone can see your reactions and votes.</p>
+    <div class="input-group">
+      <input type="text" id="modalFirstName" placeholder="First name" maxlength="20" autocomplete="given-name">
+      <input type="text" id="modalLastName" placeholder="Last name" maxlength="20" autocomplete="family-name">
+    </div>
+    <div class="color-picker-label">Choose your color</div>
+    <div class="color-picker" id="colorPicker"></div>
+    <button class="submit-btn" id="modalSubmit" disabled>I'm in</button>
+  </div>
+</div>
+
+<!-- ============================================
+     USER PILL (top-right, shown when signed in)
+     ============================================ -->
+<div class="user-pill-container" id="userPillContainer" style="display:none;">
+  <div class="user-pill" id="userPill">
+    <div class="pill-avatar" id="pillAvatar"></div>
+    <span class="pill-name" id="pillName"></span>
+  </div>
+  <div class="user-pill-dropdown" id="userDropdown">
+    <button id="btnChangeName">Change name</button>
+    <button id="btnSwitchColor">Switch color</button>
+  </div>
+</div>
 
 <!-- ============================================
      HERO
@@ -1356,74 +1785,104 @@ img { max-width: 100%; }
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Swimming holes + waterfalls</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="biodome">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Biodome with the kids</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="hen-of-the-wood">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Hen of the Wood dinner</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="bota-bota">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Bota Bota floating spa</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="cocktail-bars">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Montreal cocktail bars</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="jean-talon">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Jean-Talon Market</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="schwartz">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Schwartz's smoked meat</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="smugglers-notch">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Scrambling at Smugglers' Notch</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="old-montreal">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Old Montreal cobblestones</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
       <div class="vote-option" data-vote="lake-elmore">
         <div class="vote-bar"></div>
         <div class="vote-option-content">
           <span class="vote-option-label">Lake Elmore beach day</span>
-          <span class="vote-option-count">0</span>
+          <div class="vote-option-right">
+            <div class="vote-avatars avatar-row"></div>
+            <span class="vote-option-count">0</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="vote-note">Votes are stored in your browser &mdash; each person sees their own picks.</div>
+    <div class="vote-note">Votes sync in real-time &mdash; everyone sees who picked what.</div>
   </div>
 </section>
 
@@ -1436,33 +1895,33 @@ img { max-width: 100%; }
   <div class="section-divider"></div>
 
   <div class="checklist-grid">
-    <div class="check-group fade-in">
+    <div class="check-group fade-in" data-checklist="before">
       <h3>Before you go</h3>
       <ul>
-        <li>Valid passports for all 7 (including both kids &mdash; check expiry dates now)</li>
-        <li>Book Stowe house (VRBO/Airbnb &mdash; June 11-15)</li>
-        <li>Book Montreal apartment (Airbnb &mdash; June 15-19)</li>
-        <li>Book Hen of the Wood dinner (Waterbury &mdash; June 13)</li>
-        <li>Book Bota Bota spa (June 17 afternoon)</li>
-        <li>Book Montreal dinner (Joe Beef / Mon Lapin / Lawrence &mdash; June 17 or 18)</li>
-        <li>Rent car large enough for 7 + luggage (minivan or large SUV)</li>
-        <li>Book flights home from YUL (June 19)</li>
-        <li>Car seats: 2 (bring your own or rent with car)</li>
+        <li data-item="passports"><span class="check-box"></span><span class="check-text">Valid passports for all 7 (including both kids &mdash; check expiry dates now)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-stowe"><span class="check-box"></span><span class="check-text">Book Stowe house (VRBO/Airbnb &mdash; June 11-15)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-montreal"><span class="check-box"></span><span class="check-text">Book Montreal apartment (Airbnb &mdash; June 15-19)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-hen"><span class="check-box"></span><span class="check-text">Book Hen of the Wood dinner (Waterbury &mdash; June 13)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-bota"><span class="check-box"></span><span class="check-text">Book Bota Bota spa (June 17 afternoon)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-mtl-dinner"><span class="check-box"></span><span class="check-text">Book Montreal dinner (Joe Beef / Mon Lapin / Lawrence &mdash; June 17 or 18)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="rent-car"><span class="check-box"></span><span class="check-text">Rent car large enough for 7 + luggage (minivan or large SUV)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-flights"><span class="check-box"></span><span class="check-text">Book flights home from YUL (June 19)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="car-seats"><span class="check-box"></span><span class="check-text">Car seats: 2 (bring your own or rent with car)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
       </ul>
     </div>
 
-    <div class="check-group fade-in">
+    <div class="check-group fade-in" data-checklist="packing">
       <h3>Packing notes</h3>
       <ul>
-        <li>Layers &mdash; Stowe mornings are 55&deg;F, afternoons 70&deg;F+</li>
-        <li>Swimsuits + towels for swimming holes and Lake Elmore</li>
-        <li>Water shoes for rocky river bottoms</li>
-        <li>Rain jackets (Vermont weather is unpredictable)</li>
-        <li>Stroller for the 2yo (Rec Path is paved)</li>
-        <li>Scooter or balance bike for the 4yo (Rec Path)</li>
-        <li>Baby carrier/hiking backpack for waterfall hikes</li>
-        <li>Sunscreen + bug spray (early June = blackfly season in VT)</li>
-        <li>CAD cash not strictly needed &mdash; tap-to-pay works everywhere in Montreal</li>
+        <li data-item="layers"><span class="check-box"></span><span class="check-text">Layers &mdash; Stowe mornings are 55&deg;F, afternoons 70&deg;F+</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="swimsuits"><span class="check-box"></span><span class="check-text">Swimsuits + towels for swimming holes and Lake Elmore</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="water-shoes"><span class="check-box"></span><span class="check-text">Water shoes for rocky river bottoms</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="rain-jackets"><span class="check-box"></span><span class="check-text">Rain jackets (Vermont weather is unpredictable)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="stroller"><span class="check-box"></span><span class="check-text">Stroller for the 2yo (Rec Path is paved)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="scooter"><span class="check-box"></span><span class="check-text">Scooter or balance bike for the 4yo (Rec Path)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="carrier"><span class="check-box"></span><span class="check-text">Baby carrier/hiking backpack for waterfall hikes</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="sunscreen"><span class="check-box"></span><span class="check-text">Sunscreen + bug spray (early June = blackfly season in VT)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="cad-cash"><span class="check-box"></span><span class="check-text">CAD cash not strictly needed &mdash; tap-to-pay works everywhere in Montreal</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
       </ul>
     </div>
 
@@ -1537,14 +1996,321 @@ img { max-width: 100%; }
      SCRIPTS
      ============================================ -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.12.0/firebase-database-compat.js"></script>
 <script>
 (function() {
   'use strict';
 
   /* ==========================================
+     FLEXOKI COLORS
+     ========================================== */
+  var FLEXOKI_COLORS = [
+    { name: 'Red',     hex: '#D14D41' },
+    { name: 'Orange',  hex: '#DA702C' },
+    { name: 'Yellow',  hex: '#D0A215' },
+    { name: 'Green',   hex: '#879A39' },
+    { name: 'Cyan',    hex: '#3AA99F' },
+    { name: 'Blue',    hex: '#4385BE' },
+    { name: 'Purple',  hex: '#8B7EC8' },
+    { name: 'Magenta', hex: '#CE5D97' }
+  ];
+
+  /* ==========================================
+     FIREBASE INIT
+     ========================================== */
+  var db = null;
+  var firebaseReady = false;
+
+  try {
+    var firebaseConfig = {
+      apiKey: "AIzaSyCBEawEzVhdztWbYnJfc1R9qEe8zvvFyAE",
+      authDomain: "stoweaways-2026.firebaseapp.com",
+      databaseURL: "https://stoweaways-2026-default-rtdb.firebaseio.com",
+      projectId: "stoweaways-2026",
+      storageBucket: "stoweaways-2026.firebasestorage.app",
+      messagingSenderId: "480201563934",
+      appId: "1:480201563934:web:1010e6e1206954870bf30f"
+    };
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    firebaseReady = true;
+  } catch (e) {
+    console.warn('Firebase failed to initialize, falling back to local-only mode:', e);
+  }
+
+  /* ==========================================
+     USER IDENTITY
+     ========================================== */
+  var currentUser = null;
+  var allUsers = {};
+
+  function loadLocalUser() {
+    try {
+      var stored = localStorage.getItem('stowe-mtl-user');
+      if (stored) {
+        currentUser = JSON.parse(stored);
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  function saveLocalUser(user) {
+    try {
+      localStorage.setItem('stowe-mtl-user', JSON.stringify(user));
+    } catch (e) {}
+  }
+
+  function generateUserId() {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
+  function getInitials(first, last) {
+    return ((first || '').charAt(0) + (last || '').charAt(0)).toUpperCase();
+  }
+
+  /* ==========================================
+     AVATAR HELPERS
+     ========================================== */
+  function createAvatarEl(user, size) {
+    size = size || 24;
+    var el = document.createElement('span');
+    el.className = 'avatar';
+    el.style.width = size + 'px';
+    el.style.height = size + 'px';
+    el.style.fontSize = (size * 0.25) + 'px';
+    el.style.backgroundColor = user.color || '#999';
+    el.textContent = user.initials || '??';
+    el.title = (user.firstName || '') + ' ' + (user.lastName || '');
+    return el;
+  }
+
+  function renderAvatarRow(container, userIds, maxShow) {
+    maxShow = maxShow || 3;
+    container.innerHTML = '';
+    var ids = Object.keys(userIds || {});
+    var shown = 0;
+    for (var i = 0; i < ids.length && shown < maxShow; i++) {
+      var u = allUsers[ids[i]];
+      if (u) {
+        container.appendChild(createAvatarEl(u));
+        shown++;
+      }
+    }
+    if (ids.length > maxShow) {
+      var overflow = document.createElement('span');
+      overflow.className = 'avatar-overflow';
+      overflow.textContent = '+' + (ids.length - maxShow);
+      container.appendChild(overflow);
+    }
+  }
+
+  /* ==========================================
+     USER MODAL
+     ========================================== */
+  var modalOverlay = document.getElementById('userModal');
+  var modalFirstName = document.getElementById('modalFirstName');
+  var modalLastName = document.getElementById('modalLastName');
+  var colorPicker = document.getElementById('colorPicker');
+  var modalSubmit = document.getElementById('modalSubmit');
+  var selectedColor = null;
+  var isEditingUser = false;
+
+  function buildColorPicker() {
+    colorPicker.innerHTML = '';
+    var takenColors = {};
+    Object.keys(allUsers).forEach(function(uid) {
+      if (uid !== (currentUser && currentUser.userId)) {
+        takenColors[allUsers[uid].color] = allUsers[uid];
+      }
+    });
+
+    FLEXOKI_COLORS.forEach(function(c) {
+      var swatch = document.createElement('div');
+      swatch.className = 'color-swatch';
+      swatch.style.backgroundColor = c.hex;
+      swatch.setAttribute('data-color', c.hex);
+      swatch.title = c.name;
+
+      var takenBy = takenColors[c.hex];
+      if (takenBy) {
+        swatch.classList.add('taken');
+        swatch.textContent = takenBy.initials || '';
+        swatch.title = c.name + ' (taken by ' + (takenBy.firstName || '') + ')';
+      } else {
+        swatch.addEventListener('click', function() {
+          document.querySelectorAll('.color-swatch.selected').forEach(function(s) {
+            s.classList.remove('selected');
+          });
+          swatch.classList.add('selected');
+          selectedColor = c.hex;
+          validateModal();
+        });
+      }
+
+      // Pre-select current user's color when editing
+      if (currentUser && currentUser.color === c.hex && !takenBy) {
+        swatch.classList.add('selected');
+        selectedColor = c.hex;
+      }
+
+      colorPicker.appendChild(swatch);
+    });
+  }
+
+  function validateModal() {
+    var firstName = modalFirstName.value.trim();
+    var lastName = modalLastName.value.trim();
+    modalSubmit.disabled = !(firstName && lastName && selectedColor);
+  }
+
+  modalFirstName.addEventListener('input', validateModal);
+  modalLastName.addEventListener('input', validateModal);
+
+  function showModal(editing) {
+    isEditingUser = !!editing;
+    if (currentUser && editing) {
+      modalFirstName.value = currentUser.firstName || '';
+      modalLastName.value = currentUser.lastName || '';
+      selectedColor = currentUser.color || null;
+    } else {
+      modalFirstName.value = '';
+      modalLastName.value = '';
+      selectedColor = null;
+    }
+    buildColorPicker();
+    validateModal();
+    modalOverlay.style.display = 'flex';
+    requestAnimationFrame(function() {
+      modalOverlay.classList.add('visible');
+    });
+    modalFirstName.focus();
+  }
+
+  function hideModal() {
+    modalOverlay.classList.remove('visible');
+    setTimeout(function() {
+      modalOverlay.style.display = 'none';
+    }, 400);
+  }
+
+  modalSubmit.addEventListener('click', function() {
+    var firstName = modalFirstName.value.trim();
+    var lastName = modalLastName.value.trim();
+    if (!firstName || !lastName || !selectedColor) return;
+
+    var userId = (currentUser && currentUser.userId) || generateUserId();
+    var initials = getInitials(firstName, lastName);
+
+    currentUser = {
+      userId: userId,
+      firstName: firstName,
+      lastName: lastName,
+      initials: initials,
+      color: selectedColor
+    };
+
+    saveLocalUser(currentUser);
+
+    // Write to Firebase
+    if (firebaseReady) {
+      db.ref('users/' + userId).set({
+        firstName: firstName,
+        lastName: lastName,
+        initials: initials,
+        color: selectedColor
+      });
+    }
+
+    hideModal();
+    updateUserPill();
+  });
+
+  // Enter key submits modal
+  [modalFirstName, modalLastName].forEach(function(input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !modalSubmit.disabled) {
+        modalSubmit.click();
+      }
+    });
+  });
+
+  /* ==========================================
+     USER PILL
+     ========================================== */
+  var pillContainer = document.getElementById('userPillContainer');
+  var pillAvatar = document.getElementById('pillAvatar');
+  var pillName = document.getElementById('pillName');
+  var userPill = document.getElementById('userPill');
+  var userDropdown = document.getElementById('userDropdown');
+
+  function updateUserPill() {
+    if (!currentUser) {
+      pillContainer.style.display = 'none';
+      return;
+    }
+    pillContainer.style.display = 'block';
+    pillAvatar.style.backgroundColor = currentUser.color;
+    pillAvatar.textContent = currentUser.initials;
+    pillName.textContent = currentUser.firstName;
+  }
+
+  userPill.addEventListener('click', function(e) {
+    e.stopPropagation();
+    userDropdown.classList.toggle('open');
+  });
+
+  document.addEventListener('click', function() {
+    userDropdown.classList.remove('open');
+  });
+
+  document.getElementById('btnChangeName').addEventListener('click', function() {
+    userDropdown.classList.remove('open');
+    showModal(true);
+  });
+
+  document.getElementById('btnSwitchColor').addEventListener('click', function() {
+    userDropdown.classList.remove('open');
+    showModal(true);
+  });
+
+  /* ==========================================
+     FIREBASE: LOAD USERS + SHOW MODAL
+     ========================================== */
+  function initUserSystem() {
+    if (firebaseReady) {
+      db.ref('users').on('value', function(snapshot) {
+        allUsers = snapshot.val() || {};
+        // If we have a current user, check if modal needed
+        if (!currentUser) {
+          showModal(false);
+        } else {
+          buildColorPicker(); // Refresh taken colors
+        }
+      }, function(err) {
+        console.warn('Firebase users read failed:', err);
+        if (!currentUser) showModal(false);
+      });
+    } else {
+      if (!currentUser) showModal(false);
+    }
+  }
+
+  var hasLocalUser = loadLocalUser();
+  if (hasLocalUser) {
+    updateUserPill();
+  }
+
+  // Delay init slightly to let Firebase load
+  setTimeout(function() {
+    initUserSystem();
+  }, 100);
+
+  /* ==========================================
      LEAFLET MAP
      ========================================== */
-  const map = L.map('map', {
+  var map = L.map('map', {
     zoomControl: true,
     scrollWheelZoom: false
   }).setView([43.5, -73.2], 6);
@@ -1556,15 +2322,15 @@ img { max-width: 100%; }
   }).addTo(map);
 
   // Route polylines
-  const leg1Coords = [
+  var leg1Coords = [
     [41.034,-73.763],[41.3,-73.6],[42.0,-73.3],[42.7,-73.1],
     [43.08,-73.78],[43.3,-72.9],[44.0,-72.8],[44.338,-72.756],[44.465,-72.687]
   ];
-  const leg2Coords = [
+  var leg2Coords = [
     [44.465,-72.687],[44.476,-73.212],[44.8,-72.8],
     [45.0,-73.1],[45.3,-73.3],[45.501,-73.567]
   ];
-  const toAirportCoords = [
+  var toAirportCoords = [
     [45.501,-73.567],[45.457,-73.749]
   ];
 
@@ -1573,7 +2339,7 @@ img { max-width: 100%; }
   L.polyline(toAirportCoords, { color: '#6b6b6b', weight: 2, opacity: 0.4, dashArray: '6,8' }).addTo(map);
 
   // Major markers
-  const majorSpots = [
+  var majorSpots = [
     { coords: [41.034, -73.763], label: 'White Plains, NY', sub: 'Starting point', icon: '\u{1F697}', size: 1.4 },
     { coords: [44.465, -72.687], label: 'Stowe, VT', sub: 'June 11\u201315', icon: '\u{1F3D4}\uFE0F', size: 1.4 },
     { coords: [45.501, -73.567], label: 'Montreal', sub: 'June 15\u201319', icon: '\u{1F1E8}\u{1F1E6}', size: 1.4 },
@@ -1623,9 +2389,8 @@ img { max-width: 100%; }
 
   // Fade-in observer for general elements
   var fadeObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry, i) {
+    entries.forEach(function(entry) {
       if (entry.isIntersecting) {
-        // Stagger siblings
         var parent = entry.target.parentElement;
         var siblings = parent.querySelectorAll('.fade-in');
         var index = Array.prototype.indexOf.call(siblings, entry.target);
@@ -1645,12 +2410,10 @@ img { max-width: 100%; }
   var dayObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
-        // Fade in
         if (!entry.target.classList.contains('visible')) {
           entry.target.classList.add('visible');
         }
 
-        // Map sync: fly to this day's location
         var card = entry.target;
         var dayId = card.getAttribute('id');
         if (dayId !== activeDay) {
@@ -1669,7 +2432,7 @@ img { max-width: 100%; }
   dayCards.forEach(function(el) { dayObserver.observe(el); });
 
   /* ==========================================
-     EMOJI REACTIONS
+     EMOJI REACTIONS (Firebase-backed)
      ========================================== */
   var EMOJIS = [
     { emoji: '\u2764\uFE0F', name: 'heart' },
@@ -1678,49 +2441,57 @@ img { max-width: 100%; }
     { emoji: '\uD83D\uDE0D', name: 'love' }
   ];
 
-  function getReactions() {
-    try {
-      return JSON.parse(localStorage.getItem('stowe-mtl-reactions') || '{}');
-    } catch(e) { return {}; }
-  }
-
-  function saveReactions(data) {
-    try {
-      localStorage.setItem('stowe-mtl-reactions', JSON.stringify(data));
-    } catch(e) {}
-  }
-
   document.querySelectorAll('.reactions').forEach(function(container) {
-    var key = container.getAttribute('data-key');
-    var reactions = getReactions();
+    var dayKey = container.getAttribute('data-key');
 
     EMOJIS.forEach(function(e) {
-      var rKey = key + '-' + e.name;
-      var count = (reactions[rKey] && reactions[rKey].count) || 0;
-      var isActive = (reactions[rKey] && reactions[rKey].active) || false;
-
       var btn = document.createElement('button');
-      btn.className = 'reaction-btn' + (isActive ? ' active' : '');
-      btn.innerHTML = '<span class="emoji">' + e.emoji + '</span><span class="count">' + (count > 0 ? count : '') + '</span>';
+      btn.className = 'reaction-btn';
+      btn.innerHTML = '<div class="reaction-top"><span class="emoji">' + e.emoji + '</span><span class="count"></span></div><div class="reaction-avatars avatar-row"></div>';
       btn.setAttribute('aria-label', 'React with ' + e.name);
 
-      btn.addEventListener('click', function() {
-        var data = getReactions();
-        if (!data[rKey]) data[rKey] = { count: 0, active: false };
+      var countEl = btn.querySelector('.count');
+      var avatarsEl = btn.querySelector('.reaction-avatars');
+      var reactionRef = firebaseReady ? db.ref('reactions/' + dayKey + '/' + e.name) : null;
 
-        if (data[rKey].active) {
-          data[rKey].count = Math.max(0, data[rKey].count - 1);
-          data[rKey].active = false;
-          btn.classList.remove('active');
-        } else {
-          data[rKey].count += 1;
-          data[rKey].active = true;
-          btn.classList.add('active');
+      // Real-time listener
+      if (reactionRef) {
+        reactionRef.on('value', function(snapshot) {
+          var data = snapshot.val() || {};
+          var userIds = Object.keys(data);
+          var count = userIds.length;
+          countEl.textContent = count > 0 ? count : '';
+
+          // Check if current user reacted
+          if (currentUser && data[currentUser.userId]) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+
+          // Render avatar dots
+          renderAvatarRow(avatarsEl, data, 3);
+        }, function(err) {
+          console.warn('Reaction listener error:', err);
+        });
+      }
+
+      btn.addEventListener('click', function() {
+        if (!currentUser) {
+          showModal(false);
+          return;
         }
 
-        var countEl = btn.querySelector('.count');
-        countEl.textContent = data[rKey].count > 0 ? data[rKey].count : '';
-        saveReactions(data);
+        if (reactionRef) {
+          var userRef = reactionRef.child(currentUser.userId);
+          userRef.once('value').then(function(snap) {
+            if (snap.exists()) {
+              userRef.remove();
+            } else {
+              userRef.set(true);
+            }
+          });
+        }
 
         // Bounce animation
         btn.classList.add('bounce');
@@ -1732,68 +2503,154 @@ img { max-width: 100%; }
   });
 
   /* ==========================================
-     VOTING
+     VOTING (Firebase-backed)
      ========================================== */
-  function getVotes() {
-    try {
-      return JSON.parse(localStorage.getItem('stowe-mtl-votes') || '{}');
-    } catch(e) { return {}; }
-  }
+  function updateVoteBarsFromFirebase() {
+    if (!firebaseReady) return;
 
-  function saveVotes(data) {
-    try {
-      localStorage.setItem('stowe-mtl-votes', JSON.stringify(data));
-    } catch(e) {}
-  }
+    var votesRef = db.ref('votes');
+    votesRef.on('value', function(snapshot) {
+      var allVotes = snapshot.val() || {};
+      var options = document.querySelectorAll('.vote-option');
+      var maxCount = 0;
 
-  function updateVoteBars() {
-    var votes = getVotes();
-    var options = document.querySelectorAll('.vote-option');
-    var maxCount = 0;
+      // First pass: count
+      options.forEach(function(opt) {
+        var key = opt.getAttribute('data-vote');
+        var voters = allVotes[key] || {};
+        var count = Object.keys(voters).length;
+        if (count > maxCount) maxCount = count;
+      });
 
-    options.forEach(function(opt) {
-      var key = opt.getAttribute('data-vote');
-      var count = (votes[key] && votes[key].count) || 0;
-      if (count > maxCount) maxCount = count;
-    });
+      // Second pass: render
+      options.forEach(function(opt) {
+        var key = opt.getAttribute('data-vote');
+        var voters = allVotes[key] || {};
+        var count = Object.keys(voters).length;
+        var pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
+        var isVoted = currentUser && voters[currentUser.userId];
 
-    options.forEach(function(opt) {
-      var key = opt.getAttribute('data-vote');
-      var count = (votes[key] && votes[key].count) || 0;
-      var isVoted = (votes[key] && votes[key].voted) || false;
-      var pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
+        opt.querySelector('.vote-bar').style.width = pct + '%';
+        opt.querySelector('.vote-option-count').textContent = count > 0 ? count : '0';
 
-      opt.querySelector('.vote-bar').style.width = pct + '%';
-      opt.querySelector('.vote-option-count').textContent = count > 0 ? count : '0';
-      if (isVoted) {
-        opt.classList.add('voted');
-      } else {
-        opt.classList.remove('voted');
-      }
+        if (isVoted) {
+          opt.classList.add('voted');
+        } else {
+          opt.classList.remove('voted');
+        }
+
+        // Render voter avatars
+        var avatarContainer = opt.querySelector('.vote-avatars');
+        if (avatarContainer) {
+          renderAvatarRow(avatarContainer, voters, 3);
+        }
+      });
+    }, function(err) {
+      console.warn('Votes listener error:', err);
     });
   }
 
   document.querySelectorAll('.vote-option').forEach(function(opt) {
     opt.addEventListener('click', function() {
-      var key = opt.getAttribute('data-vote');
-      var votes = getVotes();
-      if (!votes[key]) votes[key] = { count: 0, voted: false };
-
-      if (votes[key].voted) {
-        votes[key].count = Math.max(0, votes[key].count - 1);
-        votes[key].voted = false;
-      } else {
-        votes[key].count += 1;
-        votes[key].voted = true;
+      if (!currentUser) {
+        showModal(false);
+        return;
       }
+      if (!firebaseReady) return;
 
-      saveVotes(votes);
-      updateVoteBars();
+      var key = opt.getAttribute('data-vote');
+      var userVoteRef = db.ref('votes/' + key + '/' + currentUser.userId);
+
+      userVoteRef.once('value').then(function(snap) {
+        if (snap.exists()) {
+          userVoteRef.remove();
+        } else {
+          userVoteRef.set(true);
+        }
+      });
     });
   });
 
-  // Initial render
-  updateVoteBars();
+  updateVoteBarsFromFirebase();
+
+  /* ==========================================
+     CHECKLISTS (Firebase-backed)
+     ========================================== */
+  function initChecklists() {
+    var checklistGroups = document.querySelectorAll('.check-group[data-checklist]');
+
+    checklistGroups.forEach(function(group) {
+      var items = group.querySelectorAll('li[data-item]');
+
+      items.forEach(function(li) {
+        var itemId = li.getAttribute('data-item');
+        var checkRef = firebaseReady ? db.ref('checklist/' + itemId) : null;
+        var tallyEl = li.querySelector('.check-tally');
+        var avatarContainer = li.querySelector('.avatar-row');
+
+        // Real-time listener
+        if (checkRef) {
+          checkRef.on('value', function(snapshot) {
+            var data = snapshot.val() || {};
+            var userIds = Object.keys(data);
+            var count = userIds.length;
+            var myChecked = currentUser && data[currentUser.userId];
+
+            // Update tally
+            if (count > 0) {
+              tallyEl.textContent = count + '/7';
+            } else {
+              tallyEl.textContent = '';
+            }
+
+            // Update checked state
+            if (myChecked) {
+              li.classList.add('checked');
+              if (currentUser) {
+                li.querySelector('.check-box').style.color = currentUser.color;
+                li.style.borderLeft = '3px solid ' + currentUser.color;
+                li.style.paddingLeft = 'calc(1.75rem - 3px)';
+                li.style.background = currentUser.color + '08';
+              }
+            } else {
+              li.classList.remove('checked');
+              li.querySelector('.check-box').style.color = '';
+              li.style.borderLeft = '';
+              li.style.paddingLeft = '';
+              li.style.background = '';
+            }
+
+            // Render avatar dots
+            if (avatarContainer) {
+              renderAvatarRow(avatarContainer, data, 3);
+            }
+          }, function(err) {
+            console.warn('Checklist listener error:', err);
+          });
+        }
+
+        // Click handler
+        li.addEventListener('click', function() {
+          if (!currentUser) {
+            showModal(false);
+            return;
+          }
+          if (!checkRef) return;
+
+          var userCheckRef = checkRef.child(currentUser.userId);
+          userCheckRef.once('value').then(function(snap) {
+            if (snap.exists()) {
+              userCheckRef.remove();
+            } else {
+              userCheckRef.set(true);
+            }
+          });
+        });
+      });
+    });
+  }
+
+  initChecklists();
 
 })();
 </script>
