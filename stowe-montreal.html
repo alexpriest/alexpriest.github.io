@@ -2779,10 +2779,16 @@ img { max-width: 100%; }
   function buildColorPicker() {
     colorPicker.innerHTML = '';
     // Re-read allUsers to get latest taken colors
+    // Exclude current user AND any user matching the name in the inputs
+    var inputFirst = modalFirstName.value.trim();
+    var inputLast = modalLastName.value.trim();
     var takenColors = {};
     Object.keys(allUsers).forEach(function(uid) {
-      if (uid !== (currentUser && currentUser.userId)) {
-        takenColors[allUsers[uid].color] = allUsers[uid];
+      var u = allUsers[uid];
+      var isCurrentUser = currentUser && uid === currentUser.userId;
+      var isNameMatch = inputFirst && inputLast && u.firstName === inputFirst && u.lastName === inputLast;
+      if (!isCurrentUser && !isNameMatch) {
+        takenColors[u.color] = u;
       }
     });
 
@@ -2825,12 +2831,12 @@ img { max-width: 100%; }
     modalSubmit.disabled = !(firstName && lastName && selectedColor);
   }
 
-  modalFirstName.addEventListener('input', validateModal);
-  modalLastName.addEventListener('input', validateModal);
+  modalFirstName.addEventListener('input', function() { validateModal(); buildColorPicker(); });
+  modalLastName.addEventListener('input', function() { validateModal(); buildColorPicker(); });
 
   function showModal(editing) {
     isEditingUser = !!editing;
-    if (currentUser && editing) {
+    if (currentUser) {
       modalFirstName.value = currentUser.firstName || '';
       modalLastName.value = currentUser.lastName || '';
       selectedColor = currentUser.color || null;
@@ -2860,7 +2866,19 @@ img { max-width: 100%; }
     var lastName = modalLastName.value.trim();
     if (!firstName || !lastName || !selectedColor) return;
 
-    var userId = (currentUser && currentUser.userId) || generateUserId();
+    // Try to reclaim existing Firebase user with matching name
+    var userId = (currentUser && currentUser.userId) || null;
+    if (!userId) {
+      var uids = Object.keys(allUsers);
+      for (var i = 0; i < uids.length; i++) {
+        var u = allUsers[uids[i]];
+        if (u.firstName === firstName && u.lastName === lastName) {
+          userId = uids[i];
+          break;
+        }
+      }
+    }
+    if (!userId) userId = generateUserId();
     var initials = getInitials(firstName, lastName);
 
     currentUser = {
