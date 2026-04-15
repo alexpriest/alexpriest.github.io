@@ -1373,7 +1373,69 @@ img { max-width: 100%; }
   font-size: 0.88rem;
   color: var(--text-muted);
   text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.name-picker {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
   margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.name-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.name-option:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+.name-option.selected {
+  background: rgba(26, 47, 35, 0.08);
+}
+
+.name-option-initials {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: #bbb;
+  font-family: var(--font-body);
+  transition: all 0.2s ease;
+  border: 3px solid transparent;
+}
+
+.name-option.selected .name-option-initials {
+  border-color: var(--primary);
+  transform: scale(1.1);
+}
+
+.name-option-name {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+}
+
+.name-option.selected .name-option-name {
+  color: var(--primary);
+  font-weight: 600;
 }
 
 .user-modal .input-group {
@@ -1975,19 +2037,16 @@ img { max-width: 100%; }
 <div class="user-modal-overlay" id="userModal">
   <div class="user-modal">
     <h2>Who's joining the trip?</h2>
-    <p class="modal-subtitle">Pick your name and a color.</p>
-    <div class="input-group" style="flex-direction:column">
-      <select id="modalNameSelect" style="width:100%;padding:0.85rem 1rem;border:1px solid var(--border);border-radius:10px;font-family:var(--font-body);font-size:0.95rem;background:rgba(255,255,255,0.8);color:var(--text);appearance:none;-webkit-appearance:none;background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>&quot;);background-repeat:no-repeat;background-position:right 1rem center;cursor:pointer;">
-        <option value="" disabled selected>Select your name...</option>
-        <option value="Alex|Priest">Alex Priest</option>
-        <option value="Miranda|Gale">Miranda Gale</option>
-        <option value="AJ|Adams">AJ Adams</option>
-        <option value="Ashley|Adams">Ashley Adams</option>
-        <option value="Jack|Villani">Jack Villani</option>
-      </select>
-      <input type="hidden" id="modalFirstName">
-      <input type="hidden" id="modalLastName">
+    <p class="modal-subtitle">That's you, right?</p>
+    <div class="name-picker" id="namePicker">
+      <button class="name-option" data-first="Alex" data-last="Priest"><span class="name-option-initials">AP</span><span class="name-option-name">Alex</span></button>
+      <button class="name-option" data-first="Miranda" data-last="Gale"><span class="name-option-initials">MG</span><span class="name-option-name">Miranda</span></button>
+      <button class="name-option" data-first="AJ" data-last="Adams"><span class="name-option-initials">AA</span><span class="name-option-name">AJ</span></button>
+      <button class="name-option" data-first="Ashley" data-last="Adams"><span class="name-option-initials">AA</span><span class="name-option-name">Ashley</span></button>
+      <button class="name-option" data-first="Jack" data-last="Villani"><span class="name-option-initials">JV</span><span class="name-option-name">Jack</span></button>
     </div>
+    <input type="hidden" id="modalFirstName">
+    <input type="hidden" id="modalLastName">
     <div class="color-picker-label">Choose your color</div>
     <div class="color-picker" id="colorPicker"></div>
     <button class="submit-btn" id="modalSubmit" disabled>I'm in</button>
@@ -2839,29 +2898,34 @@ img { max-width: 100%; }
     modalSubmit.disabled = !(firstName && lastName && selectedColor);
   }
 
-  var modalNameSelect = document.getElementById('modalNameSelect');
-  modalNameSelect.addEventListener('change', function() {
-    var parts = this.value.split('|');
-    modalFirstName.value = parts[0] || '';
-    modalLastName.value = parts[1] || '';
-    validateModal();
-    buildColorPicker();
+  var nameOptions = document.querySelectorAll('.name-option');
+  nameOptions.forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      nameOptions.forEach(function(o) { o.classList.remove('selected'); });
+      opt.classList.add('selected');
+      modalFirstName.value = opt.getAttribute('data-first');
+      modalLastName.value = opt.getAttribute('data-last');
+      validateModal();
+      buildColorPicker();
+    });
   });
-  // Keep old listeners as no-ops for hidden fields
-  modalFirstName.addEventListener('input', function() { validateModal(); buildColorPicker(); });
-  modalLastName.addEventListener('input', function() { validateModal(); buildColorPicker(); });
 
   function showModal(editing) {
     isEditingUser = !!editing;
+    nameOptions.forEach(function(o) { o.classList.remove('selected'); });
     if (currentUser) {
       modalFirstName.value = currentUser.firstName || '';
       modalLastName.value = currentUser.lastName || '';
-      modalNameSelect.value = (currentUser.firstName || '') + '|' + (currentUser.lastName || '');
       selectedColor = currentUser.color || null;
+      // Pre-select the matching name button
+      nameOptions.forEach(function(o) {
+        if (o.getAttribute('data-first') === currentUser.firstName && o.getAttribute('data-last') === currentUser.lastName) {
+          o.classList.add('selected');
+        }
+      });
     } else {
       modalFirstName.value = '';
       modalLastName.value = '';
-      modalNameSelect.value = '';
       selectedColor = null;
     }
     buildColorPicker();
@@ -2870,7 +2934,7 @@ img { max-width: 100%; }
     requestAnimationFrame(function() {
       modalOverlay.classList.add('visible');
     });
-    modalNameSelect.focus();
+    // No focus needed — user clicks their name icon
   }
 
   function hideModal() {
@@ -3001,6 +3065,15 @@ img { max-width: 100%; }
               el.style.backgroundColor = allUsers[uid].color;
             }
           });
+          // Re-render checkbox colors for current user
+          if (currentUser) {
+            document.querySelectorAll('.check-group li.checked .check-box').forEach(function(box) {
+              var li = box.closest('li[data-item]');
+              if (!li) return;
+              // Re-read from Firebase isn't needed — just update the color
+              box.style.color = currentUser.color;
+            });
+          }
         }
       }, function(err) {
         console.warn('Firebase users read failed:', err);
