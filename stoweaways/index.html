@@ -2360,6 +2360,80 @@ img { max-width: 100%; }
     width: 100%;
   }
 }
+
+/* ============================================
+   Best Of
+   ============================================ */
+.bestof-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 700px) { .bestof-grid { grid-template-columns: 1fr; } }
+
+.bestof-card {
+  background: var(--card-bg-solid);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+.bestof-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.bestof-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.bestof-item:last-child { border-bottom: none; }
+
+.bestof-item a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: rgba(0,0,0,0.15);
+  text-underline-offset: 2px;
+  font-weight: 600;
+}
+
+.bestof-item a:hover {
+  text-decoration-color: rgba(0,0,0,0.4);
+}
+
+.bestof-tag {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bestof-tag.stowe { background: rgba(45,107,74,0.1); color: var(--stowe); }
+.bestof-tag.montreal { background: rgba(26,58,92,0.1); color: var(--montreal); }
+.bestof-tag.enroute { background: rgba(0,0,0,0.05); color: var(--text-light); }
+
+.bestof-desc {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-left: auto;
+  text-align: right;
+  flex-shrink: 0;
+}
 </style>
 </head>
 <body>
@@ -2438,6 +2512,8 @@ img { max-width: 100%; }
     <a class="toc-link" data-target="notes">Notes</a>
     <span class="toc-separator">&middot;</span>
     <a class="toc-link" data-target="logistics">Logistics</a>
+    <span class="toc-separator">&middot;</span>
+    <a class="toc-link" data-target="best-of">Best Of</a>
     <span class="toc-separator">&middot;</span>
     <a class="toc-link" data-target="dashboard">Dashboard</a>
   </div>
@@ -2973,6 +3049,269 @@ img { max-width: 100%; }
         <li class="info-item">Montreal Airbnb regulations exist &mdash; book licensed properties</li>
       </ul>
     </div>
+  </div>
+</section>
+
+<!-- ============================================
+     BEST OF
+     ============================================ -->
+<section class="section" id="best-of">
+  <div class="section-label">Recommendations</div>
+  <h2 class="section-title">Best of</h2>
+  <div class="section-divider"></div>
+
+  <div class="bestof-grid fade-in">
+
+    <!-- Best Coffee -->
+    <div class="bestof-card">
+      <h3>&#9749; Best Coffee</h3>
+      <div class="bestof-item">
+        <a href="https://blackcapvermont.com" target="_blank" rel="noopener">Black Cap Coffee &amp; Beer</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Maple latte, pastries, great vibe</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.theroasterystowe.com" target="_blank" rel="noopener">The Roastery</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">In-house roasted specialty coffee</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://sainthenri.ca" target="_blank" rel="noopener">Caf&eacute; Saint-Henri</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Pioneered Montreal&rsquo;s third-wave scene</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://dispatchcoffee.com" target="_blank" rel="noopener">Dispatch Coffee</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Tastings, workshops, serious about craft</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.pikolo.ca" target="_blank" rel="noopener">Pikolo Espresso Bar</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Tiny, perfect, Mile End staple</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.krucoffee.com" target="_blank" rel="noopener">Kru Coffee</a>
+        <span class="bestof-tag enroute">Saratoga</span>
+        <span class="bestof-desc">Great pit stop en route</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.speederandearls.com" target="_blank" rel="noopener">Speeder &amp; Earl&rsquo;s</a>
+        <span class="bestof-tag stowe">Burlington</span>
+        <span class="bestof-desc">Burlington institution, checkerboard floors</span>
+      </div>
+    </div>
+
+    <!-- Best Restaurants -->
+    <div class="bestof-card">
+      <h3>&#127869; Best Restaurants</h3>
+      <div class="bestof-item">
+        <a href="https://henofthewood.com" target="_blank" rel="noopener">Hen of the Wood</a>
+        <span class="bestof-tag stowe">Waterbury</span>
+        <span class="bestof-desc">Farm-to-table, changes daily. The best meal in Vermont.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.docponds.com" target="_blank" rel="noopener">Doc Ponds</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Elevated pub food, great cocktails</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.platestowe.com" target="_blank" rel="noopener">Plate</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Small plates, natural wine, intimate</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.benchvt.com" target="_blank" rel="noopener">The Bench</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Wood-fired everything. Kid-friendly.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.harrisonsstowe.com" target="_blank" rel="noopener">Harrison&rsquo;s</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">American fare, wood beams, cozy</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.joebeef.ca" target="_blank" rel="noopener">Joe Beef</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Legendary. Book months ahead.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.monlapin.ca" target="_blank" rel="noopener">Mon Lapin</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">French-Italian, natural wine, same team as Joe Beef</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.lawrencerestaurant.com" target="_blank" rel="noopener">Lawrence</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Michelin Recommended, Mile End</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.schwartzsdeli.com" target="_blank" rel="noopener">Schwartz&rsquo;s Deli</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Smoked meat since 1928. Cash only.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.oliveetgourmando.com" target="_blank" rel="noopener">Olive et Gourmando</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Legendary sandwiches, Old Montreal</span>
+      </div>
+    </div>
+
+    <!-- Best Bars & Cocktails -->
+    <div class="bestof-card">
+      <h3>&#127864; Best Bars &amp; Cocktails</h3>
+      <div class="bestof-item">
+        <a href="https://www.cloakroombar.com" target="_blank" rel="noopener">Cloakroom</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">No menu, 25 seats. Tell them what you like.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.atwatercocktailclub.com" target="_blank" rel="noopener">Atwater Cocktail Club</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Hidden entrance, world-class. Top 50 in North America.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.google.com/maps/search/Le+Mal+Necessaire+Montreal" target="_blank" rel="noopener">Le Mal N&eacute;cessaire</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Tiki bar, Chinatown. Fun, strong drinks.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.apresstowe.com" target="_blank" rel="noopener">Apr&egrave;s Cocktails &amp; Wine</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Hidden inside a day spa. Craft cocktails.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.docponds.com" target="_blank" rel="noopener">Doc Ponds</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Cider Punch (rum, brandy, maple, cider)</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://alchemistbeer.com" target="_blank" rel="noopener">The Alchemist</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Heady Topper on tap at the source</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.idletymebrewing.com" target="_blank" rel="noopener">Idletyme Brewing</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Solid brewpub. Low-key beer night.</span>
+      </div>
+    </div>
+
+    <!-- Best Hikes & Nature -->
+    <div class="bestof-card">
+      <h3>&#129406; Best Hikes &amp; Nature</h3>
+      <div class="bestof-item">
+        <a href="https://www.stowe.com/explore-the-resort/during-your-stay/recreation-path.aspx" target="_blank" rel="noopener">Stowe Recreation Path</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">5.3 mi paved, flat, along the river. Daily anchor.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://vtstateparks.com/moss-glen-stowe.html" target="_blank" rel="noopener">Moss Glen Falls</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">10 min walk to waterfall. Swimming below.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.alltrails.com/trail/us/vermont/bingham-falls" target="_blank" rel="noopener">Bingham Falls</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Quarter-mile to falls + swimming holes upstream</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://vtstateparks.com/smugglers-notch.html" target="_blank" rel="noopener">Smugglers&rsquo; Notch</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Dramatic pass, giant boulders to scramble</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://vtstateparks.com/elmore.html" target="_blank" rel="noopener">Lake Elmore State Park</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Sandy beach, lifeguards, calm lake</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.lemontroyal.qc.ca/en" target="_blank" rel="noopener">Mont-Royal</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Easy hike to Kondiaronk lookout. Panoramic city views.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.pc.gc.ca/en/lhn-nhs/qc/canallachine" target="_blank" rel="noopener">Lachine Canal</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">14 km flat paved path. Bike or walk. Ends at Atwater Market.</span>
+      </div>
+    </div>
+
+    <!-- Best Kid Activities -->
+    <div class="bestof-card">
+      <h3>&#128118; Best Kid Activities</h3>
+      <div class="bestof-item">
+        <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener">Ben &amp; Jerry&rsquo;s Factory</a>
+        <span class="bestof-tag stowe">Waterbury</span>
+        <span class="bestof-desc">30 min tour + ice cream. The 4yo will talk about this for months.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.stowegolfpark.com" target="_blank" rel="noopener">Stowe Golf Park</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Mini golf with real hazards. Ice cream on site.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://coldhollow.com" target="_blank" rel="noopener">Cold Hollow Cider Mill</a>
+        <span class="bestof-tag stowe">Waterbury</span>
+        <span class="bestof-desc">Cider donuts. Kids love the donut machine.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://espacepourlavie.ca/en/biodome" target="_blank" rel="noopener">Biodome</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Four ecosystems under one roof. Penguins!</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.oldportofmontreal.com" target="_blank" rel="noopener">Old Port splash pad</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Free, right on the waterfront. Carousel next door.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.marchespublics-mtl.com/en/marches/jean-talon-market/" target="_blank" rel="noopener">Jean-Talon Market</a>
+        <span class="bestof-tag montreal">Montreal</span>
+        <span class="bestof-desc">Let the 4yo pick fruit. The 2yo eats samples.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://vtstateparks.com/smugglers-notch.html" target="_blank" rel="noopener">Smugglers&rsquo; Notch boulders</a>
+        <span class="bestof-tag stowe">Stowe</span>
+        <span class="bestof-desc">Giant rocks to climb. 4yo paradise.</span>
+      </div>
+    </div>
+
+    <!-- Best Roadside Stops -->
+    <div class="bestof-card">
+      <h3>&#128663; Best Roadside Stops</h3>
+      <div class="bestof-item">
+        <span style="font-weight:600;color:var(--text)">Saratoga Springs, NY</span>
+        <span class="bestof-tag enroute">En Route</span>
+        <span class="bestof-desc">Congress Park, Hattie&rsquo;s fried chicken, Kru Coffee. 2 hrs from White Plains.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://coldhollow.com" target="_blank" rel="noopener">Cold Hollow Cider Mill</a>
+        <span class="bestof-tag stowe">Waterbury</span>
+        <span class="bestof-desc">Cider donuts, apple cider. Right off Route 100.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://www.cabotcheese.coop" target="_blank" rel="noopener">Cabot Cheese Store</a>
+        <span class="bestof-tag stowe">Waterbury</span>
+        <span class="bestof-desc">Vermont cheddar, maple products, free samples</span>
+      </div>
+      <div class="bestof-item">
+        <span style="font-weight:600;color:var(--text)">Burlington</span>
+        <span class="bestof-tag stowe">Burlington</span>
+        <span class="bestof-desc">Church Street, Lake Champlain waterfront. 45 min from Stowe.</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://shelburnefarms.org" target="_blank" rel="noopener">Shelburne Farms</a>
+        <span class="bestof-tag stowe">Burlington</span>
+        <span class="bestof-desc">Working farm, walking trails, lake views</span>
+      </div>
+      <div class="bestof-item">
+        <a href="https://shelburnemuseum.org" target="_blank" rel="noopener">Shelburne Museum</a>
+        <span class="bestof-tag stowe">Burlington</span>
+        <span class="bestof-desc">Art + Americana, outdoor campus</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
