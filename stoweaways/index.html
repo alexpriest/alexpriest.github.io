@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stoweaways 2026 — Stowe &amp; Montreal</title>
 <meta name="description" content="A 9-day trip for 7 — mountains, swimming holes, floating spas, and the best food city in North America.">
+<meta property="og:title" content="Stoweaways 2026 — Stowe & Montreal">
+<meta property="og:description" content="A 9-day trip for 7. Mountains, swimming holes, floating spas, and the best food city in North America.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alexpriest.github.io/stoweaways">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -29,6 +33,21 @@
   --border: #e8e5e0;
   --font-display: 'PP Editorial New', 'Playfair Display', Georgia, serif;
   --font-body: 'PP Neue Montreal', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --primary-dark: #253d2d;
+  --spa-light: #c49a6c;
+  --note-stripe: #faf8f5;
+  --avatar-default: #bbb;
+  --reaction-active-bg: #fef3ee;
+  --reaction-active-border: #e8c9b8;
+  --shadow-sm: 0 2px 16px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 100px;
 
   /* Flexoki palette */
   --fx-red: #D14D41;
@@ -196,10 +215,10 @@ img { max-width: 100%; }
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255,255,255,0.5);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 1.5rem 1rem;
   text-align: center;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-md);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -279,9 +298,9 @@ img { max-width: 100%; }
 
 .accom-card {
   background: var(--card-bg-solid);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 2rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
@@ -402,9 +421,9 @@ img { max-width: 100%; }
 }
 
 .map-container {
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  box-shadow: var(--shadow-lg);
   border: 1px solid var(--border);
 }
 
@@ -443,9 +462,9 @@ img { max-width: 100%; }
 
 .day-card {
   background: var(--card-bg-solid);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 2rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
@@ -659,8 +678,8 @@ img { max-width: 100%; }
 }
 
 .reaction-btn.active {
-  background: #fef3ee;
-  border-color: #e8c9b8;
+  background: var(--reaction-active-bg);
+  border-color: var(--reaction-active-border);
 }
 
 .reaction-btn .emoji {
@@ -745,9 +764,9 @@ img { max-width: 100%; }
    ============================================ */
 .spa-feature {
   background: var(--card-bg-solid);
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   padding: 2.5rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-md);
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
@@ -761,7 +780,7 @@ img { max-width: 100%; }
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--spa), #c49a6c);
+  background: linear-gradient(90deg, var(--spa), var(--spa-light));
 }
 
 .spa-feature h3 {
@@ -860,9 +879,9 @@ img { max-width: 100%; }
 
 .road-leg {
   background: var(--card-bg-solid);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 2rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
 }
 
@@ -896,18 +915,24 @@ img { max-width: 100%; }
 }
 
 /* ============================================
+   Dark Section Utility
+   ============================================ */
+.dark-section {
+  background: var(--primary);
+  color: #f5f3ef;
+}
+.dark-section .section-label { color: rgba(255,255,255,0.4); }
+.dark-section .section-title { color: #f5f3ef; }
+.dark-section .section-divider { background: rgba(255,255,255,0.3); }
+
+/* ============================================
    Voting / Weigh In Section
    ============================================ */
 .vote-section {
-  background: var(--primary);
-  color: #f5f3ef;
   padding: 4rem 1.5rem;
 }
 
-.vote-section .section-label { color: rgba(255,255,255,0.4); }
-.vote-section .section-title { color: #f5f3ef; }
 .vote-section .section-subtitle { color: rgba(255,255,255,0.6); }
-.vote-section .section-divider { background: rgba(255,255,255,0.3); }
 
 .vote-container {
   max-width: 700px;
@@ -1071,9 +1096,9 @@ img { max-width: 100%; }
 
 .check-group {
   background: var(--card-bg-solid);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   padding: 2rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
 }
 
@@ -1167,38 +1192,29 @@ img { max-width: 100%; }
   list-style: none;
 }
 
-.info-list li {
-  cursor: default !important;
-  padding-left: 1.2rem !important;
-  padding-right: 0 !important;
+.info-item {
+  cursor: default;
+  padding: 0.35rem 0 0.35rem 1.2rem;
   position: relative;
-  display: block !important;
+  display: block;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.55;
 }
-
-.info-list li::before {
-  content: '\2022' !important;
-  position: absolute !important;
-  left: 0 !important;
-  color: var(--text-light) !important;
+.info-item::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+  color: var(--text-light);
   font-size: 1.1rem;
   line-height: 1.4;
-  width: auto !important;
-  height: auto !important;
-  min-width: 0 !important;
-  border: none !important;
-  border-radius: 0 !important;
-  background: none !important;
 }
-
-.info-list li .check-box,
-.info-list li .check-meta {
-  display: none !important;
+.info-item:hover {
+  background: transparent;
 }
-
-.info-list li:hover {
-  background: transparent !important;
-  padding-left: 1.2rem !important;
-  transform: none !important;
+.info-item .check-box,
+.info-item .check-meta {
+  display: none;
 }
 
 /* ============================================
@@ -1220,7 +1236,7 @@ img { max-width: 100%; }
 }
 
 .notes-row:nth-child(even) {
-  background: #faf8f5;
+  background: var(--note-stripe);
 }
 
 .notes-row-date {
@@ -1336,6 +1352,7 @@ img { max-width: 100%; }
 
 .note-input-row input:focus {
   border-color: var(--stowe);
+  box-shadow: 0 0 0 3px rgba(45, 107, 74, 0.1);
 }
 
 .note-input-row button {
@@ -1353,7 +1370,7 @@ img { max-width: 100%; }
 }
 
 .note-input-row button:hover {
-  background: #253d2d;
+  background: var(--primary-dark);
 }
 
 /* ============================================
@@ -1491,7 +1508,7 @@ img { max-width: 100%; }
   font-size: 0.9rem;
   font-weight: 700;
   color: #fff;
-  background: #bbb;
+  background: var(--avatar-default);
   font-family: var(--font-body);
   transition: all 0.2s ease;
   border: 3px solid transparent;
@@ -1613,7 +1630,7 @@ img { max-width: 100%; }
 }
 
 .user-modal .submit-btn:hover:not(:disabled) {
-  background: #253d2d;
+  background: var(--primary-dark);
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(26, 47, 35, 0.25);
 }
@@ -1858,6 +1875,7 @@ img { max-width: 100%; }
 
 .day-comment-input-row input:focus {
   border-color: var(--stowe);
+  box-shadow: 0 0 0 3px rgba(45, 107, 74, 0.1);
 }
 
 .day-comment-input-row button {
@@ -1875,7 +1893,7 @@ img { max-width: 100%; }
 }
 
 .day-comment-input-row button:hover {
-  background: #253d2d;
+  background: var(--primary-dark);
 }
 
 /* ============================================
@@ -2078,14 +2096,8 @@ img { max-width: 100%; }
    #7 Trip Stats Dashboard
    ============================================ */
 .trip-dashboard {
-  background: var(--primary);
-  color: #f5f3ef;
   padding: 4rem 1.5rem;
 }
-
-.trip-dashboard .section-label { color: rgba(255,255,255,0.4); }
-.trip-dashboard .section-title { color: #f5f3ef; }
-.trip-dashboard .section-divider { background: rgba(255,255,255,0.3); }
 
 .dashboard-container {
   max-width: 700px;
@@ -2318,6 +2330,7 @@ img { max-width: 100%; }
   .reaction-btn {
     padding: 0.4rem 0.55rem;
     min-width: 44px;
+    min-height: 44px;
     font-size: 0.75rem;
   }
 
@@ -2336,16 +2349,6 @@ img { max-width: 100%; }
   .day-comment-input-row input,
   .day-comment-input-row button {
     width: 100%;
-  }
-
-  .notes-row {
-    grid-template-columns: 1fr;
-  }
-
-  .notes-row-date {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding: 0.75rem 1rem;
   }
 
   .note-input-row {
@@ -2547,7 +2550,7 @@ img { max-width: 100%; }
         <h3>White Plains &rarr; Stowe (4.5 hrs)</h3>
         <p>Leave by 8-9am to arrive before the afternoon nap meltdown. The drive is mostly I-87 north through the Hudson Valley, then cuts east into Vermont on Route 89.</p>
         <ul>
-          <li><strong>Stop 1: Saratoga Springs, NY (~2 hrs in)</strong> &mdash; Stretch legs at Congress Park, grab lunch at <a href="https://www.hattiesrestaurant.com" target="_blank" rel="noopener" class="place-link">Hattie's</a> (Southern comfort food, kid-friendly) or <a href="https://www.google.com/maps/search/Uncommon+Grounds+Saratoga+Springs" target="_blank" rel="noopener" class="place-link">Uncommon Grounds</a> coffee</li>
+          <li><strong>Stop 1: Saratoga Springs, NY (~2 hrs in)</strong> &mdash; Stretch legs at Congress Park, grab lunch at <a href="https://www.hattiesrestaurant.com" target="_blank" rel="noopener" class="place-link">Hattie's</a> (Southern comfort food, kid-friendly) or <a href="https://uncommongrounds.com" target="_blank" rel="noopener" class="place-link">Uncommon Grounds</a> coffee</li>
           <li><strong>Stop 2: Waterbury, VT (~4 hrs in, 15 min from Stowe)</strong> &mdash; <a href="https://coldhollow.com" target="_blank" rel="noopener" class="place-link">Cold Hollow Cider Mill</a> for cider donuts. Save <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener" class="place-link">Ben &amp; Jerry's</a> for Day 3.</li>
           <li>Arrive Stowe ~1-2pm. Unpack, explore the village, early dinner.</li>
         </ul>
@@ -2564,7 +2567,8 @@ img { max-width: 100%; }
         <h3>Settle in &mdash; Rec Path + village day</h3>
         <p>No agenda. Let the kids set the pace. This is your decompression day.</p>
         <ul>
-          <li><strong>Morning:</strong> <a href="https://www.stowe.com/explore-the-resort/during-your-stay/recreation-path.aspx" target="_blank" rel="noopener" class="place-link">Stowe Recreation Path</a> &mdash; grab coffee, put the 2yo in the stroller, let the 4yo scooter. 5.3 miles paved along the West Branch river. Go as far as you want and turn back.</li>
+          <li><strong>Coffee:</strong> Grab coffee at the village before hitting the path &mdash; <a href="https://www.blackcapcoffeeandbeer.com" target="_blank" rel="noopener" class="place-link">Black Cap Coffee &amp; Beer</a> on Main Street or Harvest Market for a quick grab-and-go.</li>
+          <li><strong>Morning:</strong> <a href="https://www.stowe.com/explore-the-resort/during-your-stay/recreation-path.aspx" target="_blank" rel="noopener" class="place-link">Stowe Recreation Path</a> &mdash; put the 2yo in the stroller, let the 4yo scooter. 5.3 miles paved along the West Branch river. Go as far as you want and turn back.</li>
           <li><strong>Afternoon:</strong> Explore the village. <a href="https://www.stowegolfpark.com" target="_blank" rel="noopener" class="place-link">Stowe Golf Park</a> (mini golf) or just wander. Find the covered bridge on the Rec Path.</li>
           <li><strong>If it's warm:</strong> Wade in the river at one of the Rec Path access points. The water is cold but the kids won't care.</li>
         </ul>
@@ -2581,7 +2585,7 @@ img { max-width: 100%; }
         <h3>Waterfall + swimming holes</h3>
         <ul>
           <li><strong>Morning:</strong> <a href="https://vtstateparks.com/moss-glen-stowe.html" target="_blank" rel="noopener" class="place-link">Moss Glen Falls</a> (10 min drive) &mdash; easy 10-minute walk to a beautiful waterfall. The 4yo can hike it, carry the 2yo. Swimming below the falls if it's warm enough.</li>
-          <li><strong>Midday:</strong> <a href="https://www.google.com/maps/search/Bingham+Falls+Stowe+Vermont" target="_blank" rel="noopener" class="place-link">Bingham Falls</a> (near <a href="https://vtstateparks.com/smugglers-notch.html" target="_blank" rel="noopener" class="place-link">Smugglers' Notch</a>) &mdash; quarter-mile hike to falls + swimming holes upstream. More adventurous. Optional.</li>
+          <li><strong>Midday:</strong> <a href="https://www.alltrails.com/trail/us/vermont/bingham-falls" target="_blank" rel="noopener" class="place-link">Bingham Falls</a> (near <a href="https://vtstateparks.com/smugglers-notch.html" target="_blank" rel="noopener" class="place-link">Smugglers' Notch</a>) &mdash; quarter-mile hike to falls + swimming holes upstream. More adventurous. Optional.</li>
           <li><strong>Afternoon:</strong> <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener" class="place-link">Ben &amp; Jerry's</a> factory (15 min in Waterbury). 30-minute tour, ice cream at the end. Hit <a href="https://coldhollow.com" target="_blank" rel="noopener" class="place-link">Cold Hollow Cider Mill</a> next door for donuts if you didn't on Day 1.</li>
         </ul>
         <div class="meal-tip"><strong>Dinner:</strong> <a href="https://henofthewood.com" target="_blank" rel="noopener" class="place-link">Hen of the Wood</a> (Waterbury, 15 min) &mdash; the best meal of the Stowe leg. Farm-to-table, changes daily. <strong>Book ahead.</strong> Get a sitter &mdash; this is an adults-only dinner.</div>
@@ -2622,7 +2626,7 @@ img { max-width: 100%; }
         <h3>Stowe &rarr; Montreal (2.5 hrs)</h3>
         <p>Easy drive north. No rush &mdash; check out by 11, arrive Montreal by 2pm.</p>
         <ul>
-          <li><strong>Route:</strong> North on Route 100 to I-89, then I-89 to the border at Highgate Springs / Saint-Armand. Quick border crossing on a Sunday (usually 15-20 min).</li>
+          <li><strong>Route:</strong> North on Route 100 to I-89, then I-89 to the border at Highgate Springs / Saint-Armand. Quick border crossing on a Monday (usually 15-20 min).</li>
           <li><strong>Optional stop: Burlington (45 min from Stowe)</strong> &mdash; Church Street pedestrian mall, Lake Champlain waterfront. Worth 60-90 min if the kids need to burn energy before the border.</li>
           <li><strong>Border tip:</strong> Have all 7 passports handy (including kids). Declare any food you're bringing. They'll ask where you're staying and how long.</li>
           <li><strong>Arrive Montreal ~2-3pm.</strong> Settle into the apartment. Walk the neighborhood.</li>
@@ -2675,7 +2679,7 @@ img { max-width: 100%; }
           <li><strong>Afternoon:</strong> <a href="https://www.lemontroyal.qc.ca/en" target="_blank" rel="noopener" class="place-link">Mont-Royal</a> &mdash; easy walk or drive to Kondiaronk lookout for panoramic city views. Playground at Parc Jeanne-Mance on the way down. Beaver Lake if kids have energy.</li>
           <li><strong>Evening:</strong> The big night. Sitter with the kids. Best meal of the trip.</li>
         </ul>
-        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.lawrencerestaurant.com" target="_blank" rel="noopener" class="place-link">Lawrence</a> (Mile End, Michelin Recommended, seasonal) or <a href="https://www.google.com/maps/search/Mastard+Restaurant+Montreal" target="_blank" rel="noopener" class="place-link">Mastard</a> (creative, vegetable-forward).<br><br><strong>After:</strong> <a href="https://www.google.com/maps/search/Cloakroom+Bar+Montreal" target="_blank" rel="noopener" class="place-link">Cloakroom</a> (no-menu, 25 seats) or <a href="https://www.google.com/maps/search/Atwater+Cocktail+Club+Montreal" target="_blank" rel="noopener" class="place-link">Atwater Cocktail Club</a> (hidden entrance, world-class).</div>
+        <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.lawrencerestaurant.com" target="_blank" rel="noopener" class="place-link">Lawrence</a> (Mile End, Michelin Recommended, seasonal) or <a href="https://www.restaurantmastard.com" target="_blank" rel="noopener" class="place-link">Mastard</a> (creative, vegetable-forward).<br><br><strong>After:</strong> <a href="https://www.cloakroombar.com" target="_blank" rel="noopener" class="place-link">Cloakroom</a> (no-menu, 25 seats) or <a href="https://www.atwatercocktailclub.com" target="_blank" rel="noopener" class="place-link">Atwater Cocktail Club</a> (hidden entrance, world-class).</div>
         <div class="reactions" data-key="day8"></div>
       </div>
 
@@ -2687,7 +2691,7 @@ img { max-width: 100%; }
         </div>
         <h3>Montreal &rarr; Home (YUL)</h3>
         <ul>
-          <li>Sleep in. Slow morning. Pack up.</li>
+          <li>Sleep in. Slow morning. Pack up. Check out of the apartment by 11am.</li>
           <li><strong>Last stop:</strong> <a href="https://www.fairmountbagel.com" target="_blank" rel="noopener" class="place-link">Fairmount Bagels</a> (the other legendary bagel shop, 2 min from St-Viateur) &mdash; grab a bag for the plane.</li>
           <li><strong>YUL airport is 20 min from the Plateau.</strong> Major international hub, direct flights to most US cities.</li>
           <li>Drop the rental car at the airport. Done.</li>
@@ -2738,7 +2742,7 @@ img { max-width: 100%; }
     <div class="road-leg fade-in">
       <h3>Leg 1: White Plains &rarr; Stowe</h3>
       <ul>
-        <li><strong>Saratoga Springs, NY (2 hrs)</strong> &mdash; Good midpoint. Congress Park for the kids, <a href="https://www.hattiesrestaurant.com" target="_blank" rel="noopener" class="place-link">Hattie's</a> for fried chicken, or just a coffee stop at <a href="https://www.google.com/maps/search/Uncommon+Grounds+Saratoga+Springs" target="_blank" rel="noopener" class="place-link">Uncommon Grounds</a>.</li>
+        <li><strong>Saratoga Springs, NY (2 hrs)</strong> &mdash; Good midpoint. Congress Park for the kids, <a href="https://www.hattiesrestaurant.com" target="_blank" rel="noopener" class="place-link">Hattie's</a> for fried chicken, or just a coffee stop at <a href="https://uncommongrounds.com" target="_blank" rel="noopener" class="place-link">Uncommon Grounds</a>.</li>
         <li><strong>Manchester, VT (3.5 hrs via Route 7)</strong> &mdash; If you take the scenic route. Cute town, outlet shopping, Hildene (Lincoln family estate).</li>
         <li><strong>Waterbury, VT (4 hrs)</strong> &mdash; 15 min from Stowe. <a href="https://www.benjerry.com/stowe" target="_blank" rel="noopener" class="place-link">Ben &amp; Jerry's</a>, <a href="https://coldhollow.com" target="_blank" rel="noopener" class="place-link">Cold Hollow Cider Mill</a>, <a href="https://www.cabotcheese.coop" target="_blank" rel="noopener" class="place-link">Cabot Cheese</a>. You'll come back here during the trip, so you can skip on arrival day.</li>
       </ul>
@@ -2758,7 +2762,7 @@ img { max-width: 100%; }
 <!-- ============================================
      WEIGH IN (Voting Section)
      ============================================ -->
-<section class="vote-section" id="weigh-in">
+<section class="vote-section dark-section" id="weigh-in">
   <div class="vote-container">
     <div class="section-label">Weigh In</div>
     <h2 class="section-title">What are you most excited for?</h2>
@@ -2924,6 +2928,7 @@ img { max-width: 100%; }
         <li data-item="rent-car" data-max="1"><span class="check-box"></span><span class="check-text">Rent car large enough for 7 + luggage (minivan or large SUV)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
         <li data-item="book-flights" data-max="7"><span class="check-box"></span><span class="check-text">Book flights home from YUL (June 19)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
         <li data-item="car-seats" data-max="1"><span class="check-box"></span><span class="check-text">Car seats: 2 (bring your own or rent with car)</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
+        <li data-item="book-sitters" data-max="1"><span class="check-box"></span><span class="check-text">Book sitters for Stowe + Montreal dinner nights</span><span class="check-meta"><span class="check-tally"></span><span class="avatar-row"></span></span></li>
       </ul>
     </div>
 
@@ -2945,27 +2950,27 @@ img { max-width: 100%; }
     <div class="check-group info-list fade-in">
       <h3>Budget rough estimates</h3>
       <ul>
-        <li>Stowe house (4 nights): $1,000&ndash;1,600 total</li>
-        <li>Montreal apartment (4 nights): $800&ndash;1,400 CAD total</li>
-        <li>Rental car (9 days): $500&ndash;800 total</li>
-        <li>Gas: ~$120 total</li>
-        <li>Bota Bota spa (per person): ~$70-90 CAD</li>
-        <li>Groceries: ~$400-500 total for the group</li>
-        <li>Dining out: ~$100-150/dinner for the group (varies wildly)</li>
-        <li>Activities: Most free &mdash; budget ~$200 total for paid activities</li>
+        <li class="info-item">Stowe house (4 nights): $1,000&ndash;1,600 total</li>
+        <li class="info-item">Montreal apartment (4 nights): $800&ndash;1,400 CAD total</li>
+        <li class="info-item">Rental car (9 days): $500&ndash;800 total</li>
+        <li class="info-item">Gas: ~$120 total</li>
+        <li class="info-item">Bota Bota spa (per person): ~$70-90 CAD</li>
+        <li class="info-item">Groceries: ~$400-500 total for the group</li>
+        <li class="info-item">Dining out: ~$100-150/dinner for the group (varies wildly)</li>
+        <li class="info-item">Activities: Most free &mdash; budget ~$200 total for paid activities</li>
       </ul>
     </div>
 
     <div class="check-group info-list fade-in">
       <h3>Good to know</h3>
       <ul>
-        <li>Montreal is French-first. Menus, signs, greetings in French. Everyone speaks English but open with "bonjour."</li>
-        <li>Tipping in Quebec is same as US &mdash; 15-20%</li>
-        <li>Quebec uses CAD (~0.73 USD) &mdash; your dollar goes further</li>
-        <li>Blackfly season in Vermont peaks late May / early June. Bring DEET. They're annoying near water.</li>
-        <li>Lake Elmore has lifeguards but verify they're staffing by June 14</li>
-        <li>Stowe Rec Path is open year-round but mud can be an issue in early June after rain</li>
-        <li>Montreal Airbnb regulations exist &mdash; book licensed properties</li>
+        <li class="info-item">Montreal is French-first. Menus, signs, greetings in French. Everyone speaks English but open with "bonjour."</li>
+        <li class="info-item">Tipping in Quebec is same as US &mdash; 15-20%</li>
+        <li class="info-item">Quebec uses CAD (~0.73 USD) &mdash; your dollar goes further</li>
+        <li class="info-item">Blackfly season in Vermont peaks late May / early June. Bring DEET. They're annoying near water.</li>
+        <li class="info-item">Lake Elmore has lifeguards but verify they're staffing by June 14</li>
+        <li class="info-item">Stowe Rec Path is open year-round but mud can be an issue in early June after rain</li>
+        <li class="info-item">Montreal Airbnb regulations exist &mdash; book licensed properties</li>
       </ul>
     </div>
   </div>
@@ -2974,7 +2979,7 @@ img { max-width: 100%; }
 <!-- ============================================
      #7 TRIP DASHBOARD
      ============================================ -->
-<section class="trip-dashboard" id="dashboard">
+<section class="trip-dashboard dark-section" id="dashboard">
   <div class="dashboard-container">
     <div class="section-label">Dashboard</div>
     <h2 class="section-title">Trip pulse</h2>
@@ -3078,10 +3083,6 @@ img { max-width: 100%; }
     } catch (e) {}
   }
 
-  function generateUserId() {
-    return Math.random().toString(36).substr(2, 9);
-  }
-
   function getInitials(first, last) {
     return ((first || '').charAt(0) + (last || '').charAt(0)).toUpperCase();
   }
@@ -3089,12 +3090,15 @@ img { max-width: 100%; }
   /* ==========================================
      TOAST HELPER
      ========================================== */
+  var toastTimeout = null;
   function showToast(message) {
     var toast = document.getElementById('toast');
     toast.textContent = message;
     toast.classList.add('visible');
-    setTimeout(function() {
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function() {
       toast.classList.remove('visible');
+      toastTimeout = null;
     }, 3500);
   }
 
@@ -3288,7 +3292,8 @@ img { max-width: 100%; }
         }
       }
     }
-    if (!userId) userId = generateUserId();
+    // Deterministic ID from name — prevents duplicates
+    if (!userId) userId = (firstName + '-' + lastName).toLowerCase().replace(/[^a-z-]/g, '');
     var initials = getInitials(firstName, lastName);
 
     currentUser = {
@@ -3322,6 +3327,13 @@ img { max-width: 100%; }
         modalSubmit.click();
       }
     });
+  });
+
+  // Escape key closes modal (only when editing, not on first sign-in)
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modalOverlay.style.display === 'flex' && isEditingUser) {
+      hideModal();
+    }
   });
 
   /* ==========================================
@@ -3542,8 +3554,6 @@ img { max-width: 100%; }
   fadeElements.forEach(function(el) { fadeObserver.observe(el); });
 
   // Day card observer: fade in + map sync
-  var activeDay = null;
-
   var dayObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
@@ -3612,13 +3622,12 @@ img { max-width: 100%; }
 
         if (reactionRef) {
           var userRef = reactionRef.child(currentUser.userId);
-          userRef.once('value').then(function(snap) {
-            if (snap.exists()) {
-              userRef.remove();
-            } else {
-              userRef.set(true);
-            }
-          });
+          // Toggle based on current UI state — real-time listener updates UI
+          if (btn.classList.contains('active')) {
+            userRef.remove();
+          } else {
+            userRef.set(true);
+          }
         }
 
         // Bounce animation
@@ -3689,13 +3698,12 @@ img { max-width: 100%; }
       var key = opt.getAttribute('data-vote');
       var userVoteRef = db.ref('votes/' + key + '/' + currentUser.userId);
 
-      userVoteRef.once('value').then(function(snap) {
-        if (snap.exists()) {
-          userVoteRef.remove();
-        } else {
-          userVoteRef.set(true);
-        }
-      });
+      // Toggle based on current UI state — real-time listener updates UI
+      if (opt.classList.contains('voted')) {
+        userVoteRef.remove();
+      } else {
+        userVoteRef.set(true);
+      }
     });
   });
 
@@ -3740,7 +3748,27 @@ img { max-width: 100%; }
           var opt = document.createElement('div');
           opt.className = 'vote-option';
           opt.setAttribute('data-vote', id);
-          opt.innerHTML = '<div class="vote-bar"></div><div class="vote-option-content"><span class="vote-option-label">' + (item.label || id) + '</span><div class="vote-option-right"><div class="vote-avatars avatar-row"></div><span class="vote-option-count">0</span></div></div>';
+          // Build DOM safely to prevent XSS from user-supplied labels
+          var bar = document.createElement('div');
+          bar.className = 'vote-bar';
+          var content = document.createElement('div');
+          content.className = 'vote-option-content';
+          var labelSpan = document.createElement('span');
+          labelSpan.className = 'vote-option-label';
+          labelSpan.textContent = item.label || id;
+          var rightDiv = document.createElement('div');
+          rightDiv.className = 'vote-option-right';
+          var avatarsDiv = document.createElement('div');
+          avatarsDiv.className = 'vote-avatars avatar-row';
+          var countSpan = document.createElement('span');
+          countSpan.className = 'vote-option-count';
+          countSpan.textContent = '0';
+          rightDiv.appendChild(avatarsDiv);
+          rightDiv.appendChild(countSpan);
+          content.appendChild(labelSpan);
+          content.appendChild(rightDiv);
+          opt.appendChild(bar);
+          opt.appendChild(content);
 
           // Wire up voting (same as static options)
           var voteRef = db.ref('votes/' + id);
@@ -3764,10 +3792,12 @@ img { max-width: 100%; }
           opt.addEventListener('click', function() {
             if (!currentUser) { showModal(false); return; }
             var userVoteRef = voteRef.child(currentUser.userId);
-            userVoteRef.once('value').then(function(snap) {
-              if (snap.exists()) { userVoteRef.remove(); }
-              else { userVoteRef.set(true); }
-            });
+            // Toggle based on current UI state — real-time listener updates UI
+            if (opt.classList.contains('voted')) {
+              userVoteRef.remove();
+            } else {
+              userVoteRef.set(true);
+            }
           });
 
           listEl.appendChild(opt);
@@ -3856,13 +3886,12 @@ img { max-width: 100%; }
           if (!checkRef) return;
 
           var userCheckRef = checkRef.child(currentUser.userId);
-          userCheckRef.once('value').then(function(snap) {
-            if (snap.exists()) {
-              userCheckRef.remove();
-            } else {
-              userCheckRef.set(true);
-            }
-          });
+          // Toggle based on current UI state — real-time listener updates UI
+          if (li.classList.contains('checked')) {
+            userCheckRef.remove();
+          } else {
+            userCheckRef.set(true);
+          }
         });
       });
     });
@@ -4253,9 +4282,9 @@ img { max-width: 100%; }
   /* ==========================================
      #2 SCROLL PROGRESS BAR
      ========================================== */
-  (function initScrollProgress() {
+  var updateProgress = (function initScrollProgress() {
     var bar = document.getElementById('scrollProgress');
-    if (!bar) return;
+    if (!bar) return function() {};
 
     // Determine the scroll boundaries for Stowe vs Montreal content
     function updateProgress() {
@@ -4278,6 +4307,7 @@ img { max-width: 100%; }
 
     window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress();
+    return updateProgress;
   })();
 
 
@@ -4397,6 +4427,8 @@ img { max-width: 100%; }
       });
       var el = document.getElementById('dashComments');
       if (el) el.textContent = total;
+      // Recalculate scroll progress (content may have changed page height)
+      if (updateProgress) updateProgress();
     });
 
     // Checklist count
@@ -4411,6 +4443,8 @@ img { max-width: 100%; }
       });
       var el = document.getElementById('dashChecklist');
       if (el) el.textContent = done + '/' + totalItems;
+      // Recalculate scroll progress (content may have changed page height)
+      if (updateProgress) updateProgress();
     });
   })();
 
@@ -4469,6 +4503,15 @@ img { max-width: 100%; }
       checkNotesEmpty();
     }, 1500);
   })();
+
+  /* ==========================================
+     FIREBASE LISTENER CLEANUP
+     ========================================== */
+  window.addEventListener('beforeunload', function() {
+    if (firebaseReady) {
+      db.ref().off();
+    }
+  });
 
 })();
 </script>
