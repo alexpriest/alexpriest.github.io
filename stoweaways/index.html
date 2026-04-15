@@ -1195,10 +1195,10 @@ img { max-width: 100%; }
   background: rgba(45,107,74,0.06);
 }
 
-/* Claimed: faded color circle with initials — indicates "in progress" */
+/* Claimed: faded color circle with dashed outline — indicates "in progress" */
 .claim-slot.claimed,
 .claim-slot.mine {
-  border: 2px solid transparent;
+  border: 2px dashed rgba(0,0,0,0.12);
   color: #fff;
   cursor: pointer;
   opacity: 0.45;
@@ -1209,10 +1209,10 @@ img { max-width: 100%; }
 }
 
 /* Mine hover: show checkmark, bump opacity to hint "click to complete" */
-.claim-slot.mine .slot-initials { display: inline; }
-.claim-slot.mine .slot-check { display: none; }
+.claim-slot.mine .slot-initials { display: flex; align-items: center; justify-content: center; }
+.claim-slot.mine .slot-check { display: none; align-items: center; justify-content: center; }
 .claim-slot.mine:hover .slot-initials { display: none; }
-.claim-slot.mine:hover .slot-check { display: inline; }
+.claim-slot.mine:hover .slot-check { display: flex; }
 .claim-slot.mine:hover { opacity: 0.8; }
 
 /* Done: full opacity, green ring — clearly complete */
