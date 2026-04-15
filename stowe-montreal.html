@@ -570,50 +570,35 @@ img { max-width: 100%; }
 }
 
 /* Ask Claude button */
+.ask-claude-row {
+  margin-top: 0.75rem;
+}
+
 .ask-claude-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.72rem;
+  gap: 0.35rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--text-light);
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  padding: 0.45rem 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-body);
-  position: relative;
 }
 
 .ask-claude-btn:hover {
   color: var(--text);
-  border-color: #ccc;
+  border-color: #bbb;
   background: var(--bg);
 }
 
 .ask-claude-btn .ask-claude-icon {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   line-height: 1;
-}
-
-.ask-claude-tooltip {
-  display: none;
-  position: absolute;
-  bottom: calc(100% + 6px);
-  right: 0;
-  background: var(--primary);
-  color: #fff;
-  font-size: 0.7rem;
-  padding: 0.35rem 0.6rem;
-  border-radius: 4px;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-.ask-claude-btn:hover .ask-claude-tooltip {
-  display: block;
 }
 
 /* Toast notification */
@@ -658,9 +643,9 @@ img { max-width: 100%; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: 0.2rem;
   font-size: 0.82rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: transparent;
@@ -669,7 +654,8 @@ img { max-width: 100%; }
   font-family: var(--font-body);
   color: var(--text-muted);
   user-select: none;
-  min-width: 52px;
+  width: 56px;
+  height: 56px;
   text-align: center;
 }
 
@@ -1176,7 +1162,9 @@ img { max-width: 100%; }
   color: var(--primary);
   border-right: 1px solid var(--border);
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.4;
 }
 
 .notes-row-content {
@@ -2481,7 +2469,7 @@ img { max-width: 100%; }
 
   <div class="notes-table" id="notesTable">
     <div class="notes-row" data-note-day="drive-1">
-      <div class="notes-row-date">Thu Jun 11<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Drive to Stowe</span></div>
+      <div class="notes-row-date">Thu Jun 11<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Drive to Stowe</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -2491,7 +2479,7 @@ img { max-width: 100%; }
       </div>
     </div>
     <div class="notes-row" data-note-day="stowe-1">
-      <div class="notes-row-date">Fri Jun 12<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Rec Path + village</span></div>
+      <div class="notes-row-date">Fri Jun 12<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Rec Path + village</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -2501,7 +2489,7 @@ img { max-width: 100%; }
       </div>
     </div>
     <div class="notes-row" data-note-day="stowe-2">
-      <div class="notes-row-date">Sat Jun 13<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Waterfalls + swimming</span></div>
+      <div class="notes-row-date">Sat Jun 13<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Waterfalls + swimming</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -2511,7 +2499,7 @@ img { max-width: 100%; }
       </div>
     </div>
     <div class="notes-row" data-note-day="stowe-3">
-      <div class="notes-row-date">Sun Jun 14<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Lake Elmore + Smugglers'</span></div>
+      <div class="notes-row-date">Sun Jun 14<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Lake Elmore + Smugglers'</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -2521,7 +2509,7 @@ img { max-width: 100%; }
       </div>
     </div>
     <div class="notes-row" data-note-day="drive-2">
-      <div class="notes-row-date">Mon Jun 15<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Drive to Montreal</span></div>
+      <div class="notes-row-date">Mon Jun 15<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Drive to Montreal</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -2531,7 +2519,7 @@ img { max-width: 100%; }
       </div>
     </div>
     <div class="notes-row" data-note-day="mtl-1">
-      <div class="notes-row-date">Tue Jun 16<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Old Montreal + Old Port</span></div>
+      <div class="notes-row-date">Tue Jun 16<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Old Montreal + Old Port</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -2541,7 +2529,7 @@ img { max-width: 100%; }
       </div>
     </div>
     <div class="notes-row" data-note-day="mtl-2">
-      <div class="notes-row-date">Wed Jun 17<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Biodome + Spa</span></div>
+      <div class="notes-row-date">Wed Jun 17<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Biodome + Spa</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -2551,7 +2539,7 @@ img { max-width: 100%; }
       </div>
     </div>
     <div class="notes-row" data-note-day="mtl-3">
-      <div class="notes-row-date">Thu Jun 18<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Market + mountain</span></div>
+      <div class="notes-row-date">Thu Jun 18<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Market + mountain</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -2561,7 +2549,7 @@ img { max-width: 100%; }
       </div>
     </div>
     <div class="notes-row" data-note-day="fly-home">
-      <div class="notes-row-date">Fri Jun 19<br><span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">Fly home</span></div>
+      <div class="notes-row-date">Fri Jun 19<span style="font-weight:400;color:var(--text-muted);font-size:0.78rem;display:block;margin-top:0.15rem">Fly home</span></div>
       <div class="notes-row-content">
         <div class="notes-list"></div>
         <div class="note-input-row">
@@ -3527,7 +3515,9 @@ img { max-width: 100%; }
               deleteBtn.title = 'Delete comment';
               deleteBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                firebase.database().ref('comments/' + dayId + '/' + c.id).remove();
+                if (confirm('Delete this comment?')) {
+                  firebase.database().ref('comments/' + dayId + '/' + c.id).remove();
+                }
               });
               commentEl.appendChild(deleteBtn);
             }
@@ -3552,9 +3542,23 @@ img { max-width: 100%; }
       var dayDate = header.querySelector('.day-date').textContent;
       var dayTitle = card.querySelector('h3').textContent;
 
+      // Place Ask Claude button after meal-tip, before reactions
+      var mealTip = card.querySelector('.meal-tip');
+      var reactionsDiv = card.querySelector('.reactions');
+      var insertBefore = reactionsDiv || null;
+
+      var row = document.createElement('div');
+      row.className = 'ask-claude-row';
       var btn = document.createElement('button');
       btn.className = 'ask-claude-btn';
-      btn.innerHTML = '<span class="ask-claude-icon">\u2728</span> Ask Claude <span class="ask-claude-tooltip">Ask Claude about this day</span>';
+      btn.innerHTML = '<span class="ask-claude-icon">\u2728</span> Ask Claude about this day';
+      row.appendChild(btn);
+
+      if (insertBefore) {
+        card.insertBefore(row, insertBefore);
+      } else {
+        card.appendChild(row);
+      }
 
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -3565,23 +3569,32 @@ img { max-width: 100%; }
         paragraphs.forEach(function(p) { cardText += p.textContent + '\n'; });
         var listItems = card.querySelectorAll(':scope > ul > li');
         listItems.forEach(function(li) { cardText += '- ' + li.textContent + '\n'; });
-        var mealTip = card.querySelector('.meal-tip');
-        if (mealTip) { cardText += '\n' + mealTip.textContent; }
+        if (mealTip) { cardText += '\nDining: ' + mealTip.textContent; }
 
-        var prompt = 'I\'m planning a group trip. Here\'s the itinerary for ' + dayDate + ':\n\n' + cardText + '\n\nI\'d like your help refining this. Ask me anything \u2014 restaurant alternatives, activity suggestions, timing, logistics, etc.';
+        var prompt = 'I\'m planning a group trip (5 adults, 2 kids ages 2 and 4) in June 2026. Here\'s our itinerary for ' + dayDate + ':\n\n' + cardText + '\n\nHelp me refine this day. I\'m open to restaurant alternatives, activity suggestions, timing adjustments, or logistics tips. What questions do you have?';
 
-        // Copy to clipboard
-        navigator.clipboard.writeText(prompt).then(function() {
-          showToast('Prompt copied! Paste it into Claude to get personalized suggestions.');
-        }).catch(function() {
-          showToast('Could not copy to clipboard. Try again.');
+        // Copy to clipboard with fallback
+        function doCopy(text) {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+          }
+          // Fallback for non-HTTPS
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch(e) {}
+          document.body.removeChild(ta);
+          return Promise.resolve();
+        }
+
+        doCopy(prompt).then(function() {
+          showToast('Prompt copied! Paste it into Claude.');
+          window.open('https://claude.ai/new', '_blank');
         });
-
-        // Open Claude in new tab
-        window.open('https://claude.ai/new', '_blank');
       });
-
-      header.appendChild(btn);
     });
   }
 
