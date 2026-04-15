@@ -61,14 +61,14 @@ img { max-width: 100%; }
    ============================================ */
 .hero {
   position: relative;
-  min-height: 85vh;
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: #f5f3ef;
-  padding: 4rem 2rem;
+  padding: 3rem 2rem 2.5rem;
   overflow: hidden;
   background: linear-gradient(135deg, #1a2f23 0%, #1e3d2e 25%, #1a3a5c 50%, #1a2f23 75%, #2d4a3e 100%);
   background-size: 400% 400%;
@@ -667,12 +667,6 @@ img { max-width: 100%; }
   border-color: #e8c9b8;
 }
 
-.reaction-btn .reaction-top {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .reaction-btn .emoji {
   font-size: 1.25rem;
   line-height: 1;
@@ -704,9 +698,6 @@ img { max-width: 100%; }
   display: none;
 }
 
-.reaction-avatars {
-  display: none;
-}
 
 /* ============================================
    Avatar Bubbles
@@ -2022,9 +2013,6 @@ img { max-width: 100%; }
     <div class="hero-subtitle">Mountains, then city. Nature, then food.</div>
     <div class="hero-details">June 11 &ndash; 19, 2026 &middot; 7 travelers &middot; 5 adults + 2 kids (2 &amp; 4)</div>
   </div>
-  <div class="hero-scroll-hint">
-    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-  </div>
 </header>
 
 <!-- ============================================
@@ -2753,6 +2741,7 @@ img { max-width: 100%; }
     el.style.backgroundColor = currentColor;
     el.textContent = user.initials || '??';
     el.title = (user.firstName || '') + ' ' + (user.lastName || '');
+    if (user.userId) el.setAttribute('data-uid', user.userId);
     return el;
   }
 
@@ -2961,7 +2950,20 @@ img { max-width: 100%; }
         if (!currentUser) {
           showModal(false);
         } else {
+          // Update current user's color from Firebase in case it changed
+          if (allUsers[currentUser.userId]) {
+            currentUser.color = allUsers[currentUser.userId].color;
+            saveLocalUser(currentUser);
+          }
+          updateUserPill();
           buildColorPicker(); // Refresh taken colors
+          // Re-render all avatar elements on the page with current colors
+          document.querySelectorAll('.avatar[data-uid]').forEach(function(el) {
+            var uid = el.getAttribute('data-uid');
+            if (allUsers[uid]) {
+              el.style.backgroundColor = allUsers[uid].color;
+            }
+          });
         }
       }, function(err) {
         console.warn('Firebase users read failed:', err);
@@ -3122,11 +3124,10 @@ img { max-width: 100%; }
     EMOJIS.forEach(function(e) {
       var btn = document.createElement('button');
       btn.className = 'reaction-btn';
-      btn.innerHTML = '<div class="reaction-top"><span class="emoji">' + e.emoji + '</span><span class="count"></span></div><div class="reaction-avatars avatar-row"></div>';
+      btn.innerHTML = '<span class="emoji">' + e.emoji + '</span><span class="count"></span>';
       btn.setAttribute('aria-label', 'React with ' + e.name);
 
       var countEl = btn.querySelector('.count');
-      var avatarsEl = btn.querySelector('.reaction-avatars');
       var reactionRef = firebaseReady ? db.ref('reactions/' + dayKey + '/' + e.name) : null;
 
       // Real-time listener
@@ -3144,8 +3145,12 @@ img { max-width: 100%; }
             btn.classList.remove('active');
           }
 
-          // Render avatar dots
-          renderAvatarRow(avatarsEl, data, 3);
+          // Tooltip with names on hover
+          var names = userIds.map(function(uid) {
+            var u = allUsers[uid];
+            return u ? (u.firstName || '') : '';
+          }).filter(Boolean);
+          btn.title = names.length ? names.join(', ') : '';
         }, function(err) {
           console.warn('Reaction listener error:', err);
         });
