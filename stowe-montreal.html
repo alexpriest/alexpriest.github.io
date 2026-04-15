@@ -639,13 +639,12 @@ img { max-width: 100%; }
 }
 
 .reaction-btn {
+  position: relative;
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.2rem;
   font-size: 0.82rem;
-  padding: 0.5rem;
+  padding: 0;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: transparent;
@@ -654,9 +653,8 @@ img { max-width: 100%; }
   font-family: var(--font-body);
   color: var(--text-muted);
   user-select: none;
-  width: 56px;
-  height: 56px;
-  text-align: center;
+  width: 48px;
+  height: 48px;
 }
 
 .reaction-btn:hover {
@@ -672,11 +670,11 @@ img { max-width: 100%; }
 .reaction-btn .reaction-top {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  justify-content: center;
 }
 
 .reaction-btn .emoji {
-  font-size: 1rem;
+  font-size: 1.25rem;
   line-height: 1;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -686,15 +684,28 @@ img { max-width: 100%; }
 }
 
 .reaction-btn .count {
-  font-size: 0.75rem;
-  font-weight: 600;
-  min-width: 0.5em;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--primary);
+  color: #fff;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.reaction-btn .count:empty {
+  display: none;
 }
 
 .reaction-avatars {
-  display: flex;
-  justify-content: center;
-  padding-top: 2px;
+  display: none;
 }
 
 /* ============================================
@@ -3573,27 +3584,9 @@ img { max-width: 100%; }
 
         var prompt = 'I\'m planning a group trip (5 adults, 2 kids ages 2 and 4) in June 2026. Here\'s our itinerary for ' + dayDate + ':\n\n' + cardText + '\n\nHelp me refine this day. I\'m open to restaurant alternatives, activity suggestions, timing adjustments, or logistics tips. What questions do you have?';
 
-        // Copy to clipboard with fallback
-        function doCopy(text) {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            return navigator.clipboard.writeText(text);
-          }
-          // Fallback for non-HTTPS
-          var ta = document.createElement('textarea');
-          ta.value = text;
-          ta.style.position = 'fixed';
-          ta.style.left = '-9999px';
-          document.body.appendChild(ta);
-          ta.select();
-          try { document.execCommand('copy'); } catch(e) {}
-          document.body.removeChild(ta);
-          return Promise.resolve();
-        }
-
-        doCopy(prompt).then(function() {
-          showToast('Prompt copied! Paste it into Claude.');
-          window.open('https://claude.ai/new', '_blank');
-        });
+        // Open Claude with pre-filled prompt via URL
+        var claudeUrl = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
+        window.open(claudeUrl, '_blank');
       });
     });
   }
