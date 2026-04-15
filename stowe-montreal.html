@@ -2890,6 +2890,28 @@ img { max-width: 100%; }
 
       colorPicker.appendChild(swatch);
     });
+
+    // Update name option circles with their chosen colors from Firebase
+    nameOptions.forEach(function(opt) {
+      var first = opt.getAttribute('data-first');
+      var last = opt.getAttribute('data-last');
+      var initialsEl = opt.querySelector('.name-option-initials');
+      // Find this person in allUsers
+      var userColor = null;
+      Object.keys(allUsers).forEach(function(uid) {
+        var u = allUsers[uid];
+        if (u.firstName === first && u.lastName === last && u.color) {
+          userColor = u.color;
+        }
+      });
+      if (userColor) {
+        initialsEl.style.backgroundColor = userColor;
+        initialsEl.style.color = '#fff';
+      } else {
+        initialsEl.style.backgroundColor = '#bbb';
+        initialsEl.style.color = '#fff';
+      }
+    });
   }
 
   function validateModal() {
