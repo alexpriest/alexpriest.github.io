@@ -1875,6 +1875,265 @@ img { max-width: 100%; }
 }
 
 /* ============================================
+   #1 Countdown Timer
+   ============================================ */
+.countdown-stat .stat-num {
+  font-size: 1.3rem;
+  line-height: 1.3;
+}
+
+.countdown-stat .countdown-big {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+  display: block;
+}
+
+.countdown-stat .countdown-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.countdown-stat .countdown-letsgo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--stowe);
+}
+
+/* ============================================
+   #2 Scroll Progress Bar
+   ============================================ */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  z-index: 9999;
+  background: var(--stowe);
+  transition: width 0.1s linear, background 0.5s ease;
+  pointer-events: none;
+}
+
+/* ============================================
+   #4 Border Crossing Divider
+   ============================================ */
+.border-crossing-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  margin: 0.5rem 0;
+  position: relative;
+}
+
+.border-crossing-divider::before,
+.border-crossing-divider::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+.border-crossing-stamp {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.6rem;
+  padding: 0.4rem 1rem;
+  background: var(--bg);
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  line-height: 1;
+  animation: stampAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.border-crossing-stamp .stamp-arrow {
+  font-size: 1rem;
+  color: var(--text-light);
+}
+
+@keyframes stampAppear {
+  0% { transform: scale(0.5) rotate(-8deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* ============================================
+   #5 Emoji Particle Burst
+   ============================================ */
+.emoji-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 30000;
+  font-size: 1.2rem;
+  animation: emojiFloat 0.9s ease-out forwards;
+}
+
+@keyframes emojiFloat {
+  0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.4) rotate(var(--rot)); }
+}
+
+/* ============================================
+   #6 Welcome Back Toast
+   ============================================ */
+.welcome-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  padding: 0.85rem 1.75rem;
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  z-index: 20001;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.welcome-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================
+   #7 Trip Stats Dashboard
+   ============================================ */
+.trip-dashboard {
+  background: var(--primary);
+  color: #f5f3ef;
+  padding: 4rem 1.5rem;
+}
+
+.trip-dashboard .section-label { color: rgba(255,255,255,0.4); }
+.trip-dashboard .section-title { color: #f5f3ef; }
+.trip-dashboard .section-divider { background: rgba(255,255,255,0.3); }
+
+.dashboard-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.dashboard-stat {
+  text-align: center;
+  padding: 1.25rem 0.75rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  transition: background 0.2s ease;
+}
+
+.dashboard-stat:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.dashboard-stat-num {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dashboard-stat-label {
+  font-size: 0.75rem;
+  opacity: 0.5;
+  margin-top: 0.3rem;
+  font-weight: 500;
+}
+
+/* ============================================
+   #8 Stowe → Montreal Color Transition
+   ============================================ */
+.day-card[data-type="stowe"] {
+  background: linear-gradient(135deg, rgba(45, 107, 74, 0.04), rgba(255,255,255,0.95)) !important;
+}
+
+.day-card[data-type="montreal"] {
+  background: linear-gradient(135deg, rgba(26, 58, 92, 0.04), rgba(255,255,255,0.95)) !important;
+}
+
+.day-card[data-type="drive"] {
+  background: linear-gradient(135deg, rgba(184, 92, 58, 0.04), rgba(255,255,255,0.95)) !important;
+}
+
+.day-card[data-type="spa"] {
+  background: linear-gradient(135deg, rgba(139, 107, 74, 0.04), rgba(255,255,255,0.95)) !important;
+}
+
+.day-card[data-type="fly"] {
+  background: linear-gradient(135deg, rgba(107, 107, 107, 0.04), rgba(255,255,255,0.95)) !important;
+}
+
+/* ============================================
+   #9 Fun Empty States
+   ============================================ */
+.empty-state-msg {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-light);
+  padding: 0.25rem 0;
+}
+
+/* ============================================
+   #10 Hover Micro-interactions
+   ============================================ */
+.day-card {
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+}
+
+.day-card.visible:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.vote-option {
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.vote-option:hover {
+  transform: scale(1.01);
+}
+
+.check-group li {
+  transition: background 0.2s ease, padding-left 0.2s ease;
+}
+
+.check-group li:hover {
+  padding-left: 4px;
+}
+
+.name-option:hover .name-option-initials {
+  animation: wobble 0.4s ease;
+}
+
+@keyframes wobble {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  75% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* ============================================
    Responsive
    ============================================ */
 @media (max-width: 900px) {
@@ -1915,6 +2174,10 @@ img { max-width: 100%; }
     border-right: none;
     border-bottom: 1px solid var(--border);
     padding: 0.75rem 1rem;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -2041,6 +2304,9 @@ img { max-width: 100%; }
 </head>
 <body>
 
+<!-- #2 Scroll Progress Bar -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
 <!-- ============================================
      USER IDENTITY MODAL (hidden by default)
      ============================================ -->
@@ -2110,6 +2376,8 @@ img { max-width: 100%; }
     <a class="toc-link" data-target="notes">Notes</a>
     <span class="toc-separator">&middot;</span>
     <a class="toc-link" data-target="logistics">Logistics</a>
+    <span class="toc-separator">&middot;</span>
+    <a class="toc-link" data-target="dashboard">Dashboard</a>
   </div>
 </nav>
 
@@ -2118,8 +2386,8 @@ img { max-width: 100%; }
      ============================================ -->
 <section class="stats-section">
   <div class="stats-grid">
-    <div class="stat-card fade-in">
-      <div class="stat-num">9 days</div>
+    <div class="stat-card fade-in countdown-stat" id="countdownCard">
+      <div class="stat-num" id="countdownDisplay">9 days</div>
       <div class="stat-label">June 11 &ndash; 19</div>
     </div>
     <div class="stat-card fade-in">
@@ -2274,6 +2542,15 @@ img { max-width: 100%; }
         </ul>
         <div class="meal-tip"><strong>Dinner:</strong> <a href="https://www.platestowe.com" target="_blank" rel="noopener" class="place-link">Plate</a> (small plates, natural wine, intimate) or <a href="https://www.docponds.com" target="_blank" rel="noopener" class="place-link">Doc Ponds</a> if you want something casual. Get a sitter, grab cocktails at <a href="https://www.apresstowe.com" target="_blank" rel="noopener" class="place-link">Apr&egrave;s</a> after.</div>
         <div class="reactions" data-key="day4"></div>
+      </div>
+
+      <!-- #4 Border Crossing Divider -->
+      <div class="border-crossing-divider fade-in">
+        <div class="border-crossing-stamp">
+          <span>&#x1F1FA;&#x1F1F8;</span>
+          <span class="stamp-arrow">&rarr;</span>
+          <span>&#x1F1E8;&#x1F1E6;</span>
+        </div>
       </div>
 
       <!-- Day 5: Drive -->
@@ -2621,6 +2898,35 @@ img { max-width: 100%; }
         <li>Stowe Rec Path is open year-round but mud can be an issue in early June after rain</li>
         <li>Montreal Airbnb regulations exist &mdash; book licensed properties</li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     #7 TRIP DASHBOARD
+     ============================================ -->
+<section class="trip-dashboard" id="dashboard">
+  <div class="dashboard-container">
+    <div class="section-label">Dashboard</div>
+    <h2 class="section-title">Trip pulse</h2>
+    <div class="section-divider"></div>
+    <div class="dashboard-stats">
+      <div class="dashboard-stat">
+        <div class="dashboard-stat-num" id="dashTravelers">0/5</div>
+        <div class="dashboard-stat-label">travelers signed up</div>
+      </div>
+      <div class="dashboard-stat">
+        <div class="dashboard-stat-num" id="dashReactions">0</div>
+        <div class="dashboard-stat-label">reactions</div>
+      </div>
+      <div class="dashboard-stat">
+        <div class="dashboard-stat-num" id="dashComments">0</div>
+        <div class="dashboard-stat-label">comments</div>
+      </div>
+      <div class="dashboard-stat">
+        <div class="dashboard-stat-num" id="dashChecklist">0/0</div>
+        <div class="dashboard-stat-label">checklist items done</div>
+      </div>
     </div>
   </div>
 </section>
@@ -3778,6 +4084,307 @@ img { max-width: 100%; }
   }
 
   initNotes();
+
+  /* ==========================================
+     #1 COUNTDOWN TIMER
+     ========================================== */
+  (function initCountdown() {
+    var departure = new Date('2026-06-11T08:00:00-04:00').getTime();
+    var display = document.getElementById('countdownDisplay');
+    if (!display) return;
+
+    function update() {
+      var now = Date.now();
+      var diff = departure - now;
+
+      if (diff <= 0) {
+        display.innerHTML = '<span class="countdown-letsgo">Let\'s go! \uD83C\uDF89</span>';
+        return;
+      }
+
+      var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      display.innerHTML = '<span class="countdown-big">' + days + '</span>' +
+        '<span class="countdown-sub">days ' + hours + 'h ' + minutes + 'm until departure</span>';
+    }
+
+    update();
+    setInterval(update, 60000); // update every minute
+  })();
+
+  /* ==========================================
+     #2 SCROLL PROGRESS BAR
+     ========================================== */
+  (function initScrollProgress() {
+    var bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+
+    // Determine the scroll boundaries for Stowe vs Montreal content
+    function updateProgress() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+
+      var pct = Math.min((scrollTop / docHeight) * 100, 100);
+      bar.style.width = pct + '%';
+
+      // Color transition: green (Stowe) -> blue (Montreal)
+      if (pct < 40) {
+        bar.style.background = 'var(--stowe)';
+      } else if (pct < 55) {
+        bar.style.background = 'linear-gradient(90deg, var(--stowe), var(--travel))';
+      } else {
+        bar.style.background = 'linear-gradient(90deg, var(--stowe), var(--montreal))';
+      }
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  })();
+
+  /* ==========================================
+     #3 ANIMATED ROUTE DRAWING ON MAP
+     ========================================== */
+  (function initRouteAnimation() {
+    // After map renders, find SVG paths and set them up for scroll-triggered animation
+    setTimeout(function() {
+      var svgPaths = document.querySelectorAll('#map .leaflet-overlay-pane svg path');
+      if (!svgPaths.length) return;
+
+      // Set up each path with dasharray/dashoffset for draw animation
+      svgPaths.forEach(function(path) {
+        var length = path.getTotalLength();
+        if (!length || length < 10) return;
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+        path.style.transition = 'stroke-dashoffset 1.8s ease-in-out';
+      });
+
+      // Leg 1 corresponds to Day 1 (drive to Stowe), Leg 2 to Day 5 (drive to Montreal)
+      var day1 = document.getElementById('day1');
+      var day5 = document.getElementById('day5');
+      var leg1Drawn = false;
+      var leg2Drawn = false;
+
+      var routeObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+
+          if (entry.target === day1 && !leg1Drawn) {
+            leg1Drawn = true;
+            // First path = leg 1
+            if (svgPaths[0]) {
+              svgPaths[0].style.strokeDashoffset = '0';
+            }
+          }
+          if (entry.target === day5 && !leg2Drawn) {
+            leg2Drawn = true;
+            // Second and third paths = leg 2 and airport
+            if (svgPaths[1]) svgPaths[1].style.strokeDashoffset = '0';
+            if (svgPaths[2]) {
+              setTimeout(function() {
+                svgPaths[2].style.strokeDashoffset = '0';
+              }, 800);
+            }
+          }
+        });
+      }, { threshold: 0.2 });
+
+      if (day1) routeObserver.observe(day1);
+      if (day5) routeObserver.observe(day5);
+    }, 1500); // Wait for Leaflet to render SVG paths
+  })();
+
+  /* ==========================================
+     #5 EMOJI PARTICLE BURST
+     ========================================== */
+  (function initEmojiParticles() {
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.reaction-btn');
+      if (!btn) return;
+
+      var emojiEl = btn.querySelector('.emoji');
+      if (!emojiEl) return;
+      var emoji = emojiEl.textContent;
+
+      var rect = btn.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+
+      var count = 6 + Math.floor(Math.random() * 3); // 6-8 particles
+      for (var i = 0; i < count; i++) {
+        var particle = document.createElement('span');
+        particle.className = 'emoji-particle';
+        particle.textContent = emoji;
+
+        // Random direction
+        var dx = (Math.random() - 0.5) * 120;
+        var dy = -40 - Math.random() * 80;
+        var rot = (Math.random() - 0.5) * 180;
+
+        particle.style.left = cx + 'px';
+        particle.style.top = cy + 'px';
+        particle.style.setProperty('--dx', dx + 'px');
+        particle.style.setProperty('--dy', dy + 'px');
+        particle.style.setProperty('--rot', rot + 'deg');
+        particle.style.animationDelay = (Math.random() * 0.1) + 's';
+
+        document.body.appendChild(particle);
+
+        // Remove after animation
+        (function(p) {
+          setTimeout(function() {
+            if (p.parentNode) p.parentNode.removeChild(p);
+          }, 1100);
+        })(particle);
+      }
+    });
+  })();
+
+  /* ==========================================
+     #6 WELCOME BACK TOAST
+     ========================================== */
+  (function initWelcomeToast() {
+    // Check if user is returning (has localStorage identity)
+    var hasUser = loadLocalUser();
+    if (!hasUser || !currentUser) return;
+
+    // Only show once per session
+    var sessionKey = 'stowe-mtl-welcomed';
+    if (sessionStorage.getItem(sessionKey)) return;
+    sessionStorage.setItem(sessionKey, '1');
+
+    var toast = document.createElement('div');
+    toast.className = 'welcome-toast';
+    toast.textContent = 'Welcome back, ' + currentUser.firstName + '! \u2728';
+    toast.style.backgroundColor = currentUser.color || 'var(--primary)';
+    document.body.appendChild(toast);
+
+    setTimeout(function() {
+      toast.classList.add('visible');
+    }, 600);
+
+    setTimeout(function() {
+      toast.classList.remove('visible');
+      setTimeout(function() {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 500);
+    }, 3600);
+  })();
+
+  /* ==========================================
+     #7 TRIP STATS DASHBOARD (Firebase real-time)
+     ========================================== */
+  (function initDashboard() {
+    if (!firebaseReady) return;
+
+    // Travelers count
+    db.ref('users').on('value', function(snap) {
+      var users = snap.val() || {};
+      var count = Object.keys(users).length;
+      var el = document.getElementById('dashTravelers');
+      if (el) el.textContent = count + '/5';
+    });
+
+    // Reactions count
+    db.ref('reactions').on('value', function(snap) {
+      var data = snap.val() || {};
+      var total = 0;
+      Object.keys(data).forEach(function(dayKey) {
+        var dayReactions = data[dayKey] || {};
+        Object.keys(dayReactions).forEach(function(emojiKey) {
+          var users = dayReactions[emojiKey] || {};
+          total += Object.keys(users).length;
+        });
+      });
+      var el = document.getElementById('dashReactions');
+      if (el) el.textContent = total;
+    });
+
+    // Comments count
+    db.ref('comments').on('value', function(snap) {
+      var data = snap.val() || {};
+      var total = 0;
+      Object.keys(data).forEach(function(dayKey) {
+        var comments = data[dayKey] || {};
+        total += Object.keys(comments).length;
+      });
+      var el = document.getElementById('dashComments');
+      if (el) el.textContent = total;
+    });
+
+    // Checklist count
+    db.ref('checklist').on('value', function(snap) {
+      var data = snap.val() || {};
+      var done = 0;
+      var totalItems = document.querySelectorAll('.check-group[data-checklist] li[data-item]').length;
+      // Count items that have at least one check
+      Object.keys(data).forEach(function(itemKey) {
+        var checkers = data[itemKey] || {};
+        if (Object.keys(checkers).length > 0) done++;
+      });
+      var el = document.getElementById('dashChecklist');
+      if (el) el.textContent = done + '/' + totalItems;
+    });
+  })();
+
+  /* ==========================================
+     #9 FUN EMPTY STATES
+     ========================================== */
+  (function initEmptyStates() {
+    // Override the comment count label rendering to show fun messages
+    // Patch the existing comment listener by watching for 0-comment state
+    var emptyMessages = {
+      comments: 'No comments yet \u2014 be the first to weigh in!',
+      notes: 'No notes yet \u2014 what are you thinking?',
+      votes: 'Be the first to vote!'
+    };
+
+    // For comments: observe the comment count labels
+    function checkCommentEmpty() {
+      document.querySelectorAll('.comment-count-label').forEach(function(label) {
+        if (label.textContent === '0 comments') {
+          label.textContent = emptyMessages.comments;
+          label.style.fontStyle = 'italic';
+          label.style.color = 'var(--text-light)';
+        } else {
+          label.style.fontStyle = '';
+          label.style.color = '';
+        }
+      });
+    }
+
+    // For notes: observe note lists
+    function checkNotesEmpty() {
+      document.querySelectorAll('.notes-row .notes-list').forEach(function(list) {
+        if (list.children.length === 0 && !list.querySelector('.empty-state-msg')) {
+          var msg = document.createElement('div');
+          msg.className = 'empty-state-msg';
+          msg.textContent = emptyMessages.notes;
+          list.appendChild(msg);
+        }
+        // Remove empty state when notes exist
+        var emptyMsg = list.querySelector('.empty-state-msg');
+        if (emptyMsg && list.querySelectorAll('.note-entry').length > 0) {
+          emptyMsg.remove();
+        }
+      });
+    }
+
+    // Run periodically to catch Firebase updates
+    setInterval(function() {
+      checkCommentEmpty();
+      checkNotesEmpty();
+    }, 1000);
+
+    // Initial run
+    setTimeout(function() {
+      checkCommentEmpty();
+      checkNotesEmpty();
+    }, 1500);
+  })();
 
 })();
 </script>
