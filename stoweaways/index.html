@@ -1161,9 +1161,17 @@ img { max-width: 100%; }
 }
 
 .paper-card.group-todos li.is-claimed .todo-text {
-  opacity: 0.5;
+  opacity: 0.65;
+}
+
+.paper-card.group-todos li.is-done .todo-text {
+  opacity: 0.4;
   text-decoration: line-through;
   text-decoration-color: rgba(0,0,0,0.15);
+}
+
+.claim-slot.done {
+  box-shadow: 0 0 0 2px var(--stowe);
 }
 
 /* Claim slot — dashed circle when unclaimed */
@@ -4582,39 +4590,79 @@ img { max-width: 100%; }
             var claimedBy = userIds.length > 0 ? userIds[0] : null;
             var claimant = claimedBy ? allUsers[claimedBy] : null;
             var isMine = currentUser && claimedBy === currentUser.userId;
+            var status = claimedBy ? (data[claimedBy] || 'claimed') : null;
+            // Normalize: true (legacy) = "claimed"
+            if (status === true) status = 'claimed';
+            var isDone = (status === 'done');
 
             // Remove old claim-name if exists
             var oldName = slot.querySelector('.claim-name');
             if (oldName) oldName.remove();
 
-            if (isMine) {
+            if (isMine && isDone) {
+              // I claimed and completed this
+              var myColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
+              slot.className = 'claim-slot mine done';
+              slot.style.backgroundColor = myColor;
+              slot.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+              slot.setAttribute('data-uid', currentUser.userId);
+              slot.title = 'Done! Click to unclaim.';
+              var nameLabel = document.createElement('span');
+              nameLabel.className = 'claim-name';
+              nameLabel.textContent = '✓ Done';
+              nameLabel.style.color = 'var(--stowe)';
+              nameLabel.style.fontWeight = '600';
+              slot.appendChild(nameLabel);
+              li.classList.add('is-claimed');
+              li.classList.add('is-done');
+            } else if (isMine) {
+              // I claimed but not done yet
               var myColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
               slot.className = 'claim-slot mine';
               slot.style.backgroundColor = myColor;
               slot.textContent = currentUser.initials;
               slot.setAttribute('data-uid', currentUser.userId);
-              slot.title = 'Click to unclaim';
+              slot.title = 'Click to mark done';
               li.classList.add('is-claimed');
+              li.classList.remove('is-done');
+            } else if (claimant && isDone) {
+              // Someone else completed it
+              var ownerColor = (allUsers[claimedBy] && allUsers[claimedBy].color) || '#999';
+              slot.className = 'claim-slot claimed done';
+              slot.style.backgroundColor = ownerColor;
+              slot.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+              slot.setAttribute('data-uid', claimedBy);
+              slot.title = (claimant.firstName || 'Someone') + ' completed this';
+              var nameLabel = document.createElement('span');
+              nameLabel.className = 'claim-name';
+              nameLabel.textContent = (claimant.firstName || '') + ' ✓';
+              nameLabel.style.color = 'var(--stowe)';
+              slot.appendChild(nameLabel);
+              li.classList.add('is-claimed');
+              li.classList.add('is-done');
             } else if (claimant) {
+              // Someone else claimed it (not done)
               var ownerColor = (allUsers[claimedBy] && allUsers[claimedBy].color) || '#999';
               slot.className = 'claim-slot claimed';
               slot.style.backgroundColor = ownerColor;
               slot.textContent = claimant.initials || '??';
               slot.setAttribute('data-uid', claimedBy);
-              slot.title = (claimant.firstName || 'Someone') + ' has this';
-              // Add name label
+              slot.title = (claimant.firstName || 'Someone') + ' is on it';
               var nameLabel = document.createElement('span');
               nameLabel.className = 'claim-name';
               nameLabel.textContent = claimant.firstName || '';
               slot.appendChild(nameLabel);
               li.classList.add('is-claimed');
+              li.classList.remove('is-done');
             } else {
+              // Unclaimed
               slot.className = 'claim-slot';
               slot.style.backgroundColor = '';
               slot.textContent = '';
               slot.removeAttribute('data-uid');
               slot.title = "Click to claim this task";
               li.classList.remove('is-claimed');
+              li.classList.remove('is-done');
             }
 
             if (typeof updateProgress === 'function') updateProgress();
@@ -4626,10 +4674,15 @@ img { max-width: 100%; }
           if (!currentUser) { showModal(false); return; }
           if (!checkRef) return;
           var userRef = checkRef.child(currentUser.userId);
-          if (slot.classList.contains('mine')) {
+          if (slot.classList.contains('done') && slot.classList.contains('mine')) {
+            // Done → unclaim
             userRef.remove();
+          } else if (slot.classList.contains('mine')) {
+            // Claimed → done
+            userRef.set('done');
           } else if (!slot.classList.contains('claimed')) {
-            userRef.set(true);
+            // Unclaimed → claim
+            userRef.set('claimed');
           }
         });
       });
