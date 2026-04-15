@@ -179,8 +179,8 @@ img { max-width: 100%; }
    ============================================ */
 .stats-section {
   max-width: 960px;
-  margin: -3rem auto 0;
-  padding: 0 1.5rem 3rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
   position: relative;
   z-index: 3;
 }
@@ -584,9 +584,10 @@ img { max-width: 100%; }
   display: inline-flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.25rem;
   font-size: 0.82rem;
-  padding: 0.4rem 0.6rem 0.35rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: transparent;
@@ -595,7 +596,8 @@ img { max-width: 100%; }
   font-family: var(--font-body);
   color: var(--text-muted);
   user-select: none;
-  min-width: 48px;
+  min-width: 52px;
+  text-align: center;
 }
 
 .reaction-btn:hover {
@@ -972,14 +974,13 @@ img { max-width: 100%; }
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.55;
-  padding: 0.45rem 0 0.45rem 1.75rem;
-  position: relative;
+  padding: 0.45rem 0;
   cursor: pointer;
   border-radius: 6px;
   transition: background 0.2s ease;
   display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .check-group li:hover {
@@ -987,15 +988,16 @@ img { max-width: 100%; }
 }
 
 .check-group li .check-box {
-  position: absolute;
-  left: 0;
-  top: 0.45rem;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
   border-radius: 4px;
   border: 1.5px solid var(--border);
   transition: all 0.2s ease;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .check-group li.checked .check-box {
@@ -1085,7 +1087,7 @@ img { max-width: 100%; }
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 10000;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
