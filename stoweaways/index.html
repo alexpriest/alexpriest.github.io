@@ -2451,7 +2451,7 @@ img { max-width: 100%; }
     <div class="name-picker" id="namePicker">
       <button class="name-option" data-first="Alex" data-last="Priest"><span class="name-option-initials">AP</span><span class="name-option-name">Alex</span></button>
       <button class="name-option" data-first="Miranda" data-last="Gale"><span class="name-option-initials">MG</span><span class="name-option-name">Miranda</span></button>
-      <button class="name-option" data-first="AJ" data-last="Adams"><span class="name-option-initials">AA</span><span class="name-option-name">AJ</span></button>
+      <button class="name-option" data-first="AJ" data-last="Adams"><span class="name-option-initials">AJ</span><span class="name-option-name">AJ</span></button>
       <button class="name-option" data-first="Ashley" data-last="Adams"><span class="name-option-initials">AA</span><span class="name-option-name">Ashley</span></button>
       <button class="name-option" data-first="Jack" data-last="Villani"><span class="name-option-initials">JV</span><span class="name-option-name">Jack</span></button>
     </div>
@@ -3423,6 +3423,8 @@ img { max-width: 100%; }
   }
 
   function getInitials(first, last) {
+    // Special case: AJ Adams → "AJ" not "AA"
+    if (first === 'AJ') return 'AJ';
     return ((first || '').charAt(0) + (last || '').charAt(0)).toUpperCase();
   }
 
