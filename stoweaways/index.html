@@ -1170,11 +1170,7 @@ img { max-width: 100%; }
   text-decoration-color: rgba(0,0,0,0.15);
 }
 
-.claim-slot.done {
-  box-shadow: 0 0 0 2px var(--stowe);
-}
-
-/* Claim slot — dashed circle when unclaimed */
+/* Claim slot — three states: unclaimed, claimed, done */
 .claim-slot {
   width: 30px;
   height: 30px;
@@ -1186,46 +1182,49 @@ img { max-width: 100%; }
   flex-shrink: 0;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   font-weight: 700;
   color: transparent;
   position: relative;
+  background: transparent;
 }
 
+/* Unclaimed hover: tint with hint */
 .claim-slot:hover {
   border-color: var(--stowe);
-  background: rgba(45,107,74,0.04);
-  color: var(--stowe);
+  background: rgba(45,107,74,0.06);
 }
 
-.claim-slot:hover::after {
-  content: '+';
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--stowe);
-}
-
-/* Claimed state — filled with owner's avatar */
-.claim-slot.claimed {
-  border: none;
-  cursor: default;
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.6rem;
-}
-
+/* Claimed: solid circle with initials */
+.claim-slot.claimed,
 .claim-slot.mine {
-  cursor: pointer;
-  border: none;
+  border: 2px solid transparent;
   color: #fff;
-  font-weight: 700;
-  font-size: 0.6rem;
+  cursor: pointer;
 }
 
-.claim-slot.mine:hover {
-  opacity: 0.7;
+/* Claimed by someone else: not clickable */
+.claim-slot.claimed:not(.mine) {
+  cursor: default;
 }
 
+/* Mine hover: show checkmark overlay to indicate "mark as done" */
+.claim-slot.mine .slot-initials { display: inline; }
+.claim-slot.mine .slot-check { display: none; }
+.claim-slot.mine:hover .slot-initials { display: none; }
+.claim-slot.mine:hover .slot-check { display: inline; }
+.claim-slot.mine:hover { opacity: 0.85; }
+
+/* Done: solid circle with checkmark, green ring */
+.claim-slot.done {
+  border: 2px solid var(--stowe);
+}
+
+.claim-slot.done:not(.mine) {
+  cursor: default;
+}
+
+/* Name label next to the slot */
 .claim-slot .claim-name {
   position: absolute;
   left: calc(100% + 0.4rem);
@@ -4599,38 +4598,53 @@ img { max-width: 100%; }
             var oldName = slot.querySelector('.claim-name');
             if (oldName) oldName.remove();
 
+            var checkSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+            // Clear slot
+            slot.innerHTML = '';
+            slot.style.backgroundColor = '';
+
             if (isMine && isDone) {
-              // I claimed and completed this
               var myColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
               slot.className = 'claim-slot mine done';
               slot.style.backgroundColor = myColor;
-              slot.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+              slot.innerHTML = checkSvg;
               slot.setAttribute('data-uid', currentUser.userId);
               slot.title = 'Done! Click to unclaim.';
               var nameLabel = document.createElement('span');
               nameLabel.className = 'claim-name';
-              nameLabel.textContent = '✓ Done';
+              nameLabel.textContent = 'Done';
               nameLabel.style.color = 'var(--stowe)';
               nameLabel.style.fontWeight = '600';
               slot.appendChild(nameLabel);
               li.classList.add('is-claimed');
               li.classList.add('is-done');
             } else if (isMine) {
-              // I claimed but not done yet
               var myColor = (allUsers[currentUser.userId] && allUsers[currentUser.userId].color) || currentUser.color;
               slot.className = 'claim-slot mine';
               slot.style.backgroundColor = myColor;
-              slot.textContent = currentUser.initials;
+              // Initials shown normally, checkmark shown on hover (via CSS)
+              var initSpan = document.createElement('span');
+              initSpan.className = 'slot-initials';
+              initSpan.textContent = currentUser.initials;
+              var checkSpan = document.createElement('span');
+              checkSpan.className = 'slot-check';
+              checkSpan.innerHTML = checkSvg;
+              slot.appendChild(initSpan);
+              slot.appendChild(checkSpan);
               slot.setAttribute('data-uid', currentUser.userId);
               slot.title = 'Click to mark done';
+              var nameLabel = document.createElement('span');
+              nameLabel.className = 'claim-name';
+              nameLabel.textContent = currentUser.firstName || '';
+              slot.appendChild(nameLabel);
               li.classList.add('is-claimed');
               li.classList.remove('is-done');
             } else if (claimant && isDone) {
-              // Someone else completed it
               var ownerColor = (allUsers[claimedBy] && allUsers[claimedBy].color) || '#999';
               slot.className = 'claim-slot claimed done';
               slot.style.backgroundColor = ownerColor;
-              slot.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+              slot.innerHTML = checkSvg;
               slot.setAttribute('data-uid', claimedBy);
               slot.title = (claimant.firstName || 'Someone') + ' completed this';
               var nameLabel = document.createElement('span');
@@ -4641,7 +4655,6 @@ img { max-width: 100%; }
               li.classList.add('is-claimed');
               li.classList.add('is-done');
             } else if (claimant) {
-              // Someone else claimed it (not done)
               var ownerColor = (allUsers[claimedBy] && allUsers[claimedBy].color) || '#999';
               slot.className = 'claim-slot claimed';
               slot.style.backgroundColor = ownerColor;
@@ -4655,12 +4668,9 @@ img { max-width: 100%; }
               li.classList.add('is-claimed');
               li.classList.remove('is-done');
             } else {
-              // Unclaimed
               slot.className = 'claim-slot';
-              slot.style.backgroundColor = '';
-              slot.textContent = '';
               slot.removeAttribute('data-uid');
-              slot.title = "Click to claim this task";
+              slot.title = 'Click to claim';
               li.classList.remove('is-claimed');
               li.classList.remove('is-done');
             }
