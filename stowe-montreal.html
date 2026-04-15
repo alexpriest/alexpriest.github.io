@@ -923,10 +923,13 @@ img { max-width: 100%; }
 }
 
 .vote-options {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
   margin-bottom: 2.5rem;
+}
+@media (max-width: 700px) {
+  .vote-options { grid-template-columns: 1fr; }
 }
 
 .vote-option {
