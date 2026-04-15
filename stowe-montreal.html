@@ -996,6 +996,63 @@ img { max-width: 100%; }
   border-color: var(--primary);
 }
 
+.custom-vote-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.custom-vote-header {
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.7;
+  margin-bottom: 0.75rem;
+}
+
+.custom-vote-input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.custom-vote-input-row input {
+  flex: 1;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+}
+
+.custom-vote-input-row input::placeholder { color: rgba(255,255,255,0.3); }
+
+.custom-vote-input-row button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.custom-vote-input-row button:hover { background: rgba(255,255,255,0.25); }
+
+.custom-vote-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+@media (max-width: 700px) {
+  .custom-vote-list { grid-template-columns: 1fr; }
+}
+
 .vote-note {
   font-size: 0.78rem;
   opacity: 0.35;
@@ -1561,8 +1618,8 @@ img { max-width: 100%; }
    ============================================ */
 .user-pill-container {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  bottom: 1.5rem;
+  right: 1.5rem;
   z-index: 9000;
 }
 
@@ -1607,7 +1664,7 @@ img { max-width: 100%; }
 
 .user-pill-dropdown {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  bottom: calc(100% + 0.5rem);
   right: 0;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
@@ -2720,6 +2777,16 @@ img { max-width: 100%; }
       <div class="vote-option" data-vote="joe-beef"><div class="vote-bar"></div><div class="vote-option-content"><span class="vote-option-label">Joe Beef dinner (if we can get a table)</span><div class="vote-option-right"><div class="vote-avatars avatar-row"></div><span class="vote-option-count">0</span></div></div></div>
       <div class="vote-option" data-vote="lachine-bike"><div class="vote-bar"></div><div class="vote-option-content"><span class="vote-option-label">Bike ride along the Lachine Canal</span><div class="vote-option-right"><div class="vote-avatars avatar-row"></div><span class="vote-option-count">0</span></div></div></div>
     </div>
+
+    <div class="custom-vote-section" id="customVotes">
+      <div class="custom-vote-header">Something else? Add your own:</div>
+      <div class="custom-vote-input-row">
+        <input type="text" id="customVoteInput" placeholder="e.g. Midnight poutine run" maxlength="80">
+        <button id="customVoteSubmit">Add</button>
+      </div>
+      <div class="custom-vote-list" id="customVoteList"></div>
+    </div>
+
     <div class="vote-note">Votes sync in real-time &mdash; everyone sees who picked what.</div>
   </div>
 </section>
@@ -3623,6 +3690,81 @@ img { max-width: 100%; }
   });
 
   updateVoteBarsFromFirebase();
+
+  /* ==========================================
+     CUSTOM VOTE OPTIONS (Firebase-backed)
+     ========================================== */
+  (function initCustomVotes() {
+    var input = document.getElementById('customVoteInput');
+    var submitBtn = document.getElementById('customVoteSubmit');
+    var listEl = document.getElementById('customVoteList');
+    if (!input || !submitBtn || !listEl) return;
+
+    var customVoteRef = firebaseReady ? db.ref('custom-votes') : null;
+
+    submitBtn.addEventListener('click', addCustomVote);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') addCustomVote();
+    });
+
+    function addCustomVote() {
+      var text = input.value.trim();
+      if (!text || !currentUser || !customVoteRef) return;
+      var id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').substring(0, 40);
+      customVoteRef.child(id).set({
+        label: text,
+        createdBy: currentUser.userId
+      });
+      // Auto-vote for it
+      db.ref('votes/' + id + '/' + currentUser.userId).set(true);
+      input.value = '';
+    }
+
+    if (customVoteRef) {
+      customVoteRef.on('value', function(snapshot) {
+        listEl.innerHTML = '';
+        var data = snapshot.val() || {};
+        Object.keys(data).forEach(function(id) {
+          var item = data[id];
+          // Create a vote option matching the existing style
+          var opt = document.createElement('div');
+          opt.className = 'vote-option';
+          opt.setAttribute('data-vote', id);
+          opt.innerHTML = '<div class="vote-bar"></div><div class="vote-option-content"><span class="vote-option-label">' + (item.label || id) + '</span><div class="vote-option-right"><div class="vote-avatars avatar-row"></div><span class="vote-option-count">0</span></div></div>';
+
+          // Wire up voting (same as static options)
+          var voteRef = db.ref('votes/' + id);
+          var countEl = opt.querySelector('.vote-option-count');
+          var barEl = opt.querySelector('.vote-bar');
+          var avatarRow = opt.querySelector('.vote-avatars');
+
+          voteRef.on('value', function(snap) {
+            var voters = snap.val() || {};
+            var count = Object.keys(voters).length;
+            countEl.textContent = count > 0 ? count : '0';
+            barEl.style.width = Math.min(count * 20, 100) + '%';
+            if (currentUser && voters[currentUser.userId]) {
+              opt.classList.add('voted');
+            } else {
+              opt.classList.remove('voted');
+            }
+            renderAvatarRow(avatarRow, voters, 3);
+          });
+
+          opt.addEventListener('click', function() {
+            if (!currentUser) { showModal(false); return; }
+            var userVoteRef = voteRef.child(currentUser.userId);
+            userVoteRef.once('value').then(function(snap) {
+              if (snap.exists()) { userVoteRef.remove(); }
+              else { userVoteRef.set(true); }
+            });
+          });
+
+          listEl.appendChild(opt);
+        });
+      });
+    }
+  })();
 
   /* ==========================================
      CHECKLISTS (Firebase-backed)
