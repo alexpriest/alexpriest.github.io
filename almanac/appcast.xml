@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>Almanac Updates</title>
+        <link>https://alexpriest.github.io/almanac/appcast.xml</link>
+        <description>Almanac release channel. Single-channel stable (no beta — D18 deferred per DR-077).</description>
+        <language>en</language>
+        <!-- No releases yet. Add <item> entries here at release time.        -->
+        <!-- Signing procedure: almanac repo docs/release.md                   -->
+        <!-- DR-083: Sparkle integration shape.                               -->
+        <!-- Hosting: served from the alexpriest.github.io repo at /almanac/   -->
+        <!-- (the almanac repo is private; GitHub Pages is plan-blocked there).-->
+        <!-- Locked SUFeedURL alexpriest.github.io/almanac/appcast.xml         -->
+        <!-- 301-redirects to prjcts.alxprst.co/almanac/appcast.xml and        -->
+        <!-- resolves to this file.                                            -->
+    </channel>
+</rss>
