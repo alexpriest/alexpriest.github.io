@@ -5,7 +5,19 @@
         <link>https://alexpriest.github.io/almanac/appcast.xml</link>
         <description>Almanac release channel. Single-channel stable (no beta — D18 deferred per DR-077).</description>
         <language>en</language>
-        <!-- No releases yet. Add <item> entries here at release time.        -->
+        <item>
+            <title>Almanac 1.0</title>
+            <sparkle:version>1</sparkle:version>
+            <sparkle:shortVersionString>1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <pubDate>Thu, 21 May 2026 00:00:00 +0000</pubDate>
+            <enclosure
+                url="https://prjcts.alxprst.co/almanac/Almanac-v1.0.zip"
+                sparkle:edSignature="I9/oPE11zQBHJlmc9JKxx1jLG9sGtaLYN0JfKn8t2zt8L/OxCQILMoeMG6kE6Jsmim1PHbj8JuVdoMGeCWI7BQ=="
+                length="6592677"
+                type="application/zip" />
+        </item>
+        <!-- Add newer <item> entries above this line at each release.         -->
         <!-- Signing procedure: almanac repo docs/release.md                   -->
         <!-- DR-083: Sparkle integration shape.                               -->
         <!-- Hosting: served from the alexpriest.github.io repo at /almanac/   -->
