@@ -6,6 +6,18 @@
         <description>Almanac release channel. Single-channel stable (no beta — D18 deferred per DR-077).</description>
         <language>en</language>
         <item>
+            <title>Almanac 1.1</title>
+            <sparkle:version>2</sparkle:version>
+            <sparkle:shortVersionString>1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <pubDate>Thu, 21 May 2026 00:00:01 +0000</pubDate>
+            <enclosure
+                url="https://prjcts.alxprst.co/almanac/Almanac-v1.1.zip"
+                sparkle:edSignature="m8IYhi8NEQYdt/ZfXE812677fLn9AWt/miCAxoHTCCmQuOPw0pp6xBNv/+cfo7MpwW68odJIXdKh7A2sSqdfBA=="
+                length="6592649"
+                type="application/zip" />
+        </item>
+        <item>
             <title>Almanac 1.0</title>
             <sparkle:version>1</sparkle:version>
             <sparkle:shortVersionString>1.0</sparkle:shortVersionString>
