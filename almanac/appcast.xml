@@ -13,8 +13,8 @@
             <pubDate>Thu, 21 May 2026 00:00:01 +0000</pubDate>
             <enclosure
                 url="https://prjcts.alxprst.co/almanac/Almanac-v1.1.zip"
-                sparkle:edSignature="m8IYhi8NEQYdt/ZfXE812677fLn9AWt/miCAxoHTCCmQuOPw0pp6xBNv/+cfo7MpwW68odJIXdKh7A2sSqdfBA=="
-                length="6592649"
+                sparkle:edSignature="5pi3WA17I1ce6FA3UK5FHSVNnYWL3p7NSopI7NjYPB8MFBpB6LuacKd3EoirYVqNTsYrfP9AVCYLjPzUnw2aDA=="
+                length="6592888"
                 type="application/zip" />
         </item>
         <item>
@@ -25,8 +25,8 @@
             <pubDate>Thu, 21 May 2026 00:00:00 +0000</pubDate>
             <enclosure
                 url="https://prjcts.alxprst.co/almanac/Almanac-v1.0.zip"
-                sparkle:edSignature="I9/oPE11zQBHJlmc9JKxx1jLG9sGtaLYN0JfKn8t2zt8L/OxCQILMoeMG6kE6Jsmim1PHbj8JuVdoMGeCWI7BQ=="
-                length="6592677"
+                sparkle:edSignature="zdDuYQMn2qrFkLwTmkW56OoyRsTrKAqg0igUk1JuHMvyyHbhIm00t6jjxVW8/74iF6ZAv1UGNk9PlZSDn1PSCQ=="
+                length="6592802"
                 type="application/zip" />
         </item>
         <!-- Add newer <item> entries above this line at each release.         -->
